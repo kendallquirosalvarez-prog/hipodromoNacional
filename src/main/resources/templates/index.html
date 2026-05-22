@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Hipódromo Nacional</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body { font-family: Arial, sans-serif; background: #f0f2f5; }
+		.navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+		.navbar h1 { color: #e94560; font-size: 22px; }
+		.navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
+		.navbar nav a:hover { color: #e94560; }
+		.hero { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 60px 30px; text-align: center; }
+		.hero h2 { font-size: 36px; margin-bottom: 10px; }
+		.hero p { font-size: 16px; color: #aaa; margin-bottom: 30px; }
+		.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 40px 30px; max-width: 1200px; margin: 0 auto; }
+		.card { background: white; border-radius: 12px; padding: 30px 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; text-decoration: none; color: #333; }
+		.card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+		.card .icon { font-size: 40px; margin-bottom: 15px; }
+		.card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+		.card p { font-size: 13px; color: #888; }
+		.footer { text-align: center; padding: 20px; color: #888; font-size: 13px; background: white; margin-top: 20px; }
+	</style>
+</head>
+<body>
+<div class="navbar">
+	<h1>🏇 Hipódromo Nacional</h1>
+	<nav>
+		<a href="/propietarios">Propietarios</a>
+		<a href="/caballos">Caballos</a>
+		<a href="/establos">Establos</a>
+		<a href="/eventos">Eventos</a>
+		<a href="/inscripciones">Inscripciones</a>
+		<a href="/facturas">Facturas</a>
+		<a href="/historial">Historial Vet.</a>
+	</nav>
+</div>
+
+<div class="hero">
+	<h2>Sistema de Control de Carrera de Caballos</h2>
+	<p>Universidad de Costa Rica — IF-5100 Administración de Bases de Datos</p>
+</div>
+
+<div class="cards">
+	<a href="/propietarios" class="card">
+		<div class="icon">👤</div>
+		<h3>Propietarios</h3>
+		<p>Gestión de propietarios y contactos</p>
+	</a>
+	<a href="/caballos" class="card">
+		<div class="icon">🐎</div>
+		<h3>Caballos</h3>
+		<p>Registro y control de caballos</p>
+	</a>
+	<a href="/establos" class="card">
+		<div class="icon">🏠</div>
+		<h3>Establos</h3>
+		<p>Administración de establos</p>
+	</a>
+	<a href="/eventos" class="card">
+		<div class="icon">🏆</div>
+		<h3>Eventos</h3>
+		<p>Programación de carreras</p>
+	</a>
+	<a href="/inscripciones" class="card">
+		<div class="icon">📋</div>
+		<h3>Inscripciones</h3>
+		<p>Control de inscripciones</p>
+	</a>
+	<a href="/facturas" class="card">
+		<div class="icon">💰</div>
+		<h3>Facturas</h3>
+		<p>Gestión de facturación</p>
+	</a>
+	<a href="/historial" class="card">
+		<div class="icon">🩺</div>
+		<h3>Historial Vet.</h3>
+		<p>Registros veterinarios</p>
+	</a>
+</div>
+
+<div class="footer">
+	<p>Hipódromo Nacional © 2026 — IF-5100 Administración de Bases de Datos</p>
+</div>
+</body>
+</html>

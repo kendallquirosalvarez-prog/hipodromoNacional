@@ -1,0 +1,74 @@
+package com.example.hipodromo.controller;
+
+import com.example.hipodromo.model.Factura;
+import com.example.hipodromo.repository.FacturaRepository;
+import com.example.hipodromo.repository.PropietarioRepository;
+import com.example.hipodromo.repository.EventoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/facturas")
+public class FacturaController {
+
+    @Autowired
+    private FacturaRepository facturaRepository;
+
+    @Autowired
+    private PropietarioRepository propietarioRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
+
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("facturas", facturaRepository.findAll());
+        model.addAttribute("factura", new Factura());
+        model.addAttribute("propietarios", propietarioRepository.findAll());
+        model.addAttribute("eventos", eventoRepository.findAll());
+        return "facturas/index";
+    }
+
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute Factura factura) {
+        facturaRepository.insertarFactura(
+            factura.getIdFactura(),
+            factura.getIdPropietario(),
+            factura.getIdEvento(),
+            factura.getSubtotal(),
+            factura.getDescuento(),
+            factura.getImpuestos(),
+            factura.getTotal(),
+            factura.getEstadoPago()
+        );
+        return "redirect:/facturas";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable String id, Model model) {
+        model.addAttribute("factura", facturaRepository.findById(id).orElseThrow());
+        model.addAttribute("facturas", facturaRepository.findAll());
+        model.addAttribute("propietarios", propietarioRepository.findAll());
+        model.addAttribute("eventos", eventoRepository.findAll());
+        return "facturas/index";
+    }
+
+    @PostMapping("/actualizar")
+    public String actualizar(@ModelAttribute Factura factura) {
+        facturaRepository.actualizarFactura(
+            factura.getIdFactura(),
+            factura.getDescuento(),
+            factura.getTotal(),
+            factura.getEstadoPago()
+        );
+        return "redirect:/facturas";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable String id) {
+        facturaRepository.eliminarFactura(id);
+        return "redirect:/facturas";
+    }
+}

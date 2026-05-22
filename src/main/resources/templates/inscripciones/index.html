@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscripciones - Hipódromo Nacional</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+        .navbar h1 { color: #e94560; font-size: 20px; }
+        .navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
+        .navbar nav a:hover { color: #e94560; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        h2 { margin-bottom: 20px; color: #1a1a2e; }
+        .form-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #e94560; }
+        .btn { padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 15px; }
+        .btn-primary { background: #e94560; color: white; }
+        .btn-primary:hover { background: #c73652; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        tr:hover td { background: #fafafa; }
+        .btn-edit { background: #f39c12; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; }
+        .btn-delete { background: #e74c3c; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; margin-left: 5px; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>🏇 Hipódromo Nacional</h1>
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="/propietarios">Propietarios</a>
+        <a href="/caballos">Caballos</a>
+        <a href="/establos">Establos</a>
+        <a href="/eventos">Eventos</a>
+        <a href="/inscripciones">Inscripciones</a>
+        <a href="/facturas">Facturas</a>
+        <a href="/historial">Historial Vet.</a>
+    </nav>
+</div>
+
+<div class="container">
+    <h2>Gestión de Inscripciones</h2>
+
+    <div class="form-card">
+        <h3 style="margin-bottom:15px; color:#1a1a2e;">Registrar Inscripción</h3>
+        <form th:action="@{/inscripciones/guardar}" th:object="${inscripcion}" method="post">
+            <div class="form-grid">
+                <div>
+                    <label>Código de Inscripción</label>
+                    <input type="text" th:field="*{idInscripcion}" required/>
+                </div>
+                <div>
+                    <label>Evento</label>
+                    <select th:field="*{idEvento}" required>
+                        <option value="">Seleccione evento</option>
+                        <option th:each="e : ${eventos}"
+                                th:value="${e.idEvento}"
+                                th:text="${e.nombre}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Caballo</label>
+                    <select th:field="*{idCaballo}" required>
+                        <option value="">Seleccione caballo</option>
+                        <option th:each="c : ${caballos}"
+                                th:value="${c.idCaballo}"
+                                th:text="${c.nombre}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Fecha de Inscripción</label>
+                    <input type="date" th:field="*{fechaInscripcion}" required/>
+                </div>
+                <div>
+                    <label>Estado</label>
+                    <select th:field="*{estado}" required>
+                        <option value="">Seleccione</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Validada">Validada</option>
+                        <option value="Rechazada">Rechazada</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Inscripción</button>
+        </form>
+    </div>
+
+    <h3 style="margin-bottom:15px; color:#1a1a2e;">Lista de Inscripciones</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Evento</th>
+                <th>Caballo</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Posición Final</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="i : ${inscripciones}">
+                <td th:text="${i.idInscripcion}"></td>
+                <td th:text="${i.idEvento}"></td>
+                <td th:text="${i.idCaballo}"></td>
+                <td th:text="${i.fechaInscripcion}"></td>
+                <td th:text="${i.estado}"></td>
+                <td th:text="${i.posicionFinal} ?: '-'"></td>
+                <td>
+                    <a th:href="@{/inscripciones/editar/{id}(id=${i.idInscripcion})}"
+                       class="btn-edit">Editar</a>
+                    <a th:href="@{/inscripciones/eliminar/{id}(id=${i.idInscripcion})}"
+                       class="btn-delete"
+                       onclick="return confirm('¿Eliminar esta inscripción?')">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

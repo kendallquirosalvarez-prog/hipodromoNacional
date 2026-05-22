@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial Veterinario - Hipódromo Nacional</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        .navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+        .navbar h1 { color: #e94560; font-size: 20px; }
+        .navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
+        .navbar nav a:hover { color: #e94560; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        h2 { margin-bottom: 20px; color: #1a1a2e; }
+        .form-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #e94560; }
+        textarea { resize: vertical; min-height: 80px; }
+        .form-full { grid-column: 1 / -1; }
+        .btn { padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 15px; }
+        .btn-primary { background: #e94560; color: white; }
+        .btn-primary:hover { background: #c73652; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        tr:hover td { background: #fafafa; }
+        .btn-edit { background: #f39c12; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; }
+        .btn-delete { background: #e74c3c; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; margin-left: 5px; }
+        .vence-pronto { color: #e74c3c; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>🏇 Hipódromo Nacional</h1>
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="/propietarios">Propietarios</a>
+        <a href="/caballos">Caballos</a>
+        <a href="/establos">Establos</a>
+        <a href="/eventos">Eventos</a>
+        <a href="/inscripciones">Inscripciones</a>
+        <a href="/facturas">Facturas</a>
+        <a href="/historial">Historial Vet.</a>
+    </nav>
+</div>
+
+<div class="container">
+    <h2>Historial Veterinario</h2>
+
+    <div class="form-card">
+        <h3 style="margin-bottom:15px; color:#1a1a2e;">Registrar Revisión Veterinaria</h3>
+        <form th:action="@{/historial/guardar}" th:object="${historial}" method="post">
+            <div class="form-grid">
+                <div>
+                    <label>Código de Registro</label>
+                    <input type="text" th:field="*{idRegistro}" required/>
+                </div>
+                <div>
+                    <label>Caballo</label>
+                    <select th:field="*{idCaballo}" required>
+                        <option value="">Seleccione caballo</option>
+                        <option th:each="c : ${caballos}"
+                                th:value="${c.idCaballo}"
+                                th:text="${c.nombre}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Fecha de Revisión</label>
+                    <input type="date" th:field="*{fechaRevision}" required/>
+                </div>
+                <div>
+                    <label>Fecha Vencimiento Certificación</label>
+                    <input type="date" th:field="*{fechaVencimientoCertificacion}" required/>
+                </div>
+                <div>
+                    <label>Veterinario Responsable</label>
+                    <input type="text" th:field="*{veterinarioResponsable}" required/>
+                </div>
+                <div class="form-full">
+                    <label>Diagnóstico</label>
+                    <textarea th:field="*{diagnostico}" required></textarea>
+                </div>
+                <div class="form-full">
+                    <label>Tratamiento</label>
+                    <textarea th:field="*{tratamiento}" required></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Registro</button>
+        </form>
+    </div>
+
+    <h3 style="margin-bottom:15px; color:#1a1a2e;">Lista de Registros Veterinarios</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Caballo</th>
+                <th>Diagnóstico</th>
+                <th>Veterinario</th>
+                <th>Fecha Revisión</th>
+                <th>Vence Certificación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="h : ${historiales}">
+                <td th:text="${h.idRegistro}"></td>
+                <td th:text="${h.idCaballo}"></td>
+                <td th:text="${h.diagnostico}"></td>
+                <td th:text="${h.veterinarioResponsable}"></td>
+                <td th:text="${h.fechaRevision}"></td>
+                <td th:text="${h.fechaVencimientoCertificacion}"></td>
+                <td>
+                    <a th:href="@{/historial/editar/{id}(id=${h.idRegistro})}"
+                       class="btn-edit">Editar</a>
+                    <a th:href="@{/historial/eliminar/{id}(id=${h.idRegistro})}"
+                       class="btn-delete"
+                       onclick="return confirm('¿Eliminar este registro?')">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 -- INSERT INTO usuarios VALUES ('c19296', '{noop}C19296', 'Kendall Andrés Quirós Álvarez',  'ROLE_ADMIN',       true);
 -- INSERT INTO usuarios VALUES ('c20051', '{noop}C20051', 'Kristy Daniela Acosta Mercado',  'ROLE_VETERINARIO', true);
 -- INSERT INTO usuarios VALUES ('c23112', '{noop}C23112', 'Dering Josué García Acevedo',    'ROLE_OPERADOR',    true);
--- INSERT INTO usuarios VALUES ('c24510', '{noop}C24510', 'Justin Josué Marenco Herrera',   'ROLE_PROPIETARIO', true);
+-- INSERT INTO usuarios VALUES ('c24510', '{noop}C24510', 'Justin Josué Marenco Herrera',   'ROLE_ADMIN',       true);
 -- INSERT INTO usuarios VALUES ('c17735', '{noop}C17735', 'David Daniel Sotela Sánchez',    'ROLE_ENCARGADO',   true);
 
 -- Verificar

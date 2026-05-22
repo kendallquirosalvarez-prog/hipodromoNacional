@@ -34,7 +34,7 @@ public class DataInicializador implements CommandLineRunner {
                     new Usuario("c23112", passwordEncoder.encode("C23112"),
                         "Dering Josué García Acevedo",    "ROLE_OPERADOR",    true),
                     new Usuario("c24510", passwordEncoder.encode("C24510"),
-                        "Justin Josué Marenco Herrera",   "ROLE_PROPIETARIO", true),
+                        "Justin Josué Marenco Herrera",   "ROLE_ADMIN",       true),
                     new Usuario("c17735", passwordEncoder.encode("C17735"),
                         "David Daniel Sotela Sánchez",    "ROLE_ENCARGADO",   true)
                 );

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama ER & Procedimientos — Hipódromo Nacional</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg:      #0a0805;
+    --surface: #16130d;
+    --card:    #1e1a12;
+    --border:  rgba(201,169,97,.22);
+    --gold:    #c9a961;
+    --gold-lt: #e2c98a;
+    --text:    #f4ead5;
+    --muted:   #7a6d5c;
+    --green:   #4ade80;
+    --blue:    #60a5fa;
+    --red:     #f87171;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-mono:  'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ─────────────────────────────── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    width: 42px; height: 42px;
+    background: var(--gold);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  header h1 {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    color: var(--text);
+  }
+
+  header h1 span { color: var(--gold); font-style: italic; }
+
+  .header-tags {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+
+  .tag {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    letter-spacing: .08em;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── MAIN LAYOUT ─────────────────────────── */
+  .wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ── SECTION TITLES ──────────────────────── */
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    color: var(--text);
+  }
+
+  .section-header h2 em { color: var(--gold); font-style: italic; }
+
+  /* ── DIVIDER ─────────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 56px 0;
+  }
+
+  /* ── ER DIAGRAM ──────────────────────────── */
+  .er-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    overflow-x: auto;
+  }
+
+  .mermaid {
+    min-height: 200px;
+  }
+
+  /* Forzar tema oscuro en Mermaid */
+  .mermaid svg {
+    background: var(--card) !important;
+    border-radius: 8px;
+  }
+
+  /* ── LEGEND ──────────────────────────────── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── STORED PROCEDURES ───────────────────── */
+  .sp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(580px, 1fr));
+    gap: 24px;
+  }
+
+  .sp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .sp-header {
+    padding: 14px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sp-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .sp-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .sp-badge {
+    margin-left: auto;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    letter-spacing: .06em;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    tab-size: 4;
+  }
+
+  /* Syntax highlighting manual */
+  .kw  { color: #c792ea; }   /* keyword: CREATE, BEGIN, etc. */
+  .fn  { color: var(--gold); font-weight: 700; } /* procedure name */
+  .tp  { color: var(--blue); }   /* type: VARCHAR, INT, etc. */
+  .cm  { color: var(--muted); font-style: italic; } /* comment */
+  .st  { color: var(--green); }  /* string */
+  .op  { color: #89ddff; }   /* operator: =, (, ) */
+  .nm  { color: var(--gold-lt); } /* param/variable name */
+  .tx  { color: var(--text); }   /* plain text */
+
+  /* ── FOOTER ──────────────────────────────── */
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 80px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    letter-spacing: .06em;
+  }
+
+  @media (max-width: 700px) {
+    .sp-grid { grid-template-columns: 1fr; }
+    .wrapper { padding: 24px 16px 60px; }
+    header { padding: 14px 16px; }
+    .header-tags { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">♞</div>
+  <h1>Hipódromo Nacional · <span>Base de Datos</span></h1>
+  <div class="header-tags">
+    <span class="tag">PostgreSQL 17</span>
+    <span class="tag">Supabase</span>
+    <span class="tag">IF-5100 UCR</span>
+  </div>
+</header>
+
+<div class="wrapper">
+
+  <!-- ═══════════════════════════════════════════════
+       DIAGRAMA ENTIDAD-RELACIÓN
+  ════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-kicker">01 · Modelo de Datos</span>
+    <h2>Diagrama <em>Entidad-Relación</em></h2>
+  </div>
+
+  <div class="er-card">
+    <div class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': {
+  'primaryColor': '#1e1a12',
+  'primaryTextColor': '#f4ead5',
+  'primaryBorderColor': '#c9a961',
+  'lineColor': '#c9a961',
+  'secondaryColor': '#16130d',
+  'tertiaryColor': '#0a0805',
+  'edgeLabelBackground': '#1e1a12',
+  'fontFamily': 'Segoe UI'
+}}}%%
+erDiagram
+    PAIS {
+        int id_pais PK
+        varchar nombre_pais
+    }
+    PROVINCIA {
+        int id_provincia PK
+        varchar nombre_provincia
+        int id_pais FK
+    }
+    CANTON {
+        int id_canton PK
+        varchar nombre_canton
+        int id_provincia FK
+    }
+    DISTRITO {
+        int id_distrito PK
+        varchar nombre_distrito
+        int id_canton FK
+    }
+    BARRIO {
+        int id_barrio PK
+        varchar nombre_barrio
+        int id_distrito FK
+    }
+    PROPIETARIO {
+        varchar id_propietario PK
+        varchar nombre
+        varchar apellidos
+        int id_barrio FK
+        boolean descuento_proxima_facturacion
+    }
+    ESTABLO {
+        varchar id_establo PK
+        int capacidad
+        varchar estado
+        int id_barrio FK
+    }
+    CABALLO {
+        varchar id_caballo PK
+        varchar nombre
+        date fecha_nacimiento
+        char sexo
+        varchar raza
+        decimal peso
+        varchar estado_salud
+        varchar id_propietario FK
+        varchar id_establo FK
+    }
+    EVENTO {
+        varchar id_evento PK
+        varchar nombre
+        timestamp fecha
+        varchar tipo_carrera
+        int distancia
+        decimal premio_total
+        varchar estado
+    }
+    INSCRIPCION {
+        varchar id_inscripcion PK
+        varchar id_evento FK
+        varchar id_caballo FK
+        date fecha_inscripcion
+        varchar estado
+        int posicion_final
+    }
+    FACTURA {
+        varchar id_factura PK
+        varchar id_propietario FK
+        varchar id_evento FK
+        decimal subtotal
+        decimal descuento
+        decimal impuestos
+        decimal total
+        varchar estado_pago
+    }
+    HISTORIAL_VETERINARIO {
+        varchar id_registro PK
+        varchar id_caballo FK
+        varchar diagnostico
+        varchar tratamiento
+        date fecha_revision
+        date fecha_vencimiento_cert
+        varchar veterinario_responsable
+    }
+    BITACORA_AUDITORIA {
+        bigint id_bitacora PK
+        varchar tabla_afectada
+        varchar operacion
+        text datos_anteriores
+        text datos_nuevos
+        timestamp fecha_hora
+    }
+
+    PAIS            ||--o{ PROVINCIA              : "tiene"
+    PROVINCIA       ||--o{ CANTON                 : "tiene"
+    CANTON          ||--o{ DISTRITO               : "tiene"
+    DISTRITO        ||--o{ BARRIO                 : "tiene"
+    BARRIO          ||--o{ PROPIETARIO             : "reside en"
+    BARRIO          ||--o{ ESTABLO                 : "ubicado en"
+    PROPIETARIO     ||--o{ CABALLO                 : "posee"
+    ESTABLO         ||--o{ CABALLO                 : "aloja"
+    EVENTO          ||--o{ INSCRIPCION             : "incluye"
+    CABALLO         ||--o{ INSCRIPCION             : "participa en"
+    PROPIETARIO     ||--o{ FACTURA                 : "recibe"
+    EVENTO          ||--o{ FACTURA                 : "genera"
+    CABALLO         ||--o{ HISTORIAL_VETERINARIO   : "tiene"
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#c9a961"></div>
+        <span>Entidad principal</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#60a5fa"></div>
+        <span>FK — Clave foránea</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#4ade80"></div>
+        <span>PK — Clave primaria</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#7a6d5c"></div>
+        <span>|| = exactamente uno &nbsp;·&nbsp; o{ = cero o muchos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       PROCEDIMIENTOS ALMACENADOS
+  ════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-kicker">02 · Lógica de Negocio</span>
+    <h2>Procedimientos <em>Almacenados</em></h2>
+  </div>
+
+  <div class="sp-grid">
+
+    <!-- sp_insertar_propietario -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot"></div>
+        <span class="sp-name">sp_insertar_propietario</span>
+        <span class="sp-badge">INSERT</span>
+      </div>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_propietario</span><span class="op">(</span>
+    <span class="nm">p_id</span>          <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_nombre</span>      <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_apellidos</span>   <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_barrio</span>   <span class="tp">INTEGER</span>
+<span class="op">)</span>
+<span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> <span class="tx">propietario</span> <span class="op">(</span>
+        <span class="tx">id_propietario, nombre, apellidos, id_barrio</span>
+    <span class="op">)</span>
+    <span class="kw">VALUES</span> <span class="op">(</span>
+        <span class="nm">p_id</span><span class="op">,</span> <span class="nm">p_nombre</span><span class="op">,</span> <span class="nm">p_apellidos</span><span class="op">,</span> <span class="nm">p_id_barrio</span>
+    <span class="op">);</span>
+    <span class="cm">-- El trigger tr_auditoria registra el INSERT automáticamente</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span></pre>
+    </div>
+
+    <!-- sp_insertar_caballo -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot" style="background:var(--blue)"></div>
+        <span class="sp-name">sp_insertar_caballo</span>
+        <span class="sp-badge">INSERT</span>
+      </div>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_caballo</span><span class="op">(</span>
+    <span class="nm">p_id</span>               <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_nombre</span>           <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_fecha_nacimiento</span> <span class="tp">DATE</span><span class="op">,</span>
+    <span class="nm">p_sexo</span>             <span class="tp">CHAR(1)</span><span class="op">,</span>
+    <span class="nm">p_raza</span>             <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_peso</span>             <span class="tp">DECIMAL(10,2)</span><span class="op">,</span>
+    <span class="nm">p_estado_salud</span>     <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_propietario</span>   <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_establo</span>       <span class="tp">VARCHAR</span>
+<span class="op">)</span>
+<span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> <span class="tx">caballo</span> <span class="op">(</span>
+        <span class="tx">id_caballo, nombre, fecha_nacimiento, sexo, raza,
+        peso, estado_salud, id_propietario, id_establo</span>
+    <span class="op">)</span>
+    <span class="kw">VALUES</span> <span class="op">(</span>
+        <span class="nm">p_id</span><span class="op">,</span> <span class="nm">p_nombre</span><span class="op">,</span> <span class="nm">p_fecha_nacimiento</span><span class="op">,</span> <span class="nm">p_sexo</span><span class="op">,</span>
+        <span class="nm">p_raza</span><span class="op">,</span> <span class="nm">p_peso</span><span class="op">,</span> <span class="nm">p_estado_salud</span><span class="op">,</span>
+        <span class="nm">p_id_propietario</span><span class="op">,</span> <span class="nm">p_id_establo</span>
+    <span class="op">);</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span></pre>
+    </div>
+
+    <!-- sp_actualizar_caballo -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot" style="background:var(--gold-lt)"></div>
+        <span class="sp-name">sp_actualizar_caballo</span>
+        <span class="sp-badge">UPDATE</span>
+      </div>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_actualizar_caballo</span><span class="op">(</span>
+    <span class="nm">p_id</span>           <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_peso</span>         <span class="tp">DECIMAL(10,2)</span><span class="op">,</span>
+    <span class="nm">p_estado_salud</span> <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_establo</span>   <span class="tp">VARCHAR</span>
+<span class="op">)</span>
+<span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">UPDATE</span> <span class="tx">caballo</span>
+    <span class="kw">SET</span>
+        <span class="tx">peso</span>         <span class="op">=</span> <span class="nm">p_peso</span><span class="op">,</span>
+        <span class="tx">estado_salud</span> <span class="op">=</span> <span class="nm">p_estado_salud</span><span class="op">,</span>
+        <span class="tx">id_establo</span>   <span class="op">=</span> <span class="nm">p_id_establo</span>
+    <span class="kw">WHERE</span> <span class="tx">id_caballo</span> <span class="op">=</span> <span class="nm">p_id</span><span class="op">;</span>
+    <span class="cm">-- El trigger actualiza bitacora_auditoria automáticamente</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span></pre>
+    </div>
+
+    <!-- sp_insertar_inscripcion -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot" style="background:var(--green)"></div>
+        <span class="sp-name">sp_insertar_inscripcion</span>
+        <span class="sp-badge">INSERT</span>
+      </div>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_inscripcion</span><span class="op">(</span>
+    <span class="nm">p_id</span>          <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_evento</span>   <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_caballo</span>  <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_fecha</span>       <span class="tp">DATE</span><span class="op">,</span>
+    <span class="nm">p_estado</span>      <span class="tp">VARCHAR</span>
+<span class="op">)</span>
+<span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="cm">-- Validar que el caballo tenga certificación vigente</span>
+    <span class="kw">IF NOT EXISTS</span> <span class="op">(</span>
+        <span class="kw">SELECT</span> <span class="st">1</span> <span class="kw">FROM</span> <span class="tx">historial_veterinario</span>
+        <span class="kw">WHERE</span> <span class="tx">id_caballo</span> <span class="op">=</span> <span class="nm">p_id_caballo</span>
+          <span class="kw">AND</span> <span class="tx">fecha_vencimiento_certificacion</span> <span class="op">&gt;=</span> <span class="kw">CURRENT_DATE</span>
+    <span class="op">)</span> <span class="kw">THEN</span>
+        <span class="kw">RAISE EXCEPTION</span> <span class="st">'Caballo sin certificación veterinaria vigente'</span><span class="op">;</span>
+    <span class="kw">END IF;</span>
+
+    <span class="kw">INSERT INTO</span> <span class="tx">inscripcion</span> <span class="op">(</span>
+        <span class="tx">id_inscripcion, id_evento, id_caballo,
+        fecha_inscripcion, estado</span>
+    <span class="op">)</span>
+    <span class="kw">VALUES</span> <span class="op">(</span>
+        <span class="nm">p_id</span><span class="op">,</span> <span class="nm">p_id_evento</span><span class="op">,</span> <span class="nm">p_id_caballo</span><span class="op">,</span>
+        <span class="nm">p_fecha</span><span class="op">,</span> <span class="nm">p_estado</span>
+    <span class="op">);</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span></pre>
+    </div>
+
+    <!-- sp_insertar_factura -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot" style="background:var(--red)"></div>
+        <span class="sp-name">sp_insertar_factura</span>
+        <span class="sp-badge">INSERT</span>
+      </div>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_factura</span><span class="op">(</span>
+    <span class="nm">p_id</span>             <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_propietario</span> <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_id_evento</span>      <span class="tp">VARCHAR</span><span class="op">,</span>
+    <span class="nm">p_subtotal</span>       <span class="tp">DECIMAL(12,2)</span><span class="op">,</span>
+    <span class="nm">p_descuento</span>      <span class="tp">DECIMAL(12,2)</span><span class="op">,</span>
+    <span class="nm">p_impuestos</span>      <span class="tp">DECIMAL(12,2)</span><span class="op">,</span>
+    <span class="nm">p_total</span>          <span class="tp">DECIMAL(12,2)</span><span class="op">,</span>
+    <span class="nm">p_estado_pago</span>    <span class="tp">VARCHAR</span>
+<span class="op">)</span>
+<span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="cm">-- Verificar IVA 13% (legislación costarricense)</span>
+    <span class="kw">IF</span> <span class="op">ABS(</span><span class="nm">p_impuestos</span> <span class="op">-</span> <span class="op">(</span><span class="nm">p_subtotal</span> <span class="op">-</span> <span class="nm">p_descuento</span><span class="op">)</span> <span class="op">* 0.13) &gt; 0.01</span> <span class="kw">THEN</span>
+        <span class="kw">RAISE EXCEPTION</span> <span class="st">'IVA debe ser 13%% del subtotal neto'</span><span class="op">;</span>
+    <span class="kw">END IF;</span>
+
+    <span class="kw">INSERT INTO</span> <span class="tx">factura</span> <span class="op">(</span>
+        <span class="tx">id_factura, id_propietario, id_evento,
+        subtotal, descuento, impuestos, total, estado_pago</span>
+    <span class="op">)</span>
+    <span class="kw">VALUES</span> <span class="op">(</span>
+        <span class="nm">p_id</span><span class="op">,</span> <span class="nm">p_id_propietario</span><span class="op">,</span> <span class="nm">p_id_evento</span><span class="op">,</span>
+        <span class="nm">p_subtotal</span><span class="op">,</span> <span class="nm">p_descuento</span><span class="op">,</span> <span class="nm">p_impuestos</span><span class="op">,</span>
+        <span class="nm">p_total</span><span class="op">,</span> <span class="nm">p_estado_pago</span>
+    <span class="op">);</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span></pre>
+    </div>
+
+    <!-- Trigger de auditoría -->
+    <div class="sp-card">
+      <div class="sp-header">
+        <div class="sp-dot" style="background:var(--muted)"></div>
+        <span class="sp-name">tr_auditoria  (Trigger)</span>
+        <span class="sp-badge">TRIGGER</span>
+      </div>
+      <pre><span class="cm">-- Función que alimenta la bitácora de auditoría</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> <span class="fn">fn_registrar_auditoria</span><span class="op">()</span>
+<span class="kw">RETURNS TRIGGER</span> <span class="kw">LANGUAGE</span> <span class="tp">plpgsql</span> <span class="kw">AS</span> <span class="st">$$</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> <span class="tx">bitacora_auditoria</span> <span class="op">(</span>
+        <span class="tx">tabla_afectada, operacion,
+        datos_anteriores, datos_nuevos, fecha_hora</span>
+    <span class="op">)</span>
+    <span class="kw">VALUES</span> <span class="op">(</span>
+        <span class="tp">TG_TABLE_NAME</span><span class="op">,</span>
+        <span class="tp">TG_OP</span><span class="op">,</span>
+        <span class="kw">CASE WHEN</span> <span class="tp">TG_OP</span> <span class="op">!=</span> <span class="st">'INSERT'</span>
+             <span class="kw">THEN</span> <span class="tx">row_to_json</span><span class="op">(</span><span class="tp">OLD</span><span class="op">)::</span><span class="tp">TEXT</span>
+             <span class="kw">ELSE NULL END</span><span class="op">,</span>
+        <span class="kw">CASE WHEN</span> <span class="tp">TG_OP</span> <span class="op">!=</span> <span class="st">'DELETE'</span>
+             <span class="kw">THEN</span> <span class="tx">row_to_json</span><span class="op">(</span><span class="tp">NEW</span><span class="op">)::</span><span class="tp">TEXT</span>
+             <span class="kw">ELSE NULL END</span><span class="op">,</span>
+        <span class="kw">NOW</span><span class="op">()</span>
+    <span class="op">);</span>
+    <span class="kw">RETURN NEW;</span>
+<span class="kw">END;</span>
+<span class="st">$$;</span>
+
+<span class="cm">-- Asociar el trigger a cada tabla principal</span>
+<span class="kw">CREATE TRIGGER</span> <span class="fn">tr_auditoria_caballo</span>
+<span class="kw">AFTER INSERT OR UPDATE OR DELETE ON</span> <span class="tx">caballo</span>
+<span class="kw">FOR EACH ROW EXECUTE FUNCTION</span> <span class="fn">fn_registrar_auditoria</span><span class="op">();</span></pre>
+    </div>
+
+  </div><!-- /sp-grid -->
+
+</div><!-- /wrapper -->
+
+<footer>
+  Hipódromo Nacional © 2026 &nbsp;·&nbsp; IF-5100 Administración de Bases de Datos &nbsp;·&nbsp; UCR Sede Liberia
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor:       '#1e1a12',
+      primaryTextColor:   '#f4ead5',
+      primaryBorderColor: '#c9a961',
+      lineColor:          '#c9a961',
+      secondaryColor:     '#16130d',
+      tertiaryColor:      '#0a0805',
+      fontFamily:         'Segoe UI, system-ui, sans-serif'
+    },
+    er: {
+      diagramPadding: 30,
+      layoutDirection: 'TB',
+      minEntityWidth: 100,
+      minEntityHeight: 75,
+      entityPadding: 15,
+      useMaxWidth: true
+    }
+  });
+</script>
+</body>
+</html>

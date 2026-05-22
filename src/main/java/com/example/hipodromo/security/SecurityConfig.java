@@ -25,7 +25,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Recursos estáticos y login siempre accesibles
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/login", "/er-diagram.html").permitAll()
                 // Control de acceso por módulo y rol
                 .requestMatchers("/historial/**").hasAnyRole("ADMIN", "VETERINARIO")
                 .requestMatchers("/establos/**").hasAnyRole("ADMIN", "ENCARGADO")

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +30,12 @@
         <li><a href="/inscripciones">Inscripciones</a></li>
         <li><a href="/facturas">Facturas</a></li>
         <li><a href="/historial">Historial Vet.</a></li>
+        <li class="navbar-user" sec:authorize="isAuthenticated()">
+            <span class="navbar-user-name" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Salir</button>
+            </form>
+        </li>
     </ul>
 </nav>
 

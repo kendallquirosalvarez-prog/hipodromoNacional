@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li class="navbar-user" sec:authorize="isAuthenticated()">
+            <span class="navbar-user-name" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Salir</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+        <div class="page-header" style="text-align:center; padding-top: 60px;">
+            <span class="page-kicker">Error 403</span>
+            <h1>🚫 Acceso <em>Denegado</em></h1>
+            <p>No tiene permiso para acceder a este módulo con su rol actual.</p>
+            <a href="/" class="btn btn-primary" style="margin-top: 32px; display: inline-block;">Volver al inicio</a>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+</body>
+</html>

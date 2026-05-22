@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+</head>
+<body class="login-body">
+
+<div class="login-container">
+
+    <div class="login-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </div>
+
+    <div class="login-card">
+        <h2>Iniciar Sesión</h2>
+        <p class="login-subtitle">Sistema de Control · UCR IF-5100</p>
+
+        <div th:if="${param.error}" class="alert alert-error">
+            Usuario o contraseña incorrectos. Intente de nuevo.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            Sesión cerrada exitosamente.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label>Código de estudiante</label>
+                <input type="text" name="username" placeholder="c19296" required autofocus
+                       autocomplete="username"/>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" placeholder="••••••" required
+                       autocomplete="current-password"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Ingresar al sistema</button>
+        </form>
+
+        <div class="login-info">
+            <p>Usuarios del grupo · contraseña = código en mayúsculas</p>
+            <ul>
+                <li><strong>c19296</strong> · C19296 · Admin — Kendall Quirós</li>
+                <li><strong>c20051</strong> · C20051 · Veterinario — Kristy Acosta</li>
+                <li><strong>c23112</strong> · C23112 · Operador — Dering García</li>
+                <li><strong>c24510</strong> · C24510 · Propietario — Justin Marenco</li>
+                <li><strong>c17735</strong> · C17735 · Encargado — David Sotela</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

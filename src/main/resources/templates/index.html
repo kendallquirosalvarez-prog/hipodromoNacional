@@ -1,86 +1,113 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-	<meta charset="UTF-8">
-	<title>Hipódromo Nacional</title>
-	<style>
-		* { margin: 0; padding: 0; box-sizing: border-box; }
-		body { font-family: Arial, sans-serif; background: #f0f2f5; }
-		.navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-		.navbar h1 { color: #e94560; font-size: 22px; }
-		.navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
-		.navbar nav a:hover { color: #e94560; }
-		.hero { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 60px 30px; text-align: center; }
-		.hero h2 { font-size: 36px; margin-bottom: 10px; }
-		.hero p { font-size: 16px; color: #aaa; margin-bottom: 30px; }
-		.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 40px 30px; max-width: 1200px; margin: 0 auto; }
-		.card { background: white; border-radius: 12px; padding: 30px 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; text-decoration: none; color: #333; }
-		.card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-		.card .icon { font-size: 40px; margin-bottom: 15px; }
-		.card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-		.card p { font-size: 13px; color: #888; }
-		.footer { text-align: center; padding: 20px; color: #888; font-size: 13px; background: white; margin-top: 20px; }
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hipódromo Nacional — Sistema de Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
 </head>
 <body>
-<div class="navbar">
-	<h1>🏇 Hipódromo Nacional</h1>
-	<nav>
-		<a href="/propietarios">Propietarios</a>
-		<a href="/caballos">Caballos</a>
-		<a href="/establos">Establos</a>
-		<a href="/eventos">Eventos</a>
-		<a href="/inscripciones">Inscripciones</a>
-		<a href="/facturas">Facturas</a>
-		<a href="/historial">Historial Vet.</a>
-	</nav>
-</div>
 
-<div class="hero">
-	<h2>Sistema de Control de Carrera de Caballos</h2>
-	<p>Universidad de Costa Rica — IF-5100 Administración de Bases de Datos</p>
-</div>
+<div id="scroll-progress"></div>
 
-<div class="cards">
-	<a href="/propietarios" class="card">
-		<div class="icon">👤</div>
-		<h3>Propietarios</h3>
-		<p>Gestión de propietarios y contactos</p>
-	</a>
-	<a href="/caballos" class="card">
-		<div class="icon">🐎</div>
-		<h3>Caballos</h3>
-		<p>Registro y control de caballos</p>
-	</a>
-	<a href="/establos" class="card">
-		<div class="icon">🏠</div>
-		<h3>Establos</h3>
-		<p>Administración de establos</p>
-	</a>
-	<a href="/eventos" class="card">
-		<div class="icon">🏆</div>
-		<h3>Eventos</h3>
-		<p>Programación de carreras</p>
-	</a>
-	<a href="/inscripciones" class="card">
-		<div class="icon">📋</div>
-		<h3>Inscripciones</h3>
-		<p>Control de inscripciones</p>
-	</a>
-	<a href="/facturas" class="card">
-		<div class="icon">💰</div>
-		<h3>Facturas</h3>
-		<p>Gestión de facturación</p>
-	</a>
-	<a href="/historial" class="card">
-		<div class="icon">🩺</div>
-		<h3>Historial Vet.</h3>
-		<p>Registros veterinarios</p>
-	</a>
-</div>
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+    </ul>
+</nav>
 
-<div class="footer">
-	<p>Hipódromo Nacional © 2026 — IF-5100 Administración de Bases de Datos</p>
-</div>
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="hero">
+            <span class="page-kicker">UCR · Sede Liberia · IF-5100 · Administración de Bases de Datos</span>
+            <h1>Sistema de Control de<br><em>Carrera de Caballos</em></h1>
+            <p class="hero-lead">
+                Gestión integral de propietarios, caballos, eventos, establos y facturación
+                del Hipódromo Nacional de Costa Rica.
+            </p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value">7</span>
+                    <span class="stat-label">Módulos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">PostgreSQL</span>
+                    <span class="stat-label">Base de datos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">20+</span>
+                    <span class="stat-label">Registros por tabla</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">Supabase</span>
+                    <span class="stat-label">Infraestructura</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="home-section-title">Módulos del sistema</p>
+
+        <div class="home-grid">
+            <a href="/propietarios" class="card-nav reveal">
+                <span class="card-icon">👤</span>
+                <h3>Propietarios</h3>
+                <p>Registro y gestión de propietarios de caballos</p>
+            </a>
+            <a href="/caballos" class="card-nav reveal">
+                <span class="card-icon">🐎</span>
+                <h3>Caballos</h3>
+                <p>Control de caballos, razas y estado de salud</p>
+            </a>
+            <a href="/establos" class="card-nav reveal">
+                <span class="card-icon">🏠</span>
+                <h3>Establos</h3>
+                <p>Administración de establos y capacidades</p>
+            </a>
+            <a href="/eventos" class="card-nav reveal">
+                <span class="card-icon">🏆</span>
+                <h3>Eventos</h3>
+                <p>Programación y control de carreras</p>
+            </a>
+            <a href="/inscripciones" class="card-nav reveal">
+                <span class="card-icon">📋</span>
+                <h3>Inscripciones</h3>
+                <p>Inscripción de caballos a eventos</p>
+            </a>
+            <a href="/facturas" class="card-nav reveal">
+                <span class="card-icon">💰</span>
+                <h3>Facturas</h3>
+                <p>Facturación y cobros por participación</p>
+            </a>
+            <a href="/historial" class="card-nav reveal">
+                <span class="card-icon">🩺</span>
+                <h3>Historial Vet.</h3>
+                <p>Registros veterinarios y certificaciones</p>
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
 </body>
 </html>

@@ -1,110 +1,140 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Propietarios - Hipódromo Nacional</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f0f2f5; }
-        .navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-        .navbar h1 { color: #e94560; font-size: 20px; }
-        .navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
-        .navbar nav a:hover { color: #e94560; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        h2 { margin-bottom: 20px; color: #1a1a2e; }
-        .form-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        input:focus, select:focus { outline: none; border-color: #e94560; }
-        .btn { padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 15px; }
-        .btn-primary { background: #e94560; color: white; }
-        .btn-primary:hover { background: #c73652; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
-        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        tr:hover td { background: #fafafa; }
-        .btn-edit { background: #f39c12; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; }
-        .btn-delete { background: #e74c3c; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; margin-left: 5px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propietarios — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
 </head>
 <body>
-<div class="navbar">
-    <h1>🏇 Hipódromo Nacional</h1>
-    <nav>
-        <a href="/">Inicio</a>
-        <a href="/propietarios">Propietarios</a>
-        <a href="/caballos">Caballos</a>
-        <a href="/establos">Establos</a>
-        <a href="/eventos">Eventos</a>
-        <a href="/inscripciones">Inscripciones</a>
-        <a href="/facturas">Facturas</a>
-        <a href="/historial">Historial Vet.</a>
-    </nav>
-</div>
 
-<div class="container">
-    <h2>Gestión de Propietarios</h2>
+<div id="scroll-progress"></div>
 
-    <div class="form-card">
-        <h3 style="margin-bottom:15px; color:#1a1a2e;">Registrar Propietario</h3>
-        <form th:action="@{/propietarios/guardar}" th:object="${propietario}" method="post">
-            <div class="form-grid">
-                <div>
-                    <label>Cédula / ID</label>
-                    <input type="text" th:field="*{idPropietario}" required/>
-                </div>
-                <div>
-                    <label>Nombre</label>
-                    <input type="text" th:field="*{nombre}" required/>
-                </div>
-                <div>
-                    <label>Apellidos</label>
-                    <input type="text" th:field="*{apellidos}" required/>
-                </div>
-                <div>
-                    <label>Barrio</label>
-                    <select th:field="*{idBarrio}" required>
-                        <option value="">Seleccione un barrio</option>
-                        <option th:each="b : ${barrios}"
-                                th:value="${b.idBarrio}"
-                                th:text="${b.nombreBarrio}"></option>
-                    </select>
-                </div>
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 1</span>
+            <h1>👤 <em>Propietarios</em></h1>
+            <p>Registro, modificación y eliminación de propietarios de caballos.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">👤</span>
+                <h3 th:text="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)} ? 'Editar Propietario' : 'Nuevo Propietario'">Nuevo Propietario</h3>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar Propietario</button>
-        </form>
-    </div>
+            <form th:action="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)} ? @{/propietarios/actualizar} : @{/propietarios/guardar}"
+                  th:object="${propietario}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Cédula / ID</label>
+                        <input type="text" th:field="*{idPropietario}"
+                               th:readonly="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)}"
+                               placeholder="1-0000-0000" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" th:field="*{nombre}" placeholder="Nombre" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input type="text" th:field="*{apellidos}" placeholder="Apellidos" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <select th:field="*{idBarrio}" required>
+                            <option value="">Seleccione un barrio</option>
+                            <option th:each="b : ${barrios}"
+                                    th:value="${b.idBarrio}"
+                                    th:text="${b.nombreBarrio}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                        th:text="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)} ? 'Guardar cambios' : 'Registrar propietario'">
+                    Registrar propietario
+                </button>
+                <a th:if="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)}"
+                   href="/propietarios" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
 
-    <h3 style="margin-bottom:15px; color:#1a1a2e;">Lista de Propietarios</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Cédula</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>ID Barrio</th>
-                <th>Descuento</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${propietarios}">
-                <td th:text="${p.idPropietario}"></td>
-                <td th:text="${p.nombre}"></td>
-                <td th:text="${p.apellidos}"></td>
-                <td th:text="${p.idBarrio}"></td>
-                <td th:text="${p.descuentoProximaFacturacion} ? 'Sí' : 'No'"></td>
-                <td>
-                    <a th:href="@{/propietarios/editar/{id}(id=${p.idPropietario})}"
-                       class="btn-edit">Editar</a>
-                    <a th:href="@{/propietarios/eliminar/{id}(id=${p.idPropietario})}"
-                       class="btn-delete"
-                       onclick="return confirm('¿Eliminar este propietario?')">Eliminar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Lista de <em>Propietarios</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Barrio</th>
+                            <th>Descuento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${propietarios}">
+                            <td th:text="${p.idPropietario}"></td>
+                            <td th:text="${p.nombre}"></td>
+                            <td th:text="${p.apellidos}"></td>
+                            <td th:text="${p.idBarrio}"></td>
+                            <td>
+                                <span th:if="${p.descuentoProximaFacturacion}" class="badge badge-green">Sí</span>
+                                <span th:unless="${p.descuentoProximaFacturacion}" class="badge badge-gray">No</span>
+                            </td>
+                            <td class="td-actions">
+                                <a th:href="@{/propietarios/editar/{id}(id=${p.idPropietario})}" class="btn-edit">Editar</a>
+                                <a th:href="@{/propietarios/eliminar/{id}(id=${p.idPropietario})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar este propietario?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(propietarios)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">👤</div>
+                                    <p>Sin propietarios registrados</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
 </body>
 </html>

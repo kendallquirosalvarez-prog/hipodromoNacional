@@ -1,0 +1,151 @@
+/* === KEYFRAMES === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 97, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(201, 169, 97, 0.08); }
+}
+
+/* === ENTRADA INICIAL === */
+.hero          { animation: fadeInUp 0.7s var(--ease) both; }
+.home-grid     { animation: fadeInUp 0.7s 0.15s var(--ease) both; }
+.page-header   { animation: fadeInUp 0.55s var(--ease) both; }
+.form-card     { animation: fadeInUp 0.55s 0.1s var(--ease) both; }
+.table-section { animation: fadeInUp 0.55s 0.2s var(--ease) both; }
+
+/* === SCROLL REVEAL === */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === HOVER NAVBAR === */
+.navbar-nav a {
+  position: relative;
+}
+
+.navbar-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 13px; right: 13px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s var(--ease);
+}
+
+.navbar-nav a:hover::after,
+.navbar-nav a.active::after {
+  transform: scaleX(1);
+}
+
+/* === HOVER TARJETAS === */
+.card-nav .card-icon {
+  transition: transform 0.3s var(--ease);
+}
+
+.card-nav:hover .card-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+/* === FONDO DE PÁGINA (patrón geométrico sutil) === */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 169, 97, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 169, 97, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === FILA DE TABLA: highlight nueva fila === */
+tbody tr.row-new td {
+  animation: pulse-gold 1.2s ease 0.2s;
+}
+
+/* === INPUT FOCUS RING === */
+input:focus,
+select:focus,
+textarea:focus {
+  animation: none;
+}
+
+/* === LOADING SKELETON (por si se necesita) === */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 169, 97, 0.06) 25%,
+    rgba(201, 169, 97, 0.12) 50%,
+    rgba(201, 169, 97, 0.06) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: var(--radius);
+  color: transparent;
+}
+
+/* === BOTÓN: ripple al click === */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 0.15s;
+  border-radius: inherit;
+}
+
+.btn:active::after {
+  opacity: 1;
+}
+
+/* === TRANSICIÓN DE PÁGINA === */
+.page-wrapper {
+  animation: fadeIn 0.35s ease both;
+}
+
+/* === BADGE pulse al aparecer === */
+.badge {
+  animation: fadeIn 0.3s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

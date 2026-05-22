@@ -1,63 +1,194 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Caballos - Hipódromo Nacional</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f0f2f5; }
-        .navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-        .navbar h1 { color: #e94560; font-size: 20px; }
-        .navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
-        .navbar nav a:hover { color: #e94560; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        h2 { margin-bottom: 20px; color: #1a1a2e; }
-        .form-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        input:focus, select:focus { outline: none; border-color: #e94560; }
-        .btn { padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 15px; }
-        .btn-primary { background: #e94560; color: white; }
-        .btn-primary:hover { background: #c73652; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
-        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        tr:hover td { background: #fafafa; }
-        .btn-edit { background: #f39c12; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; }
-        .btn-delete { background: #e74c3c; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; margin-left: 5px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caballos — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
 </head>
 <body>
-<div class="navbar">
-    <h1>🏇 Hipódromo Nacional</h1>
-    <nav>
-        <a href="/">Inicio</a>
-        <a href="/propietarios">Propietarios</a>
-        <a href="/caballos">Caballos</a>
-        <a href="/establos">Establos</a>
-        <a href="/eventos">Eventos</a>
-        <a href="/inscripciones">Inscripciones</a>
-        <a href="/facturas">Facturas</a>
-        <a href="/historial">Historial Vet.</a>
-    </nav>
-</div>
 
-<div class="container">
-    <h2>Gestión de Caballos</h2>
+<div id="scroll-progress"></div>
 
-    <div class="form-card">
-        <h3 style="margin-bottom:15px; color:#1a1a2e;">Registrar Caballo</h3>
-        <form th:action="@{/caballos/guardar}" th:object="${caballo}" method="post">
-            <div class="form-grid">
-                <div>
-                    <label>Código Único</label>
-                    <input type="text" th:field="*{idCaballo}" required/>
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 2</span>
+            <h1>🐎 <em>Caballos</em></h1>
+            <p>Registro y control de caballos, razas, pesos y estado de salud.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">🐎</span>
+                <h3 th:text="${caballo.idCaballo != null and !#strings.isEmpty(caballo.idCaballo)} ? 'Editar Caballo' : 'Nuevo Caballo'">Nuevo Caballo</h3>
+            </div>
+            <form th:action="${caballo.idCaballo != null and !#strings.isEmpty(caballo.idCaballo)} ? @{/caballos/actualizar} : @{/caballos/guardar}"
+                  th:object="${caballo}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Código Único</label>
+                        <input type="text" th:field="*{idCaballo}"
+                               th:readonly="${caballo.idCaballo != null and !#strings.isEmpty(caballo.idCaballo)}"
+                               placeholder="CAB-001" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" th:field="*{nombre}" placeholder="Nombre del caballo" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <input type="date" th:field="*{fechaNacimiento}" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select th:field="*{sexo}" required>
+                            <option value="">Seleccione</option>
+                            <option value="M">Macho</option>
+                            <option value="H">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Raza</label>
+                        <select th:field="*{raza}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Pura Sangre">Pura Sangre</option>
+                            <option value="Cuarto de Milla">Cuarto de Milla</option>
+                            <option value="Árabe">Árabe</option>
+                            <option value="Appaloosa">Appaloosa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" th:field="*{peso}" step="0.01" placeholder="450.00" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado de Salud</label>
+                        <select th:field="*{estadoSalud}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Óptimo">Óptimo</option>
+                            <option value="Bueno">Bueno</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Crítico">Crítico</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Propietario</label>
+                        <select th:field="*{idPropietario}" required>
+                            <option value="">Seleccione propietario</option>
+                            <option th:each="p : ${propietarios}"
+                                    th:value="${p.idPropietario}"
+                                    th:text="${p.nombre} + ' ' + ${p.apellidos}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Establo</label>
+                        <select th:field="*{idEstablo}" required>
+                            <option value="">Seleccione establo</option>
+                            <option th:each="e : ${establos}"
+                                    th:value="${e.idEstablo}"
+                                    th:text="${e.idEstablo}"></option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label>Nombre</label>
-                    <input type="text" th:field="*{nombre}" required/>
-                </div>
-                <div>
-                    <label>Fecha de Nacimiento</label>
-                    <input type="date" th:field="*{fechaNaci
+                <button type="submit" class="btn btn-primary"
+                        th:text="${caballo.idCaballo != null and !#strings.isEmpty(caballo.idCaballo)} ? 'Guardar cambios' : 'Registrar caballo'">
+                    Registrar caballo
+                </button>
+                <a th:if="${caballo.idCaballo != null and !#strings.isEmpty(caballo.idCaballo)}"
+                   href="/caballos" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Lista de <em>Caballos</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Nacimiento</th>
+                            <th>Sexo</th>
+                            <th>Raza</th>
+                            <th>Peso (kg)</th>
+                            <th>Salud</th>
+                            <th>Propietario</th>
+                            <th>Establo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c : ${caballos}">
+                            <td th:text="${c.idCaballo}"></td>
+                            <td th:text="${c.nombre}"></td>
+                            <td th:text="${c.fechaNacimiento}"></td>
+                            <td th:text="${c.sexo == 'M'} ? 'Macho' : 'Hembra'"></td>
+                            <td th:text="${c.raza}"></td>
+                            <td th:text="${c.peso}"></td>
+                            <td>
+                                <span th:switch="${c.estadoSalud}">
+                                    <span th:case="'Óptimo'"  class="badge badge-green"  th:text="${c.estadoSalud}"></span>
+                                    <span th:case="'Bueno'"   class="badge badge-blue"   th:text="${c.estadoSalud}"></span>
+                                    <span th:case="'Regular'" class="badge badge-gold"   th:text="${c.estadoSalud}"></span>
+                                    <span th:case="'Crítico'" class="badge badge-red"    th:text="${c.estadoSalud}"></span>
+                                    <span th:case="*"         class="badge badge-gray"   th:text="${c.estadoSalud}"></span>
+                                </span>
+                            </td>
+                            <td th:text="${c.idPropietario}"></td>
+                            <td th:text="${c.idEstablo}"></td>
+                            <td class="td-actions">
+                                <a th:href="@{/caballos/editar/{id}(id=${c.idCaballo})}" class="btn-edit">Editar</a>
+                                <a th:href="@{/caballos/eliminar/{id}(id=${c.idCaballo})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar este caballo?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(caballos)}">
+                            <td colspan="10">
+                                <div class="empty-state">
+                                    <div class="empty-icon">🐎</div>
+                                    <p>Sin caballos registrados</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
+</body>
+</html>

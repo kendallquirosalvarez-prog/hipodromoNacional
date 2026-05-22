@@ -1,113 +1,147 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Establos - Hipódromo Nacional</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f0f2f5; }
-        .navbar { background: #1a1a2e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-        .navbar h1 { color: #e94560; font-size: 20px; }
-        .navbar nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 14px; }
-        .navbar nav a:hover { color: #e94560; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        h2 { margin-bottom: 20px; color: #1a1a2e; }
-        .form-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        input:focus, select:focus { outline: none; border-color: #e94560; }
-        .btn { padding: 10px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 15px; }
-        .btn-primary { background: #e94560; color: white; }
-        .btn-primary:hover { background: #c73652; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
-        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 13px; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        tr:hover td { background: #fafafa; }
-        .btn-edit { background: #f39c12; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; }
-        .btn-delete { background: #e74c3c; color: white; padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none; margin-left: 5px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Establos — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
 </head>
 <body>
-<div class="navbar">
-    <h1>🏇 Hipódromo Nacional</h1>
-    <nav>
-        <a href="/">Inicio</a>
-        <a href="/propietarios">Propietarios</a>
-        <a href="/caballos">Caballos</a>
-        <a href="/establos">Establos</a>
-        <a href="/eventos">Eventos</a>
-        <a href="/inscripciones">Inscripciones</a>
-        <a href="/facturas">Facturas</a>
-        <a href="/historial">Historial Vet.</a>
-    </nav>
-</div>
 
-<div class="container">
-    <h2>Gestión de Establos</h2>
+<div id="scroll-progress"></div>
 
-    <div class="form-card">
-        <h3 style="margin-bottom:15px; color:#1a1a2e;">Registrar Establo</h3>
-        <form th:action="@{/establos/guardar}" th:object="${establo}" method="post">
-            <div class="form-grid">
-                <div>
-                    <label>Código de Establo</label>
-                    <input type="text" th:field="*{idEstablo}" required/>
-                </div>
-                <div>
-                    <label>Capacidad</label>
-                    <input type="number" th:field="*{capacidad}" required/>
-                </div>
-                <div>
-                    <label>Estado</label>
-                    <select th:field="*{estado}" required>
-                        <option value="">Seleccione</option>
-                        <option value="Activo">Activo</option>
-                        <option value="Lleno">Lleno</option>
-                        <option value="En Mantenimiento">En Mantenimiento</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Barrio</label>
-                    <select th:field="*{idBarrio}" required>
-                        <option value="">Seleccione un barrio</option>
-                        <option th:each="b : ${barrios}"
-                                th:value="${b.idBarrio}"
-                                th:text="${b.nombreBarrio}"></option>
-                    </select>
-                </div>
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 3</span>
+            <h1>🏠 <em>Establos</em></h1>
+            <p>Administración de establos, capacidades y estados operativos.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">🏠</span>
+                <h3 th:text="${establo.idEstablo != null and !#strings.isEmpty(establo.idEstablo)} ? 'Editar Establo' : 'Nuevo Establo'">Nuevo Establo</h3>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar Establo</button>
-        </form>
-    </div>
+            <form th:action="${establo.idEstablo != null and !#strings.isEmpty(establo.idEstablo)} ? @{/establos/actualizar} : @{/establos/guardar}"
+                  th:object="${establo}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Código de Establo</label>
+                        <input type="text" th:field="*{idEstablo}"
+                               th:readonly="${establo.idEstablo != null and !#strings.isEmpty(establo.idEstablo)}"
+                               placeholder="EST-001" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidad</label>
+                        <input type="number" th:field="*{capacidad}" placeholder="20" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select th:field="*{estado}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Lleno">Lleno</option>
+                            <option value="En Mantenimiento">En Mantenimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <select th:field="*{idBarrio}" required>
+                            <option value="">Seleccione un barrio</option>
+                            <option th:each="b : ${barrios}"
+                                    th:value="${b.idBarrio}"
+                                    th:text="${b.nombreBarrio}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                        th:text="${establo.idEstablo != null and !#strings.isEmpty(establo.idEstablo)} ? 'Guardar cambios' : 'Registrar establo'">
+                    Registrar establo
+                </button>
+                <a th:if="${establo.idEstablo != null and !#strings.isEmpty(establo.idEstablo)}"
+                   href="/establos" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
 
-    <h3 style="margin-bottom:15px; color:#1a1a2e;">Lista de Establos</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Capacidad</th>
-                <th>Estado</th>
-                <th>ID Barrio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="e : ${establos}">
-                <td th:text="${e.idEstablo}"></td>
-                <td th:text="${e.capacidad}"></td>
-                <td th:text="${e.estado}"></td>
-                <td th:text="${e.idBarrio}"></td>
-                <td>
-                    <a th:href="@{/establos/editar/{id}(id=${e.idEstablo})}"
-                       class="btn-edit">Editar</a>
-                    <a th:href="@{/establos/eliminar/{id}(id=${e.idEstablo})}"
-                       class="btn-delete"
-                       onclick="return confirm('¿Eliminar este establo?')">Eliminar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Lista de <em>Establos</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Capacidad</th>
+                            <th>Estado</th>
+                            <th>Barrio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="e : ${establos}">
+                            <td th:text="${e.idEstablo}"></td>
+                            <td th:text="${e.capacidad}"></td>
+                            <td>
+                                <span th:switch="${e.estado}">
+                                    <span th:case="'Activo'"           class="badge badge-green" th:text="${e.estado}"></span>
+                                    <span th:case="'Lleno'"            class="badge badge-red"   th:text="${e.estado}"></span>
+                                    <span th:case="'En Mantenimiento'" class="badge badge-gold"  th:text="${e.estado}"></span>
+                                    <span th:case="*"                  class="badge badge-gray"  th:text="${e.estado}"></span>
+                                </span>
+                            </td>
+                            <td th:text="${e.idBarrio}"></td>
+                            <td class="td-actions">
+                                <a th:href="@{/establos/editar/{id}(id=${e.idEstablo})}" class="btn-edit">Editar</a>
+                                <a th:href="@{/establos/eliminar/{id}(id=${e.idEstablo})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar este establo?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(establos)}">
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <div class="empty-icon">🏠</div>
+                                    <p>Sin establos registrados</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
 </body>
 </html>

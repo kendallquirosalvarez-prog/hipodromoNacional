@@ -691,7 +691,7 @@ try:
     import qrcode, io
     qr = qrcode.QRCode(version=6, box_size=8, border=3,
                        error_correction=qrcode.constants.ERROR_CORRECT_M)
-    qr.add_data("https://htmlpreview.github.io/?https://github.com/kendallquirosalvarez-prog/hipodromoNacional/blob/main/src/main/resources/static/er-diagram-completo.html")
+    qr.add_data("https://htmlpreview.github.io/?https://github.com/kendallquirosalvarez-prog/hipodromoNacional/blob/main/src/main/resources/static/db-schema.html")
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="#58A6FF", back_color="#0D1117")
     buf = io.BytesIO(); qr_img.save(buf, format='PNG'); buf.seek(0)

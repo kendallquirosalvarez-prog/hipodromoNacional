@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hipódromo Nacional — Esquema de Base de Datos</title>
+<style>
+  :root {
+    --bg:      #0d1117;
+    --bg2:     #161b27;
+    --bg3:     #1f2937;
+    --gold:    #ffd700;
+    --blue:    #58a6ff;
+    --green:   #3fb950;
+    --orange:  #ffa657;
+    --red:     #f78166;
+    --purple:  #bc8cff;
+    --white:   #f0f6fc;
+    --gray:    #8b949e;
+    --light:   #adbac7;
+    --border:  #30363d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2332 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  header .icon { font-size: 2.8rem; }
+  header h1 { font-size: 1.7rem; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; }
+  header p  { font-size: 0.85rem; color: var(--gray); margin-top: 4px; }
+  /* ── Badges ── */
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 12px;
+    font-size: 0.78rem; color: var(--light);
+  }
+  .badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-gold   { background: var(--gold); }
+  .dot-blue   { background: var(--blue); }
+  .dot-green  { background: var(--green); }
+  .dot-purple { background: var(--purple); }
+  /* ── Nav tabs ── */
+  .nav-tabs {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 40px;
+    gap: 0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-tab {
+    padding: 14px 22px;
+    cursor: pointer;
+    color: var(--gray);
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--white); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  /* ── Sections ── */
+  .section { display: none; padding: 32px 40px; }
+  .section.active { display: block; }
+  /* ── Section title ── */
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 12px;
+  }
+  /* ── Tables grid ── */
+  .tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+  .table-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table-card-header {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-name {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .table-tag {
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .tag-geo    { background: #1a2a1a; color: var(--green); border: 1px solid #2a4a2a; }
+  .tag-core   { background: #1a1f2e; color: var(--blue);  border: 1px solid #2a3a5e; }
+  .tag-new    { background: #1f1a2e; color: var(--purple);border: 1px solid #3a2a5e; }
+  .tag-sys    { background: #2e1a1a; color: var(--red);   border: 1px solid #5e2a2a; }
+  .tag-audit  { background: #2a1f10; color: var(--orange);border: 1px solid #5e3a10; }
+  .col-list { padding: 10px 0; }
+  .col-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 16px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.78rem;
+  }
+  .col-row:hover { background: var(--bg3); }
+  .col-pk   { color: var(--gold); font-weight: 700; }
+  .col-fk   { color: var(--orange); }
+  .col-name { color: var(--white); flex: 1; }
+  .col-type { color: var(--gray); font-size: 0.72rem; }
+  .col-icon { font-size: 0.7rem; min-width: 12px; }
+  /* ── Procedures ── */
+  .procs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+    gap: 20px;
+  }
+  .proc-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .proc-card-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .proc-icon { font-size: 1.1rem; }
+  .proc-name {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .proc-type {
+    margin-left: auto;
+    font-size: 0.7rem;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .type-proc    { background: #1a2e1a; color: var(--green);  border: 1px solid #2a5e2a; }
+  .type-trigger { background: #2e1a2e; color: var(--purple); border: 1px solid #5e2a5e; }
+  .proc-desc {
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    color: var(--light);
+    border-bottom: 1px solid var(--border);
+  }
+  .proc-body {
+    padding: 0;
+    position: relative;
+  }
+  pre {
+    margin: 0;
+    padding: 16px 18px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--light);
+    overflow-x: auto;
+    background: #0d1117;
+  }
+  /* Syntax highlight */
+  .kw  { color: #ff7b72; font-weight: bold; }
+  .fn  { color: var(--blue); }
+  .str { color: var(--green); }
+  .cmt { color: var(--gray); font-style: italic; }
+  .var { color: var(--orange); }
+  .num { color: var(--purple); }
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    header { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .nav-tabs { padding: 0 20px; overflow-x: auto; }
+    .section { padding: 20px; }
+    .procs-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="icon">🐎</div>
+  <div>
+    <h1>Hipódromo Nacional — Base de Datos</h1>
+    <p>IF-5100 Administración de Bases de Datos · UCR Sede Liberia · 2025</p>
+    <div class="badges">
+      <span class="badge"><span class="dot dot-green"></span>PostgreSQL / Supabase</span>
+      <span class="badge"><span class="dot dot-blue"></span>19 tablas</span>
+      <span class="badge"><span class="dot dot-gold"></span>33 stored procedures</span>
+      <span class="badge"><span class="dot dot-purple"></span>3 triggers</span>
+    </div>
+  </div>
+</header>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showTab('tablas', this)">📋 Tablas</div>
+  <div class="nav-tab" onclick="showTab('procedures', this)">⚙️ Stored Procedures</div>
+  <div class="nav-tab" onclick="showTab('triggers', this)">⚡ Triggers</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  TABLAS                                                       -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="tablas" class="section active">
+
+  <div class="section-title">🌎 Tablas Geográficas (5)</div>
+  <div class="tables-grid" style="margin-bottom:28px">
+
+    <!-- pais -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">pais</span>
+        <span class="table-tag tag-geo">GEOGRÁFICA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_pais</span><span class="col-type">SERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre_pais</span><span class="col-type">VARCHAR(100)</span></div>
+      </div>
+    </div>
+
+    <!-- provincia -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">provincia</span>
+        <span class="table-tag tag-geo">GEOGRÁFICA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_provincia</span><span class="col-type">SERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre_provincia</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_pais</span><span class="col-type">FK → pais</span></div>
+      </div>
+    </div>
+
+    <!-- canton -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">canton</span>
+        <span class="table-tag tag-geo">GEOGRÁFICA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_canton</span><span class="col-type">SERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre_canton</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_provincia</span><span class="col-type">FK → provincia</span></div>
+      </div>
+    </div>
+
+    <!-- distrito -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">distrito</span>
+        <span class="table-tag tag-geo">GEOGRÁFICA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_distrito</span><span class="col-type">SERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre_distrito</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_canton</span><span class="col-type">FK → canton</span></div>
+      </div>
+    </div>
+
+    <!-- barrio -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">barrio</span>
+        <span class="table-tag tag-geo">GEOGRÁFICA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_barrio</span><span class="col-type">SERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre_barrio</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_distrito</span><span class="col-type">FK → distrito</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">🏇 Tablas Principales (7)</div>
+  <div class="tables-grid" style="margin-bottom:28px">
+
+    <!-- propietario -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">propietario</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_propietario</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">apellidos</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_barrio</span><span class="col-type">FK → barrio</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">...descuento_proxima_facturacion</span><span class="col-type">BOOLEAN</span></div>
+      </div>
+    </div>
+
+    <!-- establo -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">establo</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_establo</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">capacidad</span><span class="col-type">INTEGER</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">estado</span><span class="col-type">VARCHAR(50)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_barrio</span><span class="col-type">FK → barrio</span></div>
+      </div>
+    </div>
+
+    <!-- caballo -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">caballo</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_caballo</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre</span><span class="col-type">VARCHAR(100)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha_nacimiento</span><span class="col-type">DATE</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">sexo · raza · peso</span><span class="col-type">CHAR / VARCHAR / DECIMAL</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">estado_salud</span><span class="col-type">VARCHAR(30)</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_propietario</span><span class="col-type">FK → propietario</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_establo</span><span class="col-type">FK → establo</span></div>
+      </div>
+    </div>
+
+    <!-- evento -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">evento</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_evento</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre</span><span class="col-type">VARCHAR(200)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha</span><span class="col-type">TIMESTAMP</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">tipo_carrera · distancia</span><span class="col-type">VARCHAR / INTEGER</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">premio_total</span><span class="col-type">DECIMAL(12,2)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">estado</span><span class="col-type">VARCHAR(30)</span></div>
+      </div>
+    </div>
+
+    <!-- inscripcion -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">inscripcion</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_inscripcion</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_evento</span><span class="col-type">FK → evento</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_caballo</span><span class="col-type">FK → caballo</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha_inscripcion · estado</span><span class="col-type">DATE / VARCHAR</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">posicion_final</span><span class="col-type">INTEGER</span></div>
+      </div>
+    </div>
+
+    <!-- historial_veterinario -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">historial_veterinario</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_registro</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_caballo</span><span class="col-type">FK → caballo</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">diagnostico · tratamiento</span><span class="col-type">VARCHAR(300)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha_revision</span><span class="col-type">DATE</span></div>
+        <div class="col-row"><span class="col-icon">⭐</span><span class="col-name" style="color:var(--gold)">fecha_vencimiento_certificacion</span><span class="col-type">DATE</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">veterinario_responsable</span><span class="col-type">VARCHAR(150)</span></div>
+      </div>
+    </div>
+
+    <!-- factura -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">factura</span>
+        <span class="table-tag tag-core">PRINCIPAL</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_factura</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_propietario</span><span class="col-type">FK → propietario</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_evento</span><span class="col-type">FK → evento</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">subtotal · descuento · impuestos</span><span class="col-type">DECIMAL(12,2)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">total · estado_pago</span><span class="col-type">DECIMAL / VARCHAR</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha_emision</span><span class="col-type">TIMESTAMP DEFAULT NOW()</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">✨ Tablas Segunda Fase (5)</div>
+  <div class="tables-grid" style="margin-bottom:28px">
+
+    <!-- suministro -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">suministro</span>
+        <span class="table-tag tag-new">FASE 2</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_suministro</span><span class="col-type">VARCHAR(20) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">tipo · proveedor</span><span class="col-type">VARCHAR(50/100)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">cantidad_disponible</span><span class="col-type">INTEGER DEFAULT 0</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">precio_unitario</span><span class="col-type">DECIMAL(12,2)</span></div>
+      </div>
+    </div>
+
+    <!-- alimentacion -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">alimentacion</span>
+        <span class="table-tag tag-new">FASE 2</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_alimentacion</span><span class="col-type">BIGSERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_caballo</span><span class="col-type">FK → caballo</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_suministro</span><span class="col-type">FK → suministro</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">tipo_alimento · cantidad · fecha</span><span class="col-type">VARCHAR / DECIMAL / DATE</span></div>
+      </div>
+    </div>
+
+    <!-- resultado_carrera -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">resultado_carrera</span>
+        <span class="table-tag tag-new">FASE 2</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_resultado</span><span class="col-type">BIGSERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_evento</span><span class="col-type">FK → evento</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_caballo</span><span class="col-type">FK → caballo</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">posicion · tiempo · premio_ganado</span><span class="col-type">INT / VARCHAR / DECIMAL</span></div>
+      </div>
+    </div>
+
+    <!-- alerta_veterinaria -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">alerta_veterinaria</span>
+        <span class="table-tag tag-new">FASE 2</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_alerta</span><span class="col-type">BIGSERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_caballo</span><span class="col-type">FK → caballo</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_propietario</span><span class="col-type">FK → propietario</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">mensaje</span><span class="col-type">TEXT</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">leida</span><span class="col-type">BOOLEAN DEFAULT FALSE</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">fecha_alerta</span><span class="col-type">TIMESTAMP DEFAULT NOW()</span></div>
+      </div>
+    </div>
+
+    <!-- historial_transaccion -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">historial_transaccion</span>
+        <span class="table-tag tag-new">FASE 2</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_transaccion</span><span class="col-type">BIGSERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon">🔗</span><span class="col-name col-fk">id_factura</span><span class="col-type">FK → factura</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">monto · metodo_pago · fecha_pago</span><span class="col-type">DECIMAL / VARCHAR / DATE</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">🔧 Tablas del Sistema (2)</div>
+  <div class="tables-grid">
+
+    <!-- usuarios -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">usuarios</span>
+        <span class="table-tag tag-sys">SISTEMA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">username</span><span class="col-type">VARCHAR(50) PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">password</span><span class="col-type">VARCHAR(255) — BCrypt</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">nombre · rol</span><span class="col-type">VARCHAR</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">activo</span><span class="col-type">BOOLEAN DEFAULT TRUE</span></div>
+      </div>
+    </div>
+
+    <!-- bitacora_auditoria -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-name">bitacora_auditoria</span>
+        <span class="table-tag tag-audit">AUDITORÍA</span>
+      </div>
+      <div class="col-list">
+        <div class="col-row"><span class="col-icon">🔑</span><span class="col-name col-pk">id_bitacora</span><span class="col-type">BIGSERIAL PK</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">tabla_afectada · operacion</span><span class="col-type">VARCHAR</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">datos_anteriores · datos_nuevos</span><span class="col-type">TEXT (JSON)</span></div>
+        <div class="col-row"><span class="col-icon"> </span><span class="col-name">usuario_bd · fecha_hora</span><span class="col-type">VARCHAR / TIMESTAMP</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  STORED PROCEDURES                                            -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="procedures" class="section">
+
+  <div class="section-title">⚙️ Procedimientos Almacenados Destacados</div>
+  <div class="procs-grid">
+
+    <!-- sp_insertar_inscripcion -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🏇</span>
+        <span class="proc-name">sp_insertar_inscripcion</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Valida que el caballo tenga certificación veterinaria vigente antes de inscribirlo. Si no la tiene, lanza una excepción y bloquea la inscripción.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_inscripcion</span>(
+    p_id         <span class="kw">VARCHAR</span>, p_id_evento  <span class="kw">VARCHAR</span>,
+    p_id_caballo <span class="kw">VARCHAR</span>, p_fecha      <span class="kw">DATE</span>,
+    p_estado     <span class="kw">VARCHAR</span>
+)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="cmt">-- Verifica certificación veterinaria vigente</span>
+    <span class="kw">IF NOT EXISTS</span> (
+        <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> historial_veterinario
+         <span class="kw">WHERE</span> id_caballo = <span class="var">p_id_caballo</span>
+           <span class="kw">AND</span> fecha_vencimiento_certificacion &gt;= <span class="fn">CURRENT_DATE</span>
+    ) <span class="kw">THEN</span>
+        <span class="kw">RAISE EXCEPTION</span> <span class="str">'El caballo no tiene certificación veterinaria vigente.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">INSERT INTO</span> inscripcion
+        (id_inscripcion, id_evento, id_caballo, fecha_inscripcion, estado)
+    <span class="kw">VALUES</span> (<span class="var">p_id</span>, <span class="var">p_id_evento</span>, <span class="var">p_id_caballo</span>, <span class="var">p_fecha</span>, <span class="var">p_estado</span>);
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+    <!-- sp_insertar_factura -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🧾</span>
+        <span class="proc-name">sp_insertar_factura</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Valida que el IVA enviado sea exactamente el 13% del subtotal neto. Rechaza la factura si el cálculo no coincide.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_factura</span>(
+    p_id             <span class="kw">VARCHAR</span>, p_id_propietario <span class="kw">VARCHAR</span>,
+    p_id_evento      <span class="kw">VARCHAR</span>, p_subtotal       <span class="kw">DECIMAL</span>,
+    p_descuento      <span class="kw">DECIMAL</span>, p_impuestos      <span class="kw">DECIMAL</span>,
+    p_total          <span class="kw">DECIMAL</span>, p_estado_pago    <span class="kw">VARCHAR</span>
+)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="cmt">-- IVA debe ser 13% del subtotal neto</span>
+    <span class="kw">IF ABS</span>(<span class="var">p_impuestos</span> - (<span class="var">p_subtotal</span> - <span class="var">p_descuento</span>) * <span class="num">0.13</span>) &gt; <span class="num">0.01</span> <span class="kw">THEN</span>
+        <span class="kw">RAISE EXCEPTION</span> <span class="str">'El IVA debe ser el 13%% del subtotal neto.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">INSERT INTO</span> factura
+        (id_factura, id_propietario, id_evento,
+         subtotal, descuento, impuestos, total, estado_pago)
+    <span class="kw">VALUES</span>
+        (<span class="var">p_id</span>, <span class="var">p_id_propietario</span>, <span class="var">p_id_evento</span>,
+         <span class="var">p_subtotal</span>, <span class="var">p_descuento</span>, <span class="var">p_impuestos</span>, <span class="var">p_total</span>, <span class="var">p_estado_pago</span>);
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+    <!-- sp_insertar_alimentacion -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🌾</span>
+        <span class="proc-name">sp_insertar_alimentacion</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Registra una ración de alimento y automáticamente descuenta la cantidad del inventario de suministros.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_alimentacion</span>(
+    p_id_caballo    <span class="kw">VARCHAR</span>, p_id_suministro <span class="kw">VARCHAR</span>,
+    p_tipo_alimento <span class="kw">VARCHAR</span>, p_cantidad      <span class="kw">DECIMAL</span>,
+    p_fecha         <span class="kw">DATE</span>
+)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> alimentacion
+        (id_caballo, id_suministro, tipo_alimento, cantidad, fecha)
+    <span class="kw">VALUES</span>
+        (<span class="var">p_id_caballo</span>, <span class="var">p_id_suministro</span>, <span class="var">p_tipo_alimento</span>, <span class="var">p_cantidad</span>, <span class="var">p_fecha</span>);
+
+    <span class="cmt">-- Descuenta del inventario automáticamente</span>
+    <span class="kw">UPDATE</span> suministro
+       <span class="kw">SET</span> cantidad_disponible =
+               cantidad_disponible - <span class="fn">FLOOR</span>(<span class="var">p_cantidad</span>)::<span class="kw">INTEGER</span>
+     <span class="kw">WHERE</span> id_suministro = <span class="var">p_id_suministro</span>;
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+    <!-- sp_marcar_alerta_leida -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🔔</span>
+        <span class="proc-name">sp_marcar_alerta_leida</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Marca como leída una alerta veterinaria para que no vuelva a aparecer en el panel de notificaciones.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_marcar_alerta_leida</span>(p_id <span class="kw">BIGINT</span>)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">UPDATE</span> alerta_veterinaria
+       <span class="kw">SET</span> leida = <span class="kw">TRUE</span>
+     <span class="kw">WHERE</span> id_alerta = <span class="var">p_id</span>;
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+    <!-- sp_actualizar_historial_veterinario -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🩺</span>
+        <span class="proc-name">sp_actualizar_historial_veterinario</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Actualiza el diagnóstico, tratamiento y fecha de vencimiento de la certificación de un registro veterinario existente.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_actualizar_historial_veterinario</span>(
+    p_id                <span class="kw">VARCHAR</span>,
+    p_diagnostico       <span class="kw">VARCHAR</span>,
+    p_tratamiento       <span class="kw">VARCHAR</span>,
+    p_fecha_vencimiento <span class="kw">DATE</span>
+)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">UPDATE</span> historial_veterinario
+       <span class="kw">SET</span> diagnostico                     = <span class="var">p_diagnostico</span>,
+           tratamiento                     = <span class="var">p_tratamiento</span>,
+           fecha_vencimiento_certificacion = <span class="var">p_fecha_vencimiento</span>
+     <span class="kw">WHERE</span> id_registro = <span class="var">p_id</span>;
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+    <!-- sp_insertar_transaccion -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">💳</span>
+        <span class="proc-name">sp_insertar_transaccion</span>
+        <span class="proc-type type-proc">PROCEDURE</span>
+      </div>
+      <div class="proc-desc">
+        Registra un pago en el historial de transacciones vinculado a una factura, con método de pago y fecha.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> <span class="fn">sp_insertar_transaccion</span>(
+    p_id_factura  <span class="kw">VARCHAR</span>,
+    p_monto       <span class="kw">DECIMAL</span>,
+    p_metodo_pago <span class="kw">VARCHAR</span>,
+    p_fecha_pago  <span class="kw">DATE</span>
+)
+<span class="kw">LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> historial_transaccion
+        (id_factura, monto, metodo_pago, fecha_pago)
+    <span class="kw">VALUES</span>
+        (<span class="var">p_id_factura</span>, <span class="var">p_monto</span>, <span class="var">p_metodo_pago</span>, <span class="var">p_fecha_pago</span>);
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  TRIGGERS                                                     -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="triggers" class="section">
+
+  <div class="section-title">⚡ Triggers del Sistema</div>
+  <div class="procs-grid">
+
+    <!-- fn_alerta_vencimiento -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🚨</span>
+        <span class="proc-name">tr_alerta_vencimiento → fn_alerta_vencimiento</span>
+        <span class="proc-type type-trigger">TRIGGER</span>
+      </div>
+      <div class="proc-desc">
+        Se dispara automáticamente al insertar o actualizar un historial veterinario. Si la certificación vence en 30 días o menos, crea una alerta para el propietario.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE FUNCTION</span> <span class="fn">fn_alerta_vencimiento</span>()
+<span class="kw">RETURNS TRIGGER LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">IF</span> NEW.fecha_vencimiento_certificacion
+           &lt;= <span class="fn">CURRENT_DATE</span> + <span class="kw">INTERVAL</span> <span class="str">'30 days'</span> <span class="kw">THEN</span>
+
+        <span class="kw">INSERT INTO</span> alerta_veterinaria
+            (id_caballo, id_propietario, mensaje, leida, fecha_alerta)
+        <span class="kw">SELECT</span>
+            NEW.id_caballo,
+            c.id_propietario,
+            <span class="str">'Certificación vence el '</span> ||
+            NEW.fecha_vencimiento_certificacion ||
+            <span class="str">' — programar revisión veterinaria.'</span>,
+            <span class="kw">FALSE</span>, <span class="fn">NOW</span>()
+          <span class="kw">FROM</span> caballo c
+         <span class="kw">WHERE</span> c.id_caballo = NEW.id_caballo;
+    <span class="kw">END IF</span>;
+    <span class="kw">RETURN</span> NEW;
+<span class="kw">END</span>;
+$$;
+
+<span class="kw">CREATE TRIGGER</span> tr_alerta_vencimiento
+<span class="kw">AFTER INSERT OR UPDATE OF</span> fecha_vencimiento_certificacion
+<span class="kw">ON</span> historial_veterinario
+<span class="kw">FOR EACH ROW EXECUTE FUNCTION</span> <span class="fn">fn_alerta_vencimiento</span>();</pre>
+      </div>
+    </div>
+
+    <!-- fn_descuento_frecuente -->
+    <div class="proc-card">
+      <div class="proc-card-header">
+        <span class="proc-icon">🎯</span>
+        <span class="proc-name">tr_descuento_frecuente → fn_descuento_frecuente</span>
+        <span class="proc-type type-trigger">TRIGGER</span>
+      </div>
+      <div class="proc-desc">
+        Al insertar una nueva factura, calcula el total pagado por el propietario en los últimos 6 meses. Si supera ₡500,000 marca automáticamente el descuento para la próxima facturación.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE FUNCTION</span> <span class="fn">fn_descuento_frecuente</span>()
+<span class="kw">RETURNS TRIGGER LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">DECLARE</span>
+    v_total_6m <span class="kw">DECIMAL</span>;
+<span class="kw">BEGIN</span>
+    <span class="cmt">-- Suma total pagado en los últimos 6 meses</span>
+    <span class="kw">SELECT COALESCE</span>(<span class="fn">SUM</span>(total), <span class="num">0</span>) <span class="kw">INTO</span> v_total_6m
+      <span class="kw">FROM</span> factura
+     <span class="kw">WHERE</span> id_propietario = NEW.id_propietario
+       <span class="kw">AND</span> fecha_emision >= <span class="fn">NOW</span>() - <span class="kw">INTERVAL</span> <span class="str">'6 months'</span>
+       <span class="kw">AND</span> estado_pago = <span class="str">'Pagado'</span>;
+
+    <span class="kw">IF</span> v_total_6m &gt; <span class="num">500000</span> <span class="kw">THEN</span>
+        <span class="kw">UPDATE</span> propietario
+           <span class="kw">SET</span> propietario_con_descuento_proxima_facturacion = <span class="kw">TRUE</span>
+         <span class="kw">WHERE</span> id_propietario = NEW.id_propietario;
+    <span class="kw">END IF</span>;
+    <span class="kw">RETURN</span> NEW;
+<span class="kw">END</span>;
+$$;
+
+<span class="kw">CREATE TRIGGER</span> tr_descuento_frecuente
+<span class="kw">AFTER INSERT ON</span> factura
+<span class="kw">FOR EACH ROW EXECUTE FUNCTION</span> <span class="fn">fn_descuento_frecuente</span>();</pre>
+      </div>
+    </div>
+
+    <!-- fn_registrar_auditoria -->
+    <div class="proc-card" style="grid-column: 1 / -1">
+      <div class="proc-card-header">
+        <span class="proc-icon">📋</span>
+        <span class="proc-name">tr_auditoria_* → fn_registrar_auditoria</span>
+        <span class="proc-type type-trigger">TRIGGER</span>
+      </div>
+      <div class="proc-desc">
+        Registra automáticamente INSERT, UPDATE y DELETE en 12 tablas principales dentro de la bitácora de auditoría, guardando los datos anteriores y nuevos en formato JSON.
+      </div>
+      <div class="proc-body">
+<pre><span class="kw">CREATE OR REPLACE FUNCTION</span> <span class="fn">fn_registrar_auditoria</span>()
+<span class="kw">RETURNS TRIGGER LANGUAGE</span> plpgsql <span class="kw">AS</span> $$
+<span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> bitacora_auditoria
+        (tabla_afectada, operacion, datos_anteriores, datos_nuevos, usuario_bd, fecha_hora)
+    <span class="kw">VALUES</span> (
+        TG_TABLE_NAME,
+        TG_OP,
+        <span class="kw">CASE WHEN</span> TG_OP != <span class="str">'INSERT'</span> <span class="kw">THEN</span> <span class="fn">row_to_json</span>(OLD)::<span class="kw">TEXT</span> <span class="kw">ELSE NULL END</span>,
+        <span class="kw">CASE WHEN</span> TG_OP != <span class="str">'DELETE'</span> <span class="kw">THEN</span> <span class="fn">row_to_json</span>(NEW)::<span class="kw">TEXT</span> <span class="kw">ELSE NULL END</span>,
+        <span class="fn">CURRENT_USER</span>,
+        <span class="fn">NOW</span>()
+    );
+    <span class="kw">RETURN</span> NEW;
+<span class="kw">END</span>;
+$$;
+
+<span class="cmt">-- Aplicado a 12 tablas con un bloque DO dinámico:</span>
+<span class="cmt">-- propietario, caballo, establo, evento, inscripcion,</span>
+<span class="cmt">-- historial_veterinario, factura, suministro, alimentacion,</span>
+<span class="cmt">-- resultado_carrera, alerta_veterinaria, historial_transaccion</span>
+<span class="kw">DO</span> $$
+<span class="kw">DECLARE</span> t <span class="kw">TEXT</span>;
+<span class="kw">BEGIN</span>
+    <span class="kw">FOREACH</span> t <span class="kw">IN ARRAY</span> ARRAY[<span class="str">'propietario'</span>,<span class="str">'caballo'</span>,<span class="str">'establo'</span>,...] <span class="kw">LOOP</span>
+        <span class="kw">EXECUTE</span> <span class="fn">format</span>(<span class="str">'CREATE TRIGGER tr_auditoria_%1$s
+         AFTER INSERT OR UPDATE OR DELETE ON %1$s
+         FOR EACH ROW EXECUTE FUNCTION fn_registrar_auditoria();'</span>, t);
+    <span class="kw">END LOOP</span>;
+<span class="kw">END</span>;
+$$;</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

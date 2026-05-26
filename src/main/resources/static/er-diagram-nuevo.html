@@ -43,6 +43,16 @@ body { background: #0d1117; font-family: 'Segoe UI', system-ui, sans-serif; over
   font-size: 0.65rem; color: #4a5568;
 }
 
+#qr-card {
+  position: fixed; bottom: 56px; left: 16px; z-index: 100;
+  background: #161b27; border: 1px solid #c8a84b;
+  border-radius: 10px; padding: 8px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+#qr-card img { width: 88px; height: 88px; border-radius: 4px; image-rendering: pixelated; }
+#qr-card span { font-size: 0.58rem; color: #8b949e; text-align: center; max-width: 88px; line-height: 1.3; }
+
 #viewport {
   position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
   cursor: grab; overflow: hidden;
@@ -85,6 +95,10 @@ svg#lines {
   <button class="ctrl-btn" onclick="zoom(1.2)" title="Acercar">+</button>
   <button class="ctrl-btn" onclick="zoom(0.83)" title="Alejar">−</button>
   <button class="ctrl-btn" onclick="resetView()" title="Restablecer">⌂</button>
+</div>
+<div id="qr-card">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqwAAAKsAQAAAAABudKdAAAGWklEQVR4nO1dW47jOAwsFfY/vsHe/1h7g/gEGuhFUUrna5YC3KhCYDiyTDTYFEPxpZQRgJsRVAGRhZhQQYSAIgsxQZLQQYSAIgsxQZLQQYSAIgsxQZLQQYSAIgsxQZIwkCvsK145vz/GX9nGy/0YadP6iL2ec35rlUGrrIIIAUUW0Uxoa7kqgXQhv8s1pdRUQftMddG+1psyZ31d/7IBIgQUWYgJRyQhpZQu9+RO9Re/KoemH+6iItrVZnbjYX+dkluICZKERy6Hf34eLmv/Sq837qv99rdrqjfp9c53Kh/36MhfS5GFmCBJOK8TXuO337wHtzcgqgnxyql+FmfCBP/vv1NkDUQIKLIQE1adkO3u7i4CMwxMUSS7H1qi2BLb6xKwDiIEFFmICQck4S7+AHMYdoVwlfviTPh3+Vru60hDGfGvS247iBBQZCEmxNsJ2Q3lu7oTq7ug3U+/QRsctkR5+vG65HaACAFFFmJCoCSgBxHznoFg0UYbsfltpEUlZqTSU1N+ghZvBxECiizi9w4t7Dhji2530Bd7TVFIqczM/xULYYld1jljhPqXQUyQJOCJywFmJPyYr9j0wBx0NkO3E8Z1vi474ZGSQJGFmFCRR/5h3wUYLFnR9ghDdcyvIxd6UtDeYYIIAUUWYkKgJGAqgbbkrYphOA3MddC/Wo2Dm2w6QXaCAxECiizEhEBJgK9T8CbBvK5bg6XqwVkUZkho7zBAhIAiCzHhTNzBYdkLWADCFzqZzTA0QxuUTnAgQkCRhZgQKAmYv/U+HGmxyPHTP++d28Ee+bpp2QkDRAgoshAT4nOW0qhs8mnMpdxpJCbVPKVrzOxpz3btRsYsi6DkFmKCJOGRywG75b+lIW39UlbjwXYW9rrshMdKAkUWYkJF/nQRWCCyKYG1pZIf8TkMM5NB+QkdRAgoshATTvkY84g5/uA3cPXTMzr5zX5QbrMWbwcRAoosjuUxut/9rh8+owz2yE8bpoJ0wgARAoosxIQDdZF3ql0RUr6vXij9ysV/WMetbULto1Kueyllp1Bfkdx2ECGgyEJMONNn6a5lTSPiULur1cZrY7zXRzttUOZUPVAeLA2XKLmFmCBJ+B35CXlJVjS34ZKK4D2NNkH1Ds+WBIosxIRNEm5X/lw3AmXh154qvbdS7bPkuyXsb0nAFhAhoMhCTDjYozWPm+I3WFsv9n1E8Sd0l0Jru2Q9G1vik+R2gAgBRRZiwrGcpYGt/GGBdVhy9dQ2rriDAxECiizEhCP+BKxnOXmPwZK4uFU6uC5t87HyE7R4O4gQUGRxQCeseqA/tiRGl/O850K716UTHIgQUGQhJpyyE+Brn5f6hWXL4McXs0G5zQuIEFBkISYESgKcwY+tIbNv4DyPjt06Nq+9HOVPcCBCQJGFmHCs9xpcV8a1dZJPft6mLYPyJ0wQIaDIQkw4lbOUfRWDVUX51qybcvChCvkYdxAhoMhCTAiUBPi9w7KPcJGF6UvcWjebv9E1blXcYYAIAUUWYsLBWmk4B8IWi7T57dHeYEH+hB1ECCiyEBNO5ie8x/jWltmaMTrPw4RtN2QnTBAhoMhCTDjSjxG+v+J9bSP9Oquh6zlxNf+5lFc3qB/jAiIEFFmICfGSkKs90M+CfLvDIus5ktMqGF/n02Yz7MdHUnILMUGS8DviDlgOifZN3fcEhm8nwii3+ZGSQJGFmPCZ25xd9MGfD7t6Edf2KR8HzUsndBAhoMhCTDjbtxlrIcO37qyfnkb1Y1xBhIAiCzHhVB5jw9K23Va9L4T04ci1g6v2Dg5ECCiyEBNOnSFb4BMSrGnzWi+5WQ7LcQ/yJ0wQIaDIQkw40Gfp1dd568Vawou1hxJcCHL2WRqvWFyyzXTtWym5hZggSfgd5zu8ppGwuBkbfL6i5TGOR8pZerIkUGQhJvzUj7GjHSY70BKTFmOgdXGvtkQ/XraaELITHIgQUGQhJpyVhJRG0+Z2P5yK6apZSbWNs3c/tvn9pJietkTJLcQESQKebSdkd5PseJf7srOf2mA/NGo0drbc5nL+i/wJD5YEiizEhC9xh4KP7MT+yPdWckfDLBFM5Sx1ECGgyEJMCJSE9L1p+1/gltxCcltBhIAiCzFBktBBhIAiCzFBktBBhIAiCzFBktBBhIAiCzFBktBBhIAiCzFBktBBhIAiCzFBktARtBz+AHVojhnTOr+rAAAAAElFTkSuQmCC" alt="QR Diagrama ER">
+  <span>Escanear para abrir el diagrama</span>
 </div>
 <div id="hint">Rueda para zoom · Arrastrar para mover</div>
 

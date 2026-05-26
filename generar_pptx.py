@@ -75,7 +75,7 @@ def accent_bar(slide, color=BLUE):
     bar.fill.solid(); bar.fill.fore_color.rgb = color
     bar.line.fill.background()
 
-def slide_num(slide, n, total=13):
+def slide_num(slide, n, total=14):
     txt(slide, f"{n} / {total}",
         W - Inches(1.2), H - Inches(0.4), Inches(1.1), Inches(0.3),
         size=9, color=GRAY, align=PP_ALIGN.RIGHT)
@@ -710,6 +710,121 @@ txt(sl, "IF-5100 Bases de Datos",
     Inches(10.2), Inches(4.35), Inches(2.65), Inches(0.35),
     size=10, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
 slide_num(sl, 13)
+
+# ── Slide 14: Diagrama ER ─────────────────────────────────────────────────────
+from pptx.enum.shapes import MSO_CONNECTOR_TYPE
+
+sl = new_slide(); bg(sl)
+accent_bar(sl, GOLD)
+
+# Título
+box(sl, 0, 0, W, Inches(0.42), color=RGBColor(0x0a, 0x0e, 0x14))
+txt(sl, "Diagrama Entidad-Relación  —  19 tablas",
+    0, 0, W, Inches(0.42),
+    bold=True, color=GOLD, align=PP_ALIGN.CENTER, size=14)
+
+# Colores de fondo por grupo
+C_GEO  = RGBColor(0x09, 0x20, 0x10)
+C_CORE = RGBColor(0x09, 0x14, 0x2e)
+C_NEW  = RGBColor(0x18, 0x09, 0x2e)
+C_SYS  = RGBColor(0x22, 0x12, 0x05)
+
+BH = Inches(0.285)   # altura uniforme de cada entidad
+FS = 7.0             # tamaño de fuente en cajas
+
+def ent(slide, l, t, w, label, bg_c, border_c):
+    box(slide, Inches(l), Inches(t), Inches(w), BH,
+        color=bg_c, border=border_c, border_w=Pt(1))
+    txt(slide, label, Inches(l), Inches(t), Inches(w), BH,
+        size=FS, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
+
+def ln(slide, x1, y1, x2, y2, c=GRAY):
+    try:
+        cn = slide.shapes.add_connector(
+            MSO_CONNECTOR_TYPE.STRAIGHT,
+            Inches(x1), Inches(y1), Inches(x2), Inches(y2))
+        cn.line.color.rgb = c
+        cn.line.width = Pt(0.8)
+    except Exception:
+        pass
+
+# ── Entidades geográficas (verde, fila superior) ──────────────────
+ent(sl, 0.20, 0.52, 0.80, "pais",       C_GEO, GREEN)
+ent(sl, 1.13, 0.52, 1.08, "provincia",  C_GEO, GREEN)
+ent(sl, 2.34, 0.52, 0.88, "canton",     C_GEO, GREEN)
+ent(sl, 3.35, 0.52, 0.88, "distrito",   C_GEO, GREEN)
+ent(sl, 4.36, 0.52, 0.82, "barrio",     C_GEO, GREEN)
+
+ln(sl, 1.00, 0.662, 1.13, 0.662, GREEN)
+ln(sl, 2.21, 0.662, 2.34, 0.662, GREEN)
+ln(sl, 3.23, 0.662, 3.35, 0.662, GREEN)
+ln(sl, 4.23, 0.662, 4.36, 0.662, GREEN)
+
+# ── Entidades principales (azul, sección central) ────────────────
+ent(sl, 0.20, 1.40, 1.35, "propietario",          C_CORE, BLUE)
+ent(sl, 0.20, 2.40, 1.12, "establo",              C_CORE, BLUE)
+ent(sl, 2.25, 1.90, 1.25, "caballo",              C_CORE, BLUE)   # central
+ent(sl, 4.80, 1.40, 1.05, "evento",               C_CORE, BLUE)
+ent(sl, 4.80, 2.40, 1.28, "inscripcion",          C_CORE, BLUE)
+ent(sl, 2.14, 3.15, 2.42, "historial_veterinario", C_CORE, BLUE)
+ent(sl, 4.80, 3.15, 1.05, "factura",              C_CORE, BLUE)
+
+# propietario → caballo
+ln(sl, 1.55, 1.542, 2.25, 2.042, BLUE)
+# establo → caballo
+ln(sl, 1.32, 2.542, 2.25, 2.185, BLUE)
+# caballo ↓ historial_veterinario
+ln(sl, 2.875, 2.185, 2.875, 3.15, BLUE)
+# caballo → inscripcion
+ln(sl, 3.50, 2.042, 4.80, 2.542, BLUE)
+# evento ↓ inscripcion
+ln(sl, 5.325, 1.685, 5.325, 2.40, BLUE)
+# propietario → factura (horizontal pasando por caballo)
+ln(sl, 1.55, 1.542, 4.80, 3.292, BLUE)
+
+# ── Entidades fase 2 (morado, sección inferior) ──────────────────
+ent(sl, 0.20, 4.35, 1.25, "suministro",          C_NEW, PURPLE)
+ent(sl, 2.14, 4.35, 1.42, "alimentacion",        C_NEW, PURPLE)
+ent(sl, 4.65, 4.35, 2.05, "resultado_carrera",   C_NEW, PURPLE)
+ent(sl, 7.25, 2.40, 2.18, "alerta_veterinaria",  C_NEW, PURPLE)
+ent(sl, 7.25, 3.40, 2.38, "historial_transaccion", C_NEW, PURPLE)
+
+# suministro → alimentacion
+ln(sl, 1.45, 4.492, 2.14, 4.492, PURPLE)
+# caballo ↓ alimentacion (desde costado izq para no cruzar hist_vet)
+ln(sl, 2.30, 2.185, 2.30, 4.35, PURPLE)
+# evento → resultado_carrera
+ln(sl, 5.325, 1.685, 5.675, 4.35, PURPLE)
+# caballo → alerta_veterinaria
+ln(sl, 3.50, 2.042, 7.25, 2.542, PURPLE)
+# factura → historial_transaccion
+ln(sl, 5.85, 3.292, 7.25, 3.542, PURPLE)
+
+# ── Sistema (naranja, columna derecha) ───────────────────────────
+ent(sl, 9.90, 1.40, 1.25, "usuarios",           C_SYS, ORANGE)
+ent(sl, 9.90, 2.40, 2.20, "bitacora_auditoria", C_SYS, ORANGE)
+
+# ── Leyenda ──────────────────────────────────────────────────────
+LX = Inches(9.90); LY = Inches(4.15)
+box(sl, LX, LY, Inches(3.28), Inches(2.20),
+    color=BG2, border=RGBColor(0x30, 0x36, 0x3d), border_w=Pt(1))
+txt(sl, "Leyenda", LX, LY + Inches(0.06), Inches(3.28), Inches(0.28),
+    size=8.5, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
+
+legend_rows = [
+    (C_GEO,  GREEN,  "Tablas geográficas  (5)"),
+    (C_CORE, BLUE,   "Fase 1 — principales  (7)"),
+    (C_NEW,  PURPLE, "Fase 2 — nuevas  (5)"),
+    (C_SYS,  ORANGE, "Sistema  (2)"),
+]
+for i, (lbg, lborder, lname) in enumerate(legend_rows):
+    ry = LY + Inches(0.40 + i * 0.40)
+    box(sl, LX + Inches(0.14), ry + Inches(0.04),
+        Inches(0.22), Inches(0.20), color=lbg, border=lborder, border_w=Pt(1))
+    txt(sl, lname, LX + Inches(0.44), ry, Inches(2.75), Inches(0.28),
+        size=8, color=LIGHT)
+
+slide_num(sl, 14)
 
 # ── Guardar ───────────────────────────────────────────────────────────────────
 prs.save(OUT)

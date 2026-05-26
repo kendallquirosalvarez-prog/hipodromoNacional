@@ -686,22 +686,21 @@ for i, (icon, text) in enumerate(logros):
     txt(sl, text, Inches(1.15), lt + Inches(0.14), Inches(8.65), Inches(0.42),
         size=10.5, color=WHITE)
 
-# Tarjeta esquema BD (reemplaza QR)
-box(sl, Inches(10.2), Inches(1.1), Inches(2.65), Inches(2.65),
-    color=RGBColor(0x1a, 0x1f, 0x2e),
-    border=BLUE, border_w=Pt(1.5))
-txt(sl, "🗄️",
-    Inches(10.2), Inches(1.25), Inches(2.65), Inches(0.8),
-    size=38, align=PP_ALIGN.CENTER)
-txt(sl, "db-schema.html",
-    Inches(10.2), Inches(2.1), Inches(2.65), Inches(0.4),
-    size=10, bold=True, color=BLUE, align=PP_ALIGN.CENTER)
-txt(sl, "Tablas · Procedures · Triggers · Índices",
-    Inches(10.2), Inches(2.5), Inches(2.65), Inches(0.35),
-    size=8, color=GRAY, align=PP_ALIGN.CENTER)
-txt(sl, "Abrir en cualquier navegador",
-    Inches(10.2), Inches(2.85), Inches(2.65), Inches(0.3),
-    size=8, color=GRAY, align=PP_ALIGN.CENTER)
+# QR — apunta directo a Railway
+try:
+    import qrcode, io
+    qr = qrcode.QRCode(version=3, box_size=8, border=3,
+                       error_correction=qrcode.constants.ERROR_CORRECT_M)
+    qr.add_data("https://hipodromonacional-production.up.railway.app/db-schema.html")
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="#58A6FF", back_color="#0D1117")
+    buf = io.BytesIO(); qr_img.save(buf, format='PNG'); buf.seek(0)
+    sl.shapes.add_picture(buf, Inches(10.2), Inches(1.1), Inches(2.65), Inches(2.65))
+except Exception:
+    pass
+txt(sl, "hipodromonacional-production.up.railway.app",
+    Inches(10.2), Inches(3.82), Inches(2.65), Inches(0.28),
+    size=6.5, color=GRAY, align=PP_ALIGN.CENTER)
 
 box(sl, Inches(10.2), Inches(4.0), Inches(2.65), Inches(0.75), BG2)
 txt(sl, "UCR Sede Liberia · 2025–2026",

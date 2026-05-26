@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama ER — Hipódromo Nacional</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0d1117; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; user-select: none; }
+
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #0a0d12; border-bottom: 1px solid #30363d;
+  padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;
+}
+#header h1 { color: #ffd700; font-size: 1rem; font-weight: 700; }
+#header p  { color: #8b949e; font-size: 0.72rem; margin-top: 2px; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge {
+  font-size: 0.65rem; font-weight: 600; padding: 2px 8px;
+  border-radius: 10px; border: 1px solid;
+}
+.b-green  { color: #3fb950; border-color: #2a4a2a; background: #0d2010; }
+.b-blue   { color: #58a6ff; border-color: #1a3a6a; background: #0d1a3a; }
+.b-purple { color: #bc8cff; border-color: #3a2a6a; background: #1a0d3a; }
+.b-orange { color: #ffa657; border-color: #5a3010; background: #1a0d05; }
+
+#controls {
+  position: fixed; bottom: 16px; right: 16px; z-index: 100;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.ctrl-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: #161b27; border: 1px solid #30363d;
+  color: #f0f6fc; font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.ctrl-btn:hover { background: #1f2937; }
+
+#hint {
+  position: fixed; bottom: 16px; left: 16px; z-index: 100;
+  font-size: 0.65rem; color: #4a5568;
+}
+
+#viewport {
+  position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+  cursor: grab; overflow: hidden;
+}
+#viewport.grabbing { cursor: grabbing; }
+
+#canvas {
+  position: absolute;
+  transform-origin: 0 0;
+}
+
+svg#lines {
+  position: absolute; top: 0; left: 0;
+  overflow: visible; pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1>🐎 Hipódromo Nacional — Diagrama Entidad-Relación</h1>
+    <p>IF-5100 Administración de Bases de Datos · UCR Sede Liberia · 2025</p>
+  </div>
+  <div class="badges">
+    <span class="badge b-green">5 tablas geográficas</span>
+    <span class="badge b-blue">7 tablas principales</span>
+    <span class="badge b-purple">5 tablas fase 2</span>
+    <span class="badge b-orange">2 tablas sistema</span>
+  </div>
+</div>
+
+<div id="viewport">
+  <div id="canvas">
+    <svg id="lines" width="1" height="1"></svg>
+  </div>
+</div>
+
+<div id="controls">
+  <button class="ctrl-btn" onclick="zoom(1.2)" title="Acercar">+</button>
+  <button class="ctrl-btn" onclick="zoom(0.83)" title="Alejar">−</button>
+  <button class="ctrl-btn" onclick="resetView()" title="Restablecer">⌂</button>
+</div>
+<div id="hint">Rueda para zoom · Arrastrar para mover</div>
+
+<script>
+// ─── Paleta de colores ───────────────────────────────────────────
+const C = {
+  geo:    { bg:'#0a1f0d', hdr:'#0f2d12', border:'#3fb950', text:'#3fb950' },
+  core:   { bg:'#0a1428', hdr:'#0d1e3a', border:'#58a6ff', text:'#58a6ff' },
+  phase2: { bg:'#130a28', hdr:'#1a0d38', border:'#bc8cff', text:'#bc8cff' },
+  sys:    { bg:'#1a0d05', hdr:'#241205', border:'#ffa657', text:'#ffa657' },
+};
+const COL_PK   = '#ffd700';
+const COL_FK   = '#ffa657';
+const COL_NAME = '#f0f6fc';
+const COL_TYPE = '#8b949e';
+const LINE_GEO    = '#3fb950';
+const LINE_CORE   = '#58a6ff88';
+const LINE_PHASE2 = '#bc8cff88';
+
+const W = 190;   // entity width
+const HR = 30;   // header height
+const RH = 21;   // row height
+const PAD = 0;
+
+// ─── Definición de entidades ────────────────────────────────────
+const entities = [
+  // GEOGRÁFICAS
+  { id:'pais', label:'pais', group:'geo', x:20, y:20,
+    cols:[ {n:'id_pais',      t:'SERIAL',      pk:true},
+           {n:'nombre_pais',  t:'VARCHAR(100)'} ] },
+
+  { id:'provincia', label:'provincia', group:'geo', x:230, y:20,
+    cols:[ {n:'id_provincia',      t:'SERIAL',      pk:true},
+           {n:'nombre_provincia',  t:'VARCHAR(100)'},
+           {n:'id_pais',           t:'INT',  fk:'pais'} ] },
+
+  { id:'canton', label:'canton', group:'geo', x:440, y:20,
+    cols:[ {n:'id_canton',      t:'SERIAL',      pk:true},
+           {n:'nombre_canton',  t:'VARCHAR(100)'},
+           {n:'id_provincia',   t:'INT',  fk:'provincia'} ] },
+
+  { id:'distrito', label:'distrito', group:'geo', x:650, y:20,
+    cols:[ {n:'id_distrito',      t:'SERIAL',      pk:true},
+           {n:'nombre_distrito',  t:'VARCHAR(100)'},
+           {n:'id_canton',        t:'INT',  fk:'canton'} ] },
+
+  { id:'barrio', label:'barrio', group:'geo', x:860, y:20,
+    cols:[ {n:'id_barrio',      t:'SERIAL',      pk:true},
+           {n:'nombre_barrio',  t:'VARCHAR(100)'},
+           {n:'id_distrito',    t:'INT',  fk:'distrito'} ] },
+
+  // PRINCIPALES
+  { id:'propietario', label:'propietario', group:'core', x:20, y:185,
+    cols:[ {n:'id_propietario',   t:'VARCHAR(20)',  pk:true},
+           {n:'nombre',           t:'VARCHAR(100)'},
+           {n:'apellidos',        t:'VARCHAR(100)'},
+           {n:'id_barrio',        t:'INT',     fk:'barrio'},
+           {n:'...descuento',     t:'BOOLEAN'} ] },
+
+  { id:'establo', label:'establo', group:'core', x:20, y:430,
+    cols:[ {n:'id_establo',  t:'VARCHAR(20)',  pk:true},
+           {n:'capacidad',   t:'INTEGER'},
+           {n:'estado',      t:'VARCHAR(50)'},
+           {n:'id_barrio',   t:'INT',     fk:'barrio'} ] },
+
+  { id:'caballo', label:'caballo', group:'core', x:270, y:290,
+    cols:[ {n:'id_caballo',       t:'VARCHAR(20)',  pk:true},
+           {n:'nombre',           t:'VARCHAR(100)'},
+           {n:'fecha_nacimiento', t:'DATE'},
+           {n:'sexo',             t:'CHAR(1)'},
+           {n:'raza',             t:'VARCHAR(50)'},
+           {n:'peso',             t:'DECIMAL(10,2)'},
+           {n:'estado_salud',     t:'VARCHAR(30)'},
+           {n:'id_propietario',   t:'VARCHAR(20)', fk:'propietario'},
+           {n:'id_establo',       t:'VARCHAR(20)', fk:'establo'} ] },
+
+  { id:'evento', label:'evento', group:'core', x:520, y:160,
+    cols:[ {n:'id_evento',    t:'VARCHAR(20)',   pk:true},
+           {n:'nombre',       t:'VARCHAR(200)'},
+           {n:'fecha',        t:'TIMESTAMP'},
+           {n:'tipo_carrera', t:'VARCHAR(50)'},
+           {n:'distancia',    t:'INTEGER'},
+           {n:'premio_total', t:'DECIMAL(12,2)'},
+           {n:'estado',       t:'VARCHAR(30)'} ] },
+
+  { id:'inscripcion', label:'inscripcion', group:'core', x:520, y:445,
+    cols:[ {n:'id_inscripcion',    t:'VARCHAR(20)',  pk:true},
+           {n:'id_evento',         t:'VARCHAR(20)',  fk:'evento'},
+           {n:'id_caballo',        t:'VARCHAR(20)',  fk:'caballo'},
+           {n:'fecha_inscripcion', t:'DATE'},
+           {n:'estado',            t:'VARCHAR(30)'},
+           {n:'posicion_final',    t:'INTEGER'} ] },
+
+  { id:'historial_veterinario', label:'historial_veterinario', group:'core', x:270, y:600,
+    cols:[ {n:'id_registro',              t:'VARCHAR(20)',  pk:true},
+           {n:'id_caballo',               t:'VARCHAR(20)',  fk:'caballo'},
+           {n:'diagnostico',              t:'VARCHAR(300)'},
+           {n:'tratamiento',              t:'VARCHAR(300)'},
+           {n:'fecha_revision',           t:'DATE'},
+           {n:'fecha_vencimiento_cert',   t:'DATE'},
+           {n:'veterinario_responsable',  t:'VARCHAR(150)'} ] },
+
+  { id:'factura', label:'factura', group:'core', x:520, y:700,
+    cols:[ {n:'id_factura',      t:'VARCHAR(20)',   pk:true},
+           {n:'id_propietario',  t:'VARCHAR(20)',   fk:'propietario'},
+           {n:'id_evento',       t:'VARCHAR(20)',   fk:'evento'},
+           {n:'subtotal',        t:'DECIMAL(12,2)'},
+           {n:'descuento',       t:'DECIMAL(12,2)'},
+           {n:'impuestos',       t:'DECIMAL(12,2)'},
+           {n:'total',           t:'DECIMAL(12,2)'},
+           {n:'estado_pago',     t:'VARCHAR(30)'},
+           {n:'fecha_emision',   t:'TIMESTAMP'} ] },
+
+  // FASE 2
+  { id:'suministro', label:'suministro', group:'phase2', x:20, y:635,
+    cols:[ {n:'id_suministro',       t:'VARCHAR(20)',   pk:true},
+           {n:'tipo',                t:'VARCHAR(50)'},
+           {n:'proveedor',           t:'VARCHAR(100)'},
+           {n:'cantidad_disponible', t:'INTEGER'},
+           {n:'precio_unitario',     t:'DECIMAL(12,2)'} ] },
+
+  { id:'alimentacion', label:'alimentacion', group:'phase2', x:270, y:880,
+    cols:[ {n:'id_alimentacion',  t:'BIGSERIAL',     pk:true},
+           {n:'id_caballo',       t:'VARCHAR(20)',   fk:'caballo'},
+           {n:'id_suministro',    t:'VARCHAR(20)',   fk:'suministro'},
+           {n:'tipo_alimento',    t:'VARCHAR(50)'},
+           {n:'cantidad',         t:'DECIMAL(10,2)'},
+           {n:'fecha',            t:'DATE'} ] },
+
+  { id:'resultado_carrera', label:'resultado_carrera', group:'phase2', x:520, y:970,
+    cols:[ {n:'id_resultado',  t:'BIGSERIAL',     pk:true},
+           {n:'id_evento',     t:'VARCHAR(20)',   fk:'evento'},
+           {n:'id_caballo',    t:'VARCHAR(20)',   fk:'caballo'},
+           {n:'posicion',      t:'INTEGER'},
+           {n:'tiempo',        t:'VARCHAR(20)'},
+           {n:'premio_ganado', t:'DECIMAL(12,2)'} ] },
+
+  { id:'alerta_veterinaria', label:'alerta_veterinaria', group:'phase2', x:790, y:450,
+    cols:[ {n:'id_alerta',      t:'BIGSERIAL',     pk:true},
+           {n:'id_caballo',     t:'VARCHAR(20)',   fk:'caballo'},
+           {n:'id_propietario', t:'VARCHAR(20)',   fk:'propietario'},
+           {n:'mensaje',        t:'TEXT'},
+           {n:'leida',          t:'BOOLEAN'},
+           {n:'fecha_alerta',   t:'TIMESTAMP'} ] },
+
+  { id:'historial_transaccion', label:'historial_transaccion', group:'phase2', x:790, y:700,
+    cols:[ {n:'id_transaccion', t:'BIGSERIAL',     pk:true},
+           {n:'id_factura',     t:'VARCHAR(20)',   fk:'factura'},
+           {n:'monto',          t:'DECIMAL(12,2)'},
+           {n:'metodo_pago',    t:'VARCHAR(30)'},
+           {n:'fecha_pago',     t:'DATE'} ] },
+
+  // SISTEMA
+  { id:'usuarios', label:'usuarios', group:'sys', x:1060, y:20,
+    cols:[ {n:'username',  t:'VARCHAR(50)',   pk:true},
+           {n:'password',  t:'VARCHAR(255)'},
+           {n:'nombre',    t:'VARCHAR(150)'},
+           {n:'rol',       t:'VARCHAR(50)'},
+           {n:'activo',    t:'BOOLEAN'} ] },
+
+  { id:'bitacora_auditoria', label:'bitacora_auditoria', group:'sys', x:1060, y:230,
+    cols:[ {n:'id_bitacora',       t:'BIGSERIAL',     pk:true},
+           {n:'tabla_afectada',    t:'VARCHAR(50)'},
+           {n:'operacion',         t:'VARCHAR(10)'},
+           {n:'datos_anteriores',  t:'TEXT'},
+           {n:'datos_nuevos',      t:'TEXT'},
+           {n:'usuario_bd',        t:'VARCHAR(100)'},
+           {n:'fecha_hora',        t:'TIMESTAMP'} ] },
+];
+
+// ─── Relaciones FK ───────────────────────────────────────────────
+const relations = [
+  // Geográficas (cadena)
+  { from:'pais',        fromCol:'id_pais',       to:'provincia',   toCol:'id_pais',       color:LINE_GEO },
+  { from:'provincia',   fromCol:'id_provincia',  to:'canton',      toCol:'id_provincia',  color:LINE_GEO },
+  { from:'canton',      fromCol:'id_canton',     to:'distrito',    toCol:'id_canton',     color:LINE_GEO },
+  { from:'distrito',    fromCol:'id_distrito',   to:'barrio',      toCol:'id_distrito',   color:LINE_GEO },
+  // barrio → propietario, establo
+  { from:'barrio',      fromCol:'id_barrio',     to:'propietario', toCol:'id_barrio',     color:LINE_GEO },
+  { from:'barrio',      fromCol:'id_barrio',     to:'establo',     toCol:'id_barrio',     color:LINE_GEO },
+  // propietario, establo → caballo
+  { from:'propietario', fromCol:'id_propietario',to:'caballo',     toCol:'id_propietario',color:LINE_CORE },
+  { from:'establo',     fromCol:'id_establo',    to:'caballo',     toCol:'id_establo',    color:LINE_CORE },
+  // caballo, evento → inscripcion
+  { from:'caballo',     fromCol:'id_caballo',    to:'inscripcion', toCol:'id_caballo',    color:LINE_CORE },
+  { from:'evento',      fromCol:'id_evento',     to:'inscripcion', toCol:'id_evento',     color:LINE_CORE },
+  // caballo → historial_veterinario
+  { from:'caballo',     fromCol:'id_caballo',    to:'historial_veterinario', toCol:'id_caballo', color:LINE_CORE },
+  // propietario, evento → factura
+  { from:'propietario', fromCol:'id_propietario',to:'factura',     toCol:'id_propietario',color:LINE_CORE },
+  { from:'evento',      fromCol:'id_evento',     to:'factura',     toCol:'id_evento',     color:LINE_CORE },
+  // caballo, suministro → alimentacion
+  { from:'caballo',     fromCol:'id_caballo',    to:'alimentacion',toCol:'id_caballo',    color:LINE_PHASE2 },
+  { from:'suministro',  fromCol:'id_suministro', to:'alimentacion',toCol:'id_suministro', color:LINE_PHASE2 },
+  // evento, caballo → resultado_carrera
+  { from:'evento',      fromCol:'id_evento',     to:'resultado_carrera', toCol:'id_evento',   color:LINE_PHASE2 },
+  { from:'caballo',     fromCol:'id_caballo',    to:'resultado_carrera', toCol:'id_caballo',  color:LINE_PHASE2 },
+  // caballo, propietario → alerta_veterinaria
+  { from:'caballo',     fromCol:'id_caballo',    to:'alerta_veterinaria', toCol:'id_caballo',    color:LINE_PHASE2 },
+  { from:'propietario', fromCol:'id_propietario',to:'alerta_veterinaria', toCol:'id_propietario',color:LINE_PHASE2 },
+  // factura → historial_transaccion
+  { from:'factura',     fromCol:'id_factura',    to:'historial_transaccion', toCol:'id_factura', color:LINE_PHASE2 },
+];
+
+// ─── Calcular dimensiones ────────────────────────────────────────
+function entityHeight(e) { return HR + e.cols.length * RH + 8; }
+
+function colY(e, colName) {
+  const idx = e.cols.findIndex(c => c.n === colName);
+  return e.y + HR + idx * RH + RH / 2;
+}
+
+// ─── Renderizar entidades ────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const svgEl  = document.getElementById('lines');
+
+const map = {};
+entities.forEach(e => { map[e.id] = e; });
+
+// Calcular tamaño total del canvas
+let maxX = 0, maxY = 0;
+entities.forEach(e => {
+  maxX = Math.max(maxX, e.x + W + 30);
+  maxY = Math.max(maxY, e.y + entityHeight(e) + 30);
+});
+canvas.style.width  = maxX + 'px';
+canvas.style.height = maxY + 'px';
+svgEl.setAttribute('width',  maxX);
+svgEl.setAttribute('height', maxY);
+
+entities.forEach(e => {
+  const c = C[e.group];
+  const h = entityHeight(e);
+
+  const div = document.createElement('div');
+  div.style.cssText = `
+    position:absolute; left:${e.x}px; top:${e.y}px;
+    width:${W}px; border:1.5px solid ${c.border};
+    border-radius:7px; overflow:hidden; font-size:11px;
+  `;
+
+  // Header
+  const hdr = document.createElement('div');
+  hdr.style.cssText = `
+    background:${c.hdr}; padding:0 8px;
+    height:${HR}px; display:flex; align-items:center;
+    border-bottom:1px solid ${c.border};
+  `;
+  hdr.innerHTML = `<span style="font-weight:700;color:${c.text};font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.label}</span>`;
+  div.appendChild(hdr);
+
+  // Columnas
+  const body = document.createElement('div');
+  body.style.cssText = `background:${c.bg}; padding:4px 0;`;
+
+  e.cols.forEach(col => {
+    const row = document.createElement('div');
+    row.style.cssText = `
+      display:flex; align-items:center; padding:1px 7px;
+      height:${RH}px; gap:4px;
+    `;
+
+    let icon = '', nameColor = COL_NAME;
+    if (col.pk) { icon = '🔑'; nameColor = COL_PK; }
+    else if (col.fk) { icon = '→'; nameColor = COL_FK; }
+
+    row.innerHTML = `
+      <span style="font-size:9px;min-width:14px;text-align:center">${icon}</span>
+      <span style="flex:1;color:${nameColor};font-family:Consolas,monospace;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${col.n}</span>
+      <span style="color:${COL_TYPE};font-family:Consolas,monospace;font-size:8.5px;white-space:nowrap">${col.t}</span>
+    `;
+    body.appendChild(row);
+  });
+
+  div.appendChild(body);
+  canvas.appendChild(div);
+});
+
+// ─── Dibujar relaciones ──────────────────────────────────────────
+let paths = '';
+relations.forEach(r => {
+  const from = map[r.from];
+  const to   = map[r.to];
+  if (!from || !to) return;
+
+  const fy = colY(from, r.fromCol);
+  const ty = colY(to,   r.toCol);
+
+  // Decidir lado de conexión según posición relativa
+  let fx, tx, cp1x, cp2x;
+  if (from.x + W < to.x) {
+    fx = from.x + W; tx = to.x;
+    const d = (tx - fx) * 0.55;
+    cp1x = fx + d; cp2x = tx - d;
+  } else if (from.x > to.x + W) {
+    fx = from.x; tx = to.x + W;
+    const d = (fx - tx) * 0.55;
+    cp1x = fx - d; cp2x = tx + d;
+  } else if (from.y + entityHeight(from) < to.y) {
+    // misma columna, from arriba
+    fx = from.x + W * 0.5; fy_adj = from.y + entityHeight(from);
+    tx = to.x + W * 0.5;   ty_adj = to.y;
+    paths += `<path d="M${fx},${fy_adj} C${fx},${(fy_adj+ty_adj)/2} ${tx},${(fy_adj+ty_adj)/2} ${tx},${ty_adj}"
+      fill="none" stroke="${r.color}" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+    return;
+  } else {
+    // superposición: salir por la izquierda de uno
+    fx = from.x; tx = to.x + W;
+    cp1x = from.x - 40; cp2x = to.x + W + 40;
+  }
+
+  paths += `<path d="M${fx},${fy} C${cp1x},${fy} ${cp2x},${ty} ${tx},${ty}"
+    fill="none" stroke="${r.color}" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+
+  // Punto en el extremo PK (origen)
+  paths += `<circle cx="${fx}" cy="${fy}" r="3" fill="${r.color}" opacity="0.7"/>`;
+  // Flecha en el extremo FK (destino)
+  const dir = tx > fx ? 1 : -1;
+  paths += `<polygon points="${tx},${ty} ${tx-dir*8},${ty-4} ${tx-dir*8},${ty+4}"
+    fill="${r.color}" opacity="0.85"/>`;
+});
+
+svgEl.innerHTML = paths;
+
+// ─── Pan / Zoom ──────────────────────────────────────────────────
+const viewport = document.getElementById('viewport');
+let scale = 0.72, tx = 40, ty = 10;
+let dragging = false, lastX, lastY;
+
+function applyTransform() {
+  canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+}
+applyTransform();
+
+viewport.addEventListener('mousedown', e => {
+  dragging = true; lastX = e.clientX; lastY = e.clientY;
+  viewport.classList.add('grabbing');
+});
+window.addEventListener('mouseup', () => { dragging = false; viewport.classList.remove('grabbing'); });
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  tx += e.clientX - lastX; ty += e.clientY - lastY;
+  lastX = e.clientX; lastY = e.clientY;
+  applyTransform();
+});
+viewport.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.1 : 0.91;
+  const rect = viewport.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  tx = mx - (mx - tx) * factor;
+  ty = my - (my - ty) * factor;
+  scale *= factor;
+  applyTransform();
+}, { passive: false });
+
+// Touch support
+let lastDist = null;
+viewport.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) { dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+  if (e.touches.length === 2) { lastDist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY); }
+});
+viewport.addEventListener('touchend', () => { dragging = false; lastDist = null; });
+viewport.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && dragging) {
+    tx += e.touches[0].clientX - lastX; ty += e.touches[0].clientY - lastY;
+    lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; applyTransform();
+  }
+  if (e.touches.length === 2) {
+    const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    if (lastDist) { scale *= d/lastDist; applyTransform(); } lastDist = d;
+  }
+}, { passive: false });
+
+function zoom(f) { scale *= f; applyTransform(); }
+function resetView() { scale = 0.72; tx = 40; ty = 10; applyTransform(); }
+</script>
+</body>
+</html>

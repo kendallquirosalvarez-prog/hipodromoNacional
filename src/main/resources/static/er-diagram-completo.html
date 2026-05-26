@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama ER Completo — Hipódromo Nacional</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg:      #0a0805;
+    --surface: #16130d;
+    --card:    #1e1a12;
+    --border:  rgba(201,169,97,.22);
+    --gold:    #c9a961;
+    --gold-lt: #e2c98a;
+    --text:    #f4ead5;
+    --muted:   #7a6d5c;
+    --green:   #4ade80;
+    --blue:    #60a5fa;
+    --red:     #f87171;
+    --purple:  #c792ea;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-mono:  'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    width: 42px; height: 42px;
+    background: var(--gold);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  header h1 { font-family: var(--font-serif); font-size: 20px; color: var(--text); }
+  header h1 span { color: var(--gold); font-style: italic; }
+
+  .header-tags { margin-left: auto; display: flex; gap: 8px; }
+  .tag {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    letter-spacing: .08em;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .wrapper { max-width: 1500px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  .section-header { margin-bottom: 28px; }
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .section-header h2 { font-family: var(--font-serif); font-size: 28px; color: var(--text); }
+  .section-header h2 em { color: var(--gold); font-style: italic; }
+  .section-header p { margin-top: 8px; color: var(--muted); font-size: 14px; }
+
+  .divider { height: 1px; background: var(--border); margin: 56px 0; }
+
+  /* Tabla de módulos */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .module-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .module-pill .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .module-pill span { color: var(--text); font-family: var(--font-mono); }
+  .module-pill small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+
+  /* ER diagram */
+  .er-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    overflow-x: auto;
+  }
+  .mermaid { min-height: 200px; }
+  .mermaid svg { background: var(--card) !important; border-radius: 8px; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Grupos de tablas */
+  .group-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 32px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Tabla de relaciones */
+  .rel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .rel-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--surface);
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    border-bottom: 1px solid var(--border);
+  }
+  .rel-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(201,169,97,.08);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .rel-table tr:hover td { background: rgba(201,169,97,.04); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+  }
+  .badge-new  { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
+  .badge-orig { background: rgba(96,165,250,.12); color: var(--blue);  border: 1px solid rgba(96,165,250,.25); }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 80px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    letter-spacing: .06em;
+  }
+
+  @media (max-width: 700px) {
+    .wrapper { padding: 24px 16px 60px; }
+    header { padding: 14px 16px; }
+    .header-tags { display: none; }
+    .modules-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">♞</div>
+  <h1>Hipódromo Nacional · <span>Diagrama ER Completo</span></h1>
+  <div class="header-tags">
+    <span class="tag">14 tablas</span>
+    <span class="tag">PostgreSQL</span>
+    <span class="tag">IF-5100 UCR</span>
+  </div>
+</header>
+
+<div class="wrapper">
+
+  <!-- ══════════════════════════════════════
+       RESUMEN DE MÓDULOS
+  ══════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-kicker">01 · Estructura del Sistema</span>
+    <h2>12 Módulos · <em>14 Tablas</em></h2>
+    <p>Módulos originales (azul) y módulos nuevos agregados en la segunda fase (verde)</p>
+  </div>
+
+  <div class="modules-grid">
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>propietario</span><small>Datos del dueño</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>caballo</span><small>Registro equino</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>establo</span><small>Instalaciones</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>evento</span><small>Carreras programadas</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>inscripcion</span><small>Participación en evento</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>factura</span><small>Cobros por participación</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--blue)"></div>
+      <div><span>historial_veterinario</span><small>Certificaciones</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--green)"></div>
+      <div><span>suministro</span><small>Inventario de insumos</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--green)"></div>
+      <div><span>alimentacion</span><small>Raciones por caballo</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--green)"></div>
+      <div><span>resultado_carrera</span><small>Posiciones y premios</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--green)"></div>
+      <div><span>alerta_veterinaria</span><small>Avisos de vencimiento</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--green)"></div>
+      <div><span>historial_transaccion</span><small>Pagos de facturas</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--muted)"></div>
+      <div><span>pais / provincia …</span><small>Geografía (5 tablas)</small></div>
+    </div>
+    <div class="module-pill">
+      <div class="dot" style="background:var(--muted)"></div>
+      <div><span>usuarios</span><small>Spring Security</small></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       DIAGRAMA ER
+  ══════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-kicker">02 · Modelo Relacional</span>
+    <h2>Diagrama <em>Entidad-Relación</em></h2>
+  </div>
+
+  <div class="er-card">
+    <div class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': {
+  'primaryColor': '#1e1a12',
+  'primaryTextColor': '#f4ead5',
+  'primaryBorderColor': '#c9a961',
+  'lineColor': '#c9a961',
+  'secondaryColor': '#16130d',
+  'tertiaryColor': '#0a0805',
+  'edgeLabelBackground': '#1e1a12',
+  'fontFamily': 'Segoe UI'
+}}}%%
+erDiagram
+    PAIS {
+        int id_pais PK
+        varchar nombre_pais
+    }
+    PROVINCIA {
+        int id_provincia PK
+        varchar nombre_provincia
+        int id_pais FK
+    }
+    CANTON {
+        int id_canton PK
+        varchar nombre_canton
+        int id_provincia FK
+    }
+    DISTRITO {
+        int id_distrito PK
+        varchar nombre_distrito
+        int id_canton FK
+    }
+    BARRIO {
+        int id_barrio PK
+        varchar nombre_barrio
+        int id_distrito FK
+    }
+    PROPIETARIO {
+        varchar id_propietario PK
+        varchar nombre
+        varchar apellidos
+        int id_barrio FK
+        boolean descuento_prox_factura
+    }
+    ESTABLO {
+        varchar id_establo PK
+        int capacidad
+        varchar estado
+        int id_barrio FK
+    }
+    CABALLO {
+        varchar id_caballo PK
+        varchar nombre
+        date fecha_nacimiento
+        char sexo
+        varchar raza
+        decimal peso
+        varchar estado_salud
+        varchar id_propietario FK
+        varchar id_establo FK
+    }
+    EVENTO {
+        varchar id_evento PK
+        varchar nombre
+        timestamp fecha
+        varchar tipo_carrera
+        int distancia
+        decimal premio_total
+        varchar estado
+    }
+    INSCRIPCION {
+        varchar id_inscripcion PK
+        varchar id_evento FK
+        varchar id_caballo FK
+        date fecha_inscripcion
+        varchar estado
+        int posicion_final
+    }
+    FACTURA {
+        varchar id_factura PK
+        varchar id_propietario FK
+        varchar id_evento FK
+        decimal subtotal
+        decimal descuento
+        decimal impuestos
+        decimal total
+        varchar estado_pago
+        timestamp fecha_emision
+    }
+    HISTORIAL_VETERINARIO {
+        varchar id_registro PK
+        varchar id_caballo FK
+        varchar diagnostico
+        varchar tratamiento
+        date fecha_revision
+        date fecha_vencimiento_cert
+        varchar veterinario_responsable
+    }
+    SUMINISTRO {
+        varchar id_suministro PK
+        varchar tipo
+        varchar proveedor
+        int cantidad_disponible
+        decimal precio_unitario
+    }
+    ALIMENTACION {
+        bigint id_alimentacion PK
+        varchar id_caballo FK
+        varchar id_suministro FK
+        varchar tipo_alimento
+        decimal cantidad
+        date fecha
+    }
+    RESULTADO_CARRERA {
+        bigint id_resultado PK
+        varchar id_evento FK
+        varchar id_caballo FK
+        int posicion
+        varchar tiempo
+        decimal premio_ganado
+    }
+    ALERTA_VETERINARIA {
+        bigint id_alerta PK
+        varchar id_caballo FK
+        varchar id_propietario FK
+        text mensaje
+        boolean leida
+        timestamp fecha_alerta
+    }
+    HISTORIAL_TRANSACCION {
+        bigint id_transaccion PK
+        varchar id_factura FK
+        decimal monto
+        varchar metodo_pago
+        date fecha_pago
+    }
+
+    PAIS                 ||--o{ PROVINCIA              : "tiene"
+    PROVINCIA            ||--o{ CANTON                 : "tiene"
+    CANTON               ||--o{ DISTRITO               : "tiene"
+    DISTRITO             ||--o{ BARRIO                 : "tiene"
+    BARRIO               ||--o{ PROPIETARIO            : "reside en"
+    BARRIO               ||--o{ ESTABLO                : "ubicado en"
+    PROPIETARIO          ||--o{ CABALLO                : "posee"
+    ESTABLO              ||--o{ CABALLO                : "aloja"
+    EVENTO               ||--o{ INSCRIPCION            : "incluye"
+    CABALLO              ||--o{ INSCRIPCION            : "participa en"
+    PROPIETARIO          ||--o{ FACTURA                : "recibe"
+    EVENTO               ||--o{ FACTURA                : "genera"
+    CABALLO              ||--o{ HISTORIAL_VETERINARIO  : "tiene"
+    SUMINISTRO           ||--o{ ALIMENTACION           : "provee"
+    CABALLO              ||--o{ ALIMENTACION           : "consume"
+    EVENTO               ||--o{ RESULTADO_CARRERA      : "registra"
+    CABALLO              ||--o{ RESULTADO_CARRERA      : "obtiene"
+    CABALLO              ||--o{ ALERTA_VETERINARIA     : "genera"
+    PROPIETARIO          ||--o{ ALERTA_VETERINARIA     : "notifica a"
+    FACTURA              ||--o{ HISTORIAL_TRANSACCION  : "tiene pagos"
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold)"></div>
+        <span>|| = exactamente uno</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--blue)"></div>
+        <span>o{ = cero o muchos</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--green)"></div>
+        <span>PK = Clave primaria</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--red)"></div>
+        <span>FK = Clave foránea</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       TABLA DE RELACIONES
+  ══════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-kicker">03 · Claves Foráneas</span>
+    <h2>Relaciones entre <em>Tablas</em></h2>
+  </div>
+
+  <div class="er-card" style="padding:0; overflow:hidden;">
+
+    <div class="group-label" style="padding:0 24px; margin:20px 0 12px;">Geografía</div>
+    <table class="rel-table">
+      <thead><tr>
+        <th>Tabla hija</th><th>Columna FK</th><th>Tabla padre</th><th>Columna PK</th><th>Fase</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>provincia</td><td>id_pais</td><td>pais</td><td>id_pais</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>canton</td><td>id_provincia</td><td>provincia</td><td>id_provincia</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>distrito</td><td>id_canton</td><td>canton</td><td>id_canton</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>barrio</td><td>id_distrito</td><td>distrito</td><td>id_distrito</td><td><span class="badge badge-orig">original</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="group-label" style="padding:0 24px; margin:20px 0 12px;">Entidades principales</div>
+    <table class="rel-table">
+      <thead><tr>
+        <th>Tabla hija</th><th>Columna FK</th><th>Tabla padre</th><th>Columna PK</th><th>Fase</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>propietario</td><td>id_barrio</td><td>barrio</td><td>id_barrio</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>establo</td><td>id_barrio</td><td>barrio</td><td>id_barrio</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>caballo</td><td>id_propietario</td><td>propietario</td><td>id_propietario</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>caballo</td><td>id_establo</td><td>establo</td><td>id_establo</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>inscripcion</td><td>id_evento</td><td>evento</td><td>id_evento</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>inscripcion</td><td>id_caballo</td><td>caballo</td><td>id_caballo</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>factura</td><td>id_propietario</td><td>propietario</td><td>id_propietario</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>factura</td><td>id_evento</td><td>evento</td><td>id_evento</td><td><span class="badge badge-orig">original</span></td></tr>
+        <tr><td>historial_veterinario</td><td>id_caballo</td><td>caballo</td><td>id_caballo</td><td><span class="badge badge-orig">original</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="group-label" style="padding:0 24px; margin:20px 0 12px;">Módulos nuevos (segunda fase)</div>
+    <table class="rel-table">
+      <thead><tr>
+        <th>Tabla hija</th><th>Columna FK</th><th>Tabla padre</th><th>Columna PK</th><th>Fase</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>alimentacion</td><td>id_caballo</td><td>caballo</td><td>id_caballo</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>alimentacion</td><td>id_suministro</td><td>suministro</td><td>id_suministro</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>resultado_carrera</td><td>id_evento</td><td>evento</td><td>id_evento</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>resultado_carrera</td><td>id_caballo</td><td>caballo</td><td>id_caballo</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>alerta_veterinaria</td><td>id_caballo</td><td>caballo</td><td>id_caballo</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>alerta_veterinaria</td><td>id_propietario</td><td>propietario</td><td>id_propietario</td><td><span class="badge badge-new">nuevo</span></td></tr>
+        <tr><td>historial_transaccion</td><td>id_factura</td><td>factura</td><td>id_factura</td><td><span class="badge badge-new">nuevo</span></td></tr>
+      </tbody>
+    </table>
+    <div style="height:24px"></div>
+  </div>
+
+</div>
+
+<footer>
+  Hipódromo Nacional © 2026 &nbsp;·&nbsp; IF-5100 Administración de Bases de Datos &nbsp;·&nbsp; UCR Sede Liberia
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor:       '#1e1a12',
+      primaryTextColor:   '#f4ead5',
+      primaryBorderColor: '#c9a961',
+      lineColor:          '#c9a961',
+      secondaryColor:     '#16130d',
+      tertiaryColor:      '#0a0805',
+      fontFamily:         'Segoe UI, system-ui, sans-serif'
+    },
+    er: {
+      diagramPadding: 30,
+      layoutDirection: 'TB',
+      minEntityWidth: 100,
+      minEntityHeight: 75,
+      entityPadding: 15,
+      useMaxWidth: true
+    }
+  });
+</script>
+</body>
+</html>

@@ -689,9 +689,9 @@ for i, (icon, text) in enumerate(logros):
 # QR
 try:
     import qrcode, io
-    qr = qrcode.QRCode(version=2, box_size=8, border=3,
+    qr = qrcode.QRCode(version=6, box_size=8, border=3,
                        error_correction=qrcode.constants.ERROR_CORRECT_M)
-    qr.add_data("https://github.com/kendallquirosalvarez-prog/hipodromoNacional")
+    qr.add_data("https://htmlpreview.github.io/?https://github.com/kendallquirosalvarez-prog/hipodromoNacional/blob/main/src/main/resources/static/er-diagram-completo.html")
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="#58A6FF", back_color="#0D1117")
     buf = io.BytesIO(); qr_img.save(buf, format='PNG'); buf.seek(0)

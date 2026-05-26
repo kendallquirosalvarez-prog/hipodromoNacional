@@ -774,6 +774,52 @@ FOR EACH ROW EXECUTE FUNCTION fn_descuento_frecuente();
 
 
 -- =============================================================
+-- ÍNDICES
+-- =============================================================
+
+-- caballo: FK más consultada (listar caballos por propietario)
+CREATE INDEX IF NOT EXISTS idx_caballo_propietario
+    ON caballo(id_propietario);
+
+-- caballo: búsquedas por establo
+CREATE INDEX IF NOT EXISTS idx_caballo_establo
+    ON caballo(id_establo);
+
+-- inscripcion: consultas por evento y por caballo
+CREATE INDEX IF NOT EXISTS idx_inscripcion_evento
+    ON inscripcion(id_evento);
+CREATE INDEX IF NOT EXISTS idx_inscripcion_caballo
+    ON inscripcion(id_caballo);
+
+-- historial_veterinario: el SP sp_insertar_inscripcion y el trigger
+-- fn_alerta_vencimiento filtran siempre por (id_caballo, fecha_vencimiento)
+CREATE INDEX IF NOT EXISTS idx_historial_vet_caballo_vencimiento
+    ON historial_veterinario(id_caballo, fecha_vencimiento_certificacion);
+
+-- factura: el trigger fn_descuento_frecuente suma por propietario + fecha
+CREATE INDEX IF NOT EXISTS idx_factura_propietario_fecha
+    ON factura(id_propietario, fecha_emision);
+
+-- alerta_veterinaria: panel de alertas pendientes (leida = FALSE)
+CREATE INDEX IF NOT EXISTS idx_alerta_propietario_leida
+    ON alerta_veterinaria(id_propietario, leida);
+
+-- alimentacion: historial de alimentación por caballo
+CREATE INDEX IF NOT EXISTS idx_alimentacion_caballo
+    ON alimentacion(id_caballo);
+
+-- resultado_carrera: resultados por evento y por caballo
+CREATE INDEX IF NOT EXISTS idx_resultado_evento
+    ON resultado_carrera(id_evento);
+CREATE INDEX IF NOT EXISTS idx_resultado_caballo
+    ON resultado_carrera(id_caballo);
+
+-- historial_transaccion: pagos por factura
+CREATE INDEX IF NOT EXISTS idx_transaccion_factura
+    ON historial_transaccion(id_factura);
+
+
+-- =============================================================
 -- VERIFICACIÓN FINAL
 -- =============================================================
 

@@ -228,6 +228,7 @@
       <span class="badge"><span class="dot dot-blue"></span>19 tablas</span>
       <span class="badge"><span class="dot dot-gold"></span>33 stored procedures</span>
       <span class="badge"><span class="dot dot-purple"></span>3 triggers</span>
+      <span class="badge"><span class="dot dot-gold"></span>11 índices</span>
     </div>
   </div>
 </header>
@@ -236,6 +237,7 @@
   <div class="nav-tab active" onclick="showTab('tablas', this)">📋 Tablas</div>
   <div class="nav-tab" onclick="showTab('procedures', this)">⚙️ Stored Procedures</div>
   <div class="nav-tab" onclick="showTab('triggers', this)">⚡ Triggers</div>
+  <div class="nav-tab" onclick="showTab('indices', this)">🗂️ Índices</div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════ -->
@@ -861,6 +863,146 @@ $$;</pre>
     </div>
 
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  ÍNDICES                                                      -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="indices" class="section">
+
+  <div class="section-title">🗂️ Índices del Sistema (11)</div>
+
+  <div style="margin-bottom:20px; padding:14px 18px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:0.82rem; color:var(--light); line-height:1.7">
+    Los índices aceleran las consultas más frecuentes del sistema. Todos usan <code style="color:var(--blue);background:var(--bg3);padding:1px 6px;border-radius:4px">CREATE INDEX IF NOT EXISTS</code>
+    para evitar errores si ya existen.
+  </div>
+
+  <!-- Tabla resumen -->
+  <div style="overflow-x:auto; margin-bottom:28px">
+    <table style="width:100%;border-collapse:collapse;font-size:0.82rem">
+      <thead>
+        <tr style="background:var(--bg3);color:var(--gold)">
+          <th style="padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)">Nombre del índice</th>
+          <th style="padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)">Tabla</th>
+          <th style="padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)">Columna(s)</th>
+          <th style="padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)">Justificación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_caballo_propietario</td>
+          <td style="padding:9px 14px;color:var(--light)">caballo</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_propietario</td>
+          <td style="padding:9px 14px;color:var(--gray)">FK más consultada — listar caballos por dueño</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_caballo_establo</td>
+          <td style="padding:9px 14px;color:var(--light)">caballo</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_establo</td>
+          <td style="padding:9px 14px;color:var(--gray)">Caballos asignados a un establo</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_inscripcion_evento</td>
+          <td style="padding:9px 14px;color:var(--light)">inscripcion</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_evento</td>
+          <td style="padding:9px 14px;color:var(--gray)">Listar participantes de una carrera</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_inscripcion_caballo</td>
+          <td style="padding:9px 14px;color:var(--light)">inscripcion</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_caballo</td>
+          <td style="padding:9px 14px;color:var(--gray)">Historial de carreras de un caballo</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_historial_vet_caballo_vencimiento</td>
+          <td style="padding:9px 14px;color:var(--light)">historial_veterinario</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_caballo,<br>fecha_vencimiento_certificacion</td>
+          <td style="padding:9px 14px;color:var(--gray)">Usado por <em>sp_insertar_inscripcion</em> y el trigger de alerta en cada consulta</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_factura_propietario_fecha</td>
+          <td style="padding:9px 14px;color:var(--light)">factura</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_propietario, fecha_emision</td>
+          <td style="padding:9px 14px;color:var(--gray)">Trigger <em>fn_descuento_frecuente</em> suma facturas de los últimos 6 meses</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_alerta_propietario_leida</td>
+          <td style="padding:9px 14px;color:var(--light)">alerta_veterinaria</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_propietario, leida</td>
+          <td style="padding:9px 14px;color:var(--gray)">Panel de alertas pendientes — filtra leida = FALSE</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_alimentacion_caballo</td>
+          <td style="padding:9px 14px;color:var(--light)">alimentacion</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_caballo</td>
+          <td style="padding:9px 14px;color:var(--gray)">Historial de alimentación de un caballo</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_resultado_evento</td>
+          <td style="padding:9px 14px;color:var(--light)">resultado_carrera</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_evento</td>
+          <td style="padding:9px 14px;color:var(--gray)">Podio completo de una carrera</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_resultado_caballo</td>
+          <td style="padding:9px 14px;color:var(--light)">resultado_carrera</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_caballo</td>
+          <td style="padding:9px 14px;color:var(--gray)">Estadísticas de resultados de un caballo</td>
+        </tr>
+        <tr>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--blue)">idx_transaccion_factura</td>
+          <td style="padding:9px 14px;color:var(--light)">historial_transaccion</td>
+          <td style="padding:9px 14px;font-family:monospace;color:var(--orange)">id_factura</td>
+          <td style="padding:9px 14px;color:var(--gray)">Pagos asociados a una factura</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Código SQL -->
+  <div class="section-title">📄 Script SQL</div>
+  <div class="proc-card" style="grid-column:1/-1">
+    <div class="proc-body">
+<pre><span class="cmt">-- caballo</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_caballo_propietario</span>
+    <span class="kw">ON</span> caballo(id_propietario);
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_caballo_establo</span>
+    <span class="kw">ON</span> caballo(id_establo);
+
+<span class="cmt">-- inscripcion</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_inscripcion_evento</span>
+    <span class="kw">ON</span> inscripcion(id_evento);
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_inscripcion_caballo</span>
+    <span class="kw">ON</span> inscripcion(id_caballo);
+
+<span class="cmt">-- historial_veterinario (índice compuesto usado por sp_insertar_inscripcion)</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_historial_vet_caballo_vencimiento</span>
+    <span class="kw">ON</span> historial_veterinario(id_caballo, fecha_vencimiento_certificacion);
+
+<span class="cmt">-- factura (usado por el trigger fn_descuento_frecuente)</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_factura_propietario_fecha</span>
+    <span class="kw">ON</span> factura(id_propietario, fecha_emision);
+
+<span class="cmt">-- alerta_veterinaria (panel de notificaciones pendientes)</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_alerta_propietario_leida</span>
+    <span class="kw">ON</span> alerta_veterinaria(id_propietario, leida);
+
+<span class="cmt">-- alimentacion</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_alimentacion_caballo</span>
+    <span class="kw">ON</span> alimentacion(id_caballo);
+
+<span class="cmt">-- resultado_carrera</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_resultado_evento</span>
+    <span class="kw">ON</span> resultado_carrera(id_evento);
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_resultado_caballo</span>
+    <span class="kw">ON</span> resultado_carrera(id_caballo);
+
+<span class="cmt">-- historial_transaccion</span>
+<span class="kw">CREATE INDEX IF NOT EXISTS</span> <span class="fn">idx_transaccion_factura</span>
+    <span class="kw">ON</span> historial_transaccion(id_factura);</pre>
+    </div>
+  </div>
+
 </div>
 
 <script>

@@ -255,12 +255,22 @@ BEGIN
 END;
 $$;
 
+-- usuarios (requerida para el login de Spring Security)
+CREATE TABLE IF NOT EXISTS usuarios (
+    username VARCHAR(50)  PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    nombre   VARCHAR(150) NOT NULL,
+    rol      VARCHAR(50)  NOT NULL,
+    activo   BOOLEAN      NOT NULL DEFAULT TRUE
+);
+
 -- Verificar que quedaron creadas
 SELECT table_name
   FROM information_schema.tables
  WHERE table_schema = 'public'
    AND table_name IN (
        'historial_veterinario','suministro','alimentacion',
-       'resultado_carrera','alerta_veterinaria','historial_transaccion'
+       'resultado_carrera','alerta_veterinaria','historial_transaccion',
+       'usuarios'
    )
  ORDER BY table_name;

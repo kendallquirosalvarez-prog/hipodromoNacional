@@ -1,10 +1,13 @@
--- ============================================================
--- DATOS DE PRUEBA - Hipódromo Nacional
--- IF-5100 Administración de Bases de Datos - UCR Sede Liberia
--- Ejecutar en Supabase SQL Editor
--- ============================================================
+-- Datos de prueba para el sistema Hipódromo Nacional.
+-- Ejecutar en Supabase SQL Editor.
+-- IF-5100 Administración de Bases de Datos · UCR Sede Liberia
 
--- Limpiar datos existentes (respetando FK, orden inverso)
+-- Limpiar datos existentes respetando FK (orden inverso de dependencias)
+TRUNCATE TABLE historial_transaccion CASCADE;
+TRUNCATE TABLE alerta_veterinaria CASCADE;
+TRUNCATE TABLE resultado_carrera CASCADE;
+TRUNCATE TABLE alimentacion CASCADE;
+TRUNCATE TABLE suministro CASCADE;
 TRUNCATE TABLE factura CASCADE;
 TRUNCATE TABLE historial_veterinario CASCADE;
 TRUNCATE TABLE inscripcion CASCADE;
@@ -18,9 +21,7 @@ TRUNCATE TABLE canton CASCADE;
 TRUNCATE TABLE provincia CASCADE;
 TRUNCATE TABLE pais CASCADE;
 
--- ============================================================
--- 1. PAIS (5 registros)
--- ============================================================
+-- Países
 INSERT INTO pais (id_pais, nombre_pais) VALUES
 (1, 'Costa Rica'),
 (2, 'Panamá'),
@@ -28,9 +29,7 @@ INSERT INTO pais (id_pais, nombre_pais) VALUES
 (4, 'Honduras'),
 (5, 'El Salvador');
 
--- ============================================================
--- 2. PROVINCIA (5 registros)
--- ============================================================
+-- Provincias
 INSERT INTO provincia (id_provincia, nombre_provincia, id_pais) VALUES
 (1, 'Guanacaste',   1),
 (2, 'San José',     1),
@@ -38,9 +37,7 @@ INSERT INTO provincia (id_provincia, nombre_provincia, id_pais) VALUES
 (4, 'Heredia',      1),
 (5, 'Puntarenas',   1);
 
--- ============================================================
--- 3. CANTON (5 registros)
--- ============================================================
+-- Cantones
 INSERT INTO canton (id_canton, nombre_canton, id_provincia) VALUES
 (1, 'Liberia',      1),
 (2, 'Nicoya',       1),
@@ -48,9 +45,7 @@ INSERT INTO canton (id_canton, nombre_canton, id_provincia) VALUES
 (4, 'Bagaces',      1),
 (5, 'Cañas',        1);
 
--- ============================================================
--- 4. DISTRITO (5 registros)
--- ============================================================
+-- Distritos
 INSERT INTO distrito (id_distrito, nombre_distrito, id_canton) VALUES
 (1, 'Liberia Centro',  1),
 (2, 'Cañas Dulces',    1),
@@ -58,9 +53,7 @@ INSERT INTO distrito (id_distrito, nombre_distrito, id_canton) VALUES
 (4, 'Nacascolo',       1),
 (5, 'Curubandé',       1);
 
--- ============================================================
--- 5. BARRIO (20 registros)
--- ============================================================
+-- Barrios
 INSERT INTO barrio (nombre_barrio, id_distrito) VALUES
 ('Barrio El Bosque',        1),
 ('Barrio La Libertad',      1),
@@ -83,10 +76,7 @@ INSERT INTO barrio (nombre_barrio, id_distrito) VALUES
 ('Barrio El Paraíso',       5),
 ('Barrio Las Brisas',       5);
 
--- ============================================================
--- 6. PROPIETARIO (20 registros)
--- Las cédulas de Costa Rica tienen formato: X-XXXX-XXXX
--- ============================================================
+-- Propietarios (cédulas en formato costarricense X-XXXX-XXXX)
 INSERT INTO propietario (id_propietario, nombre, apellidos, id_barrio, propietario_con_descuento_proxima_facturacion) VALUES
 ('1-0501-0001', 'Carlos',    'Rodríguez Mora',       1,  false),
 ('1-0501-0002', 'María',     'González Jiménez',     2,  false),
@@ -109,9 +99,7 @@ INSERT INTO propietario (id_propietario, nombre, apellidos, id_barrio, propietar
 ('5-0245-0019', 'Rodrigo',   'Alpízar Zamora',       19, true),
 ('5-0245-0020', 'Marcela',   'Barrantes López',      20, false);
 
--- ============================================================
--- 7. ESTABLO (20 registros)
--- ============================================================
+-- Establos
 INSERT INTO establo (id_establo, capacidad, estado, id_barrio) VALUES
 ('EST-001', 15, 'Activo',             1),
 ('EST-002', 20, 'Activo',             2),
@@ -134,9 +122,7 @@ INSERT INTO establo (id_establo, capacidad, estado, id_barrio) VALUES
 ('EST-019', 30, 'Activo',             19),
 ('EST-020', 22, 'Activo',             20);
 
--- ============================================================
--- 8. CABALLO (20 registros)
--- ============================================================
+-- Caballos
 INSERT INTO caballo (id_caballo, nombre, fecha_nacimiento, sexo, raza, peso, estado_salud, id_propietario, id_establo) VALUES
 ('CAB-001', 'Relámpago',     '2018-03-15', 'M', 'Pura Sangre',        480.50, 'Óptimo',     '1-0501-0001', 'EST-001'),
 ('CAB-002', 'Tormenta',      '2019-06-22', 'H', 'Cuarto de Milla',    430.00, 'Bueno',      '1-0501-0002', 'EST-002'),
@@ -159,9 +145,7 @@ INSERT INTO caballo (id_caballo, nombre, fecha_nacimiento, sexo, raza, peso, est
 ('CAB-019', 'Rayo',          '2016-12-20', 'M', 'Appaloosa',          510.00, 'Óptimo',     '5-0245-0019', 'EST-019'),
 ('CAB-020', 'Sirena',        '2019-04-17', 'H', 'Árabe',              412.75, 'Regular',    '5-0245-0020', 'EST-020');
 
--- ============================================================
--- 9. EVENTO (20 registros)
--- ============================================================
+-- Eventos
 INSERT INTO evento (id_evento, nombre, fecha, tipo_carrera, distancia, premio_total, estado) VALUES
 ('EVT-001', 'Gran Premio Guanacaste 2025',       '2025-02-15 10:00:00', 'Clásica',      1200, 5000000.00,  'Finalizado'),
 ('EVT-002', 'Copa Liberia Primavera',             '2025-03-08 09:00:00', 'Velocidad',    800,  3500000.00,  'Finalizado'),
@@ -184,10 +168,8 @@ INSERT INTO evento (id_evento, nombre, fecha, tipo_carrera, distancia, premio_to
 ('EVT-019', 'Gran Carrera Aniversario',          '2026-05-15 10:00:00', 'Clásica',      1800, 7500000.00,  'En Curso'),
 ('EVT-020', 'Premio Especial Guanacaste 2026',   '2026-07-25 09:30:00', 'Obstáculos',   2000, 9500000.00,  'Programado');
 
--- ============================================================
--- 10. INSCRIPCION (20 registros)
--- id_inscripcion es VARCHAR(50), no SERIAL
--- ============================================================
+-- Inscripciones
+-- id_inscripcion es VARCHAR(50)
 INSERT INTO inscripcion (id_inscripcion, id_evento, id_caballo, fecha_inscripcion, estado, posicion_final) VALUES
 ('INS-001', 'EVT-001', 'CAB-001', '2025-02-01', 'Completado', 1),
 ('INS-002', 'EVT-001', 'CAB-003', '2025-02-01', 'Completado', 2),
@@ -210,9 +192,7 @@ INSERT INTO inscripcion (id_inscripcion, id_evento, id_caballo, fecha_inscripcio
 ('INS-019', 'EVT-019', 'CAB-018', '2026-05-01', 'En Carrera', NULL),
 ('INS-020', 'EVT-019', 'CAB-020', '2026-05-01', 'En Carrera', NULL);
 
--- ============================================================
--- 11. HISTORIAL_VETERINARIO (20 registros)
--- ============================================================
+-- Historial veterinario
 INSERT INTO historial_veterinario (id_registro, id_caballo, diagnostico, tratamiento, fecha_revision, fecha_vencimiento_certificacion, veterinario_responsable) VALUES
 ('HIV-001', 'CAB-001', 'Revisión preventiva anual',           'Vacunas y desparasitación',            '2025-01-10', '2026-01-10', 'Dr. Marco Solano'),
 ('HIV-002', 'CAB-002', 'Lesión leve en tendón anterior',      'Reposo 15 días y anti-inflamatorio',   '2025-01-15', '2026-01-15', 'Dra. Laura Méndez'),
@@ -235,10 +215,7 @@ INSERT INTO historial_veterinario (id_registro, id_caballo, diagnostico, tratami
 ('HIV-019', 'CAB-019', 'Herida superficial en flanco',        'Limpieza y vendaje 5 días',            '2025-10-01', '2026-10-01', 'Dr. Pablo Castro'),
 ('HIV-020', 'CAB-020', 'Revisión preventiva anual',           'Vacunas y desparasitación',            '2025-10-14', '2026-10-14', 'Dra. Laura Méndez');
 
--- ============================================================
--- 12. FACTURA (20 registros)
--- Subtotal * 0.13 = impuestos; total = subtotal - descuento + impuestos
--- ============================================================
+-- Facturas (subtotal * 0.13 = impuestos; total = subtotal - descuento + impuestos)
 INSERT INTO factura (id_factura, id_propietario, id_evento, subtotal, descuento, impuestos, total, estado_pago, fecha_emision) VALUES
 ('FAC-001', '1-0501-0001', 'EVT-001', 150000.00, 0.00,     19500.00,  169500.00,  'Pagado',    '2025-02-15 12:00:00'),
 ('FAC-002', '1-0501-0002', 'EVT-001', 150000.00, 0.00,     19500.00,  169500.00,  'Pagado',    '2025-02-15 12:00:00'),
@@ -261,19 +238,75 @@ INSERT INTO factura (id_factura, id_propietario, id_evento, subtotal, descuento,
 ('FAC-019', '5-0245-0019', 'EVT-019', 190000.00, 19000.00, 22230.00,  193230.00,  'Pendiente', '2026-05-01 10:00:00'),
 ('FAC-020', '5-0245-0020', 'EVT-019', 190000.00, 0.00,     24700.00,  214700.00,  'Pendiente', '2026-05-01 10:30:00');
 
--- ============================================================
--- Verificación rápida de conteos
--- ============================================================
-SELECT 'pais'                  AS tabla, COUNT(*) AS registros FROM pais
-UNION ALL SELECT 'provincia',          COUNT(*) FROM provincia
-UNION ALL SELECT 'canton',             COUNT(*) FROM canton
-UNION ALL SELECT 'distrito',           COUNT(*) FROM distrito
-UNION ALL SELECT 'barrio',             COUNT(*) FROM barrio
-UNION ALL SELECT 'propietario',        COUNT(*) FROM propietario
-UNION ALL SELECT 'establo',            COUNT(*) FROM establo
-UNION ALL SELECT 'caballo',            COUNT(*) FROM caballo
-UNION ALL SELECT 'evento',             COUNT(*) FROM evento
-UNION ALL SELECT 'inscripcion',        COUNT(*) FROM inscripcion
-UNION ALL SELECT 'historial_vet',      COUNT(*) FROM historial_veterinario
-UNION ALL SELECT 'factura',            COUNT(*) FROM factura
+-- Suministros (inventario de alimentos y materiales)
+INSERT INTO suministro (id_suministro, tipo, proveedor, cantidad_disponible, precio_unitario) VALUES
+('SUM-001', 'Alimento',    'Nutrición Equina S.A.',    500, 850.00),
+('SUM-002', 'Alimento',    'Agropecuaria Liberia',     300, 1200.00),
+('SUM-003', 'Alimento',    'Granos del Norte S.R.L.',  200, 650.00),
+('SUM-004', 'Medicamento', 'Veterinaria Central',       80, 3500.00),
+('SUM-005', 'Medicamento', 'PharmEquine C.R.',          50, 7200.00),
+('SUM-006', 'Equipo',      'Hipic Supply C.R.',         25, 15000.00),
+('SUM-007', 'Limpieza',    'Distribuidora Guanacaste',  90, 450.00),
+('SUM-008', 'Alimento',    'Nutrición Equina S.A.',    150, 980.00);
+
+-- Alimentación (raciones registradas; el stored procedure descuenta de suministros)
+INSERT INTO alimentacion (id_caballo, id_suministro, tipo_alimento, cantidad, fecha) VALUES
+('CAB-001', 'SUM-001', 'Heno',        5.00, '2026-05-20'),
+('CAB-002', 'SUM-002', 'Concentrado', 3.50, '2026-05-20'),
+('CAB-003', 'SUM-001', 'Heno',        4.50, '2026-05-21'),
+('CAB-004', 'SUM-003', 'Avena',       2.00, '2026-05-21'),
+('CAB-005', 'SUM-001', 'Heno',        5.50, '2026-05-22'),
+('CAB-006', 'SUM-008', 'Zanahoria',   1.50, '2026-05-22'),
+('CAB-007', 'SUM-002', 'Concentrado', 4.00, '2026-05-23'),
+('CAB-008', 'SUM-001', 'Heno',        5.00, '2026-05-23'),
+('CAB-009', 'SUM-003', 'Avena',       2.50, '2026-05-24'),
+('CAB-010', 'SUM-001', 'Heno',        4.00, '2026-05-24');
+
+-- Resultados de carrera (eventos ya finalizados)
+INSERT INTO resultado_carrera (id_evento, id_caballo, posicion, tiempo, premio_ganado) VALUES
+('EVT-001', 'CAB-001', 1, '1:12.45', 3000000.00),
+('EVT-001', 'CAB-003', 2, '1:13.10', 1000000.00),
+('EVT-001', 'CAB-005', 3, '1:13.58',  500000.00),
+('EVT-002', 'CAB-007', 1, '0:48.32', 2100000.00),
+('EVT-002', 'CAB-009', 2, '0:49.01',  700000.00),
+('EVT-003', 'CAB-011', 1, '1:58.20', 2520000.00),
+('EVT-003', 'CAB-013', 2, '1:59.45',  840000.00),
+('EVT-004', 'CAB-015', 1, '2:21.30', 4800000.00),
+('EVT-004', 'CAB-017', 2, '2:22.15', 1600000.00),
+('EVT-005', 'CAB-019', 1, '1:02.48', 3900000.00);
+
+-- Alertas veterinarias (generadas por el trigger de vencimiento)
+INSERT INTO alerta_veterinaria (id_caballo, id_propietario, mensaje, leida, fecha_alerta) VALUES
+('CAB-001', '1-0501-0001', 'Certificación vence el 2026-01-10 — renovar antes de inscribir a próxima carrera', true,  '2025-12-11 08:00:00'),
+('CAB-004', '1-0501-0004', 'Certificación vence el 2026-02-18 — animal en estado Regular, revisar antes de competir', false, '2026-01-19 08:00:00'),
+('CAB-009', '1-0501-0009', 'Certificación vence el 2026-05-03 — próximo vencimiento dentro de 30 días', false, '2026-04-03 08:00:00'),
+('CAB-015', '5-0245-0015', 'Certificación vence el 2026-08-06 — programar revisión veterinaria', false, '2026-07-07 08:00:00');
+
+-- Historial de transacciones (pagos de facturas)
+INSERT INTO historial_transaccion (id_factura, monto, metodo_pago, fecha_pago) VALUES
+('FAC-001', 169500.00, 'Transferencia', '2025-02-16'),
+('FAC-002', 169500.00, 'Efectivo',      '2025-02-17'),
+('FAC-003', 122040.00, 'SINPE',         '2025-03-09'),
+('FAC-004', 152550.00, 'Tarjeta',       '2025-04-21'),
+('FAC-005', 226000.00, 'Transferencia', '2025-05-11'),
+('FAC-006', 183060.00, 'Efectivo',      '2025-06-15'),
+('FAC-007', 163850.00, 'SINPE',         '2025-07-06'),
+('FAC-009', 180800.00, 'Tarjeta',       '2025-09-13'),
+('FAC-011', 124300.00, 'Transferencia', '2025-10-19'),
+('FAC-012', 147532.50, 'SINPE',         '2025-07-07');
+
+-- Verificación de conteos
+SELECT 'pais'                    AS tabla, COUNT(*) AS registros FROM pais
+UNION ALL SELECT 'propietario',          COUNT(*) FROM propietario
+UNION ALL SELECT 'establo',              COUNT(*) FROM establo
+UNION ALL SELECT 'caballo',              COUNT(*) FROM caballo
+UNION ALL SELECT 'evento',               COUNT(*) FROM evento
+UNION ALL SELECT 'inscripcion',          COUNT(*) FROM inscripcion
+UNION ALL SELECT 'historial_veterinario',COUNT(*) FROM historial_veterinario
+UNION ALL SELECT 'factura',              COUNT(*) FROM factura
+UNION ALL SELECT 'suministro',           COUNT(*) FROM suministro
+UNION ALL SELECT 'alimentacion',         COUNT(*) FROM alimentacion
+UNION ALL SELECT 'resultado_carrera',    COUNT(*) FROM resultado_carrera
+UNION ALL SELECT 'alerta_veterinaria',   COUNT(*) FROM alerta_veterinaria
+UNION ALL SELECT 'historial_transaccion',COUNT(*) FROM historial_transaccion
 ORDER BY tabla;

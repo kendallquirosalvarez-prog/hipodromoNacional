@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suministros — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/resultados">Resultados</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/transacciones">Transacciones</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+        <li><a href="/alertas">Alertas Vet.</a></li>
+        <li><a href="/suministros">Suministros</a></li>
+        <li><a href="/alimentacion">Alimentación</a></li>
+        <li class="navbar-user" sec:authorize="isAuthenticated()">
+            <span class="navbar-user-name" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Salir</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 10</span>
+            <h1>📦 <em>Suministros</em></h1>
+            <p>Control de inventario de alimentos y materiales para el hipódromo.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">📦</span>
+                <h3 th:text="${suministro.idSuministro != null and !#strings.isEmpty(suministro.idSuministro)} ? 'Editar Suministro' : 'Nuevo Suministro'">Nuevo Suministro</h3>
+            </div>
+            <form th:action="${suministro.idSuministro != null and !#strings.isEmpty(suministro.idSuministro)} ? @{/suministros/actualizar} : @{/suministros/guardar}"
+                  th:object="${suministro}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Código</label>
+                        <input type="text" th:field="*{idSuministro}"
+                               th:readonly="${suministro.idSuministro != null and !#strings.isEmpty(suministro.idSuministro)}"
+                               placeholder="SUM-001" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select th:field="*{tipo}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Alimento">Alimento</option>
+                            <option value="Medicamento">Medicamento</option>
+                            <option value="Equipo">Equipo</option>
+                            <option value="Limpieza">Limpieza</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <input type="text" th:field="*{proveedor}" placeholder="Nombre del proveedor" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad disponible</label>
+                        <input type="number" th:field="*{cantidadDisponible}" min="0" placeholder="100" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio unitario (₡)</label>
+                        <input type="number" th:field="*{precioUnitario}" step="0.01" min="0" placeholder="1500.00" required/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                        th:text="${suministro.idSuministro != null and !#strings.isEmpty(suministro.idSuministro)} ? 'Guardar cambios' : 'Registrar suministro'">
+                    Registrar suministro
+                </button>
+                <a th:if="${suministro.idSuministro != null and !#strings.isEmpty(suministro.idSuministro)}"
+                   href="/suministros" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Lista de <em>Suministros</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Proveedor</th>
+                            <th>Cantidad</th>
+                            <th>Precio (₡)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${suministros}">
+                            <td th:text="${s.idSuministro}"></td>
+                            <td th:text="${s.tipo}"></td>
+                            <td th:text="${s.proveedor}"></td>
+                            <td>
+                                <span th:class="${s.cantidadDisponible < 10} ? 'badge badge-red' : 'badge badge-green'"
+                                      th:text="${s.cantidadDisponible}"></span>
+                            </td>
+                            <td th:text="'₡' + ${#numbers.formatDecimal(s.precioUnitario, 1, 2)}"></td>
+                            <td class="td-actions">
+                                <a th:href="@{/suministros/editar/{id}(id=${s.idSuministro})}" class="btn-edit">Editar</a>
+                                <a th:href="@{/suministros/eliminar/{id}(id=${s.idSuministro})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar este suministro?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(suministros)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📦</div>
+                                    <p>Sin suministros registrados</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 <head>
@@ -29,7 +29,12 @@
         <li><a href="/eventos">Eventos</a></li>
         <li><a href="/inscripciones">Inscripciones</a></li>
         <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/transacciones">Transacciones</a></li>
         <li><a href="/historial">Historial Vet.</a></li>
+        <li><a href="/resultados">Resultados</a></li>
+        <li><a href="/alertas">Alertas Vet.</a></li>
+        <li><a href="/suministros">Suministros</a></li>
+        <li><a href="/alimentacion">Alimentaci&#xF3;n</a></li>
         <li class="navbar-user" sec:authorize="isAuthenticated()">
             <span class="navbar-user-name" sec:authentication="name"></span>
             <form th:action="@{/logout}" method="post">

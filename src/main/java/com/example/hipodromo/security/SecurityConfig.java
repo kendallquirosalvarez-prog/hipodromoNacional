@@ -27,10 +27,11 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .requestMatchers("/login", "/er-diagram.html").permitAll()
                 // Control de acceso por módulo y rol
-                .requestMatchers("/historial/**").hasAnyRole("ADMIN", "VETERINARIO")
-                .requestMatchers("/establos/**").hasAnyRole("ADMIN", "ENCARGADO")
+                .requestMatchers("/historial/**", "/alertas/**").hasAnyRole("ADMIN", "VETERINARIO")
+                .requestMatchers("/establos/**", "/suministros/**", "/alimentacion/**").hasAnyRole("ADMIN", "ENCARGADO")
                 .requestMatchers("/propietarios/**", "/caballos/**").hasAnyRole("ADMIN", "PROPIETARIO")
-                .requestMatchers("/eventos/**", "/inscripciones/**", "/facturas/**").hasAnyRole("ADMIN", "OPERADOR")
+                .requestMatchers("/eventos/**", "/inscripciones/**", "/facturas/**",
+                                 "/transacciones/**", "/resultados/**").hasAnyRole("ADMIN", "OPERADOR")
                 // Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
             )

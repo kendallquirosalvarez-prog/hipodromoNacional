@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transacciones — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/resultados">Resultados</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/transacciones">Transacciones</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+        <li><a href="/alertas">Alertas Vet.</a></li>
+        <li><a href="/suministros">Suministros</a></li>
+        <li><a href="/alimentacion">Alimentación</a></li>
+        <li class="navbar-user" sec:authorize="isAuthenticated()">
+            <span class="navbar-user-name" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Salir</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 7</span>
+            <h1>💳 <em>Historial de Transacciones</em></h1>
+            <p>Registro de pagos por factura. Al registrar una transacción que cubre el total, la factura se marca como pagada automáticamente.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">💳</span>
+                <h3>Registrar Transacción</h3>
+            </div>
+            <form th:action="@{/transacciones/guardar}" th:object="${transaccion}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Factura</label>
+                        <select th:field="*{idFactura}" required>
+                            <option value="">Seleccione factura</option>
+                            <option th:each="f : ${facturas}"
+                                    th:value="${f.idFactura}"
+                                    th:text="${f.idFactura} + ' — Total: ₡' + ${f.total} + ' (' + ${f.estadoPago} + ')'"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Monto pagado (₡)</label>
+                        <input type="number" th:field="*{monto}" step="0.01" min="0.01" placeholder="25000.00" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Método de pago</label>
+                        <select th:field="*{metodoPago}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                            <option value="SINPE">SINPE Móvil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de pago</label>
+                        <input type="date" th:field="*{fechaPago}" required/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar pago</button>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Historial de <em>Transacciones</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Factura</th>
+                            <th>Monto (₡)</th>
+                            <th>Método</th>
+                            <th>Fecha pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t : ${transacciones}">
+                            <td th:text="${t.idTransaccion}"></td>
+                            <td th:text="${t.idFactura}"></td>
+                            <td th:text="'₡' + ${#numbers.formatDecimal(t.monto, 1, 2)}"></td>
+                            <td th:text="${t.metodoPago}"></td>
+                            <td th:text="${t.fechaPago}"></td>
+                            <td class="td-actions">
+                                <a th:href="@{/transacciones/eliminar/{id}(id=${t.idTransaccion})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar esta transacción?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(transacciones)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">💳</div>
+                                    <p>Sin transacciones registradas</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
+</body>
+</html>

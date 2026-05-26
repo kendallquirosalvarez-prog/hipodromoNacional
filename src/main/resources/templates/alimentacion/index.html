@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alimentación — Hipódromo Nacional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/animations.css}">
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">♞</div>
+        <span class="navbar-name">Hipódromo Nacional</span>
+    </a>
+    <ul class="navbar-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/propietarios">Propietarios</a></li>
+        <li><a href="/caballos">Caballos</a></li>
+        <li><a href="/establos">Establos</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/inscripciones">Inscripciones</a></li>
+        <li><a href="/resultados">Resultados</a></li>
+        <li><a href="/facturas">Facturas</a></li>
+        <li><a href="/transacciones">Transacciones</a></li>
+        <li><a href="/historial">Historial Vet.</a></li>
+        <li><a href="/alertas">Alertas Vet.</a></li>
+        <li><a href="/suministros">Suministros</a></li>
+        <li><a href="/alimentacion">Alimentación</a></li>
+        <li class="navbar-user" sec:authorize="isAuthenticated()">
+            <span class="navbar-user-name" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Salir</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<main class="page-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <span class="page-kicker">Gestión · Módulo 11</span>
+            <h1>🌾 <em>Alimentación</em></h1>
+            <p>Registro de raciones alimentarias por caballo. Descuenta automáticamente del inventario de suministros.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">🌾</span>
+                <h3>Registrar Alimentación</h3>
+            </div>
+            <form th:action="@{/alimentacion/guardar}" th:object="${alimentacion}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Caballo</label>
+                        <select th:field="*{idCaballo}" required>
+                            <option value="">Seleccione caballo</option>
+                            <option th:each="c : ${caballos}"
+                                    th:value="${c.idCaballo}"
+                                    th:text="${c.nombre} + ' (' + ${c.idCaballo} + ')'"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Suministro</label>
+                        <select th:field="*{idSuministro}" required>
+                            <option value="">Seleccione suministro</option>
+                            <option th:each="s : ${suministros}"
+                                    th:value="${s.idSuministro}"
+                                    th:text="${s.tipo} + ' — ' + ${s.idSuministro}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de alimento</label>
+                        <select th:field="*{tipoAlimento}" required>
+                            <option value="">Seleccione</option>
+                            <option value="Heno">Heno</option>
+                            <option value="Concentrado">Concentrado</option>
+                            <option value="Avena">Avena</option>
+                            <option value="Zanahoria">Zanahoria</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad (kg)</label>
+                        <input type="number" th:field="*{cantidad}" step="0.01" min="0.01" placeholder="5.00" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" th:field="*{fecha}" required/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar alimentación</button>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <div class="table-section-header">
+                <h3>Historial de <em>Alimentación</em></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Caballo</th>
+                            <th>Suministro</th>
+                            <th>Tipo alimento</th>
+                            <th>Cantidad (kg)</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r : ${registros}">
+                            <td th:text="${r.idAlimentacion}"></td>
+                            <td th:text="${r.idCaballo}"></td>
+                            <td th:text="${r.idSuministro}"></td>
+                            <td th:text="${r.tipoAlimento}"></td>
+                            <td th:text="${r.cantidad}"></td>
+                            <td th:text="${r.fecha}"></td>
+                            <td class="td-actions">
+                                <a th:href="@{/alimentacion/eliminar/{id}(id=${r.idAlimentacion})}"
+                                   class="btn-delete"
+                                   onclick="return confirm('¿Eliminar este registro?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(registros)}">
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon">🌾</div>
+                                    <p>Sin registros de alimentación</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Hipódromo Nacional © 2026 · IF-5100 Administración de Bases de Datos · UCR Sede Liberia</p>
+</footer>
+
+<script th:src="@{/js/interactions.js}" defer></script>
+</body>
+</html>

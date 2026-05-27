@@ -14,21 +14,39 @@
 -- PASO 1: Eliminar triggers y funciones conflictivas del compañero
 -- ================================================================
 
--- Trigger que bloquea TODO insert/update/delete en caballo
-DROP TRIGGER IF EXISTS trg_auditoria_caballos    ON caballo;
-DROP TRIGGER IF EXISTS trg_auditoria_propietarios ON propietario;
-DROP TRIGGER IF EXISTS trg_auditoria_eventos      ON evento;
-DROP TRIGGER IF EXISTS trg_auditoria_inscripciones ON inscripcion;
-DROP TRIGGER IF EXISTS trg_auditoria_facturas     ON factura;
-DROP TRIGGER IF EXISTS trg_auditoria_historial    ON historial_veterinario;
+-- Triggers del compañero — nombres en SINGULAR y PLURAL para cubrir ambas variantes
+DROP TRIGGER IF EXISTS trg_auditoria_caballo               ON caballo;
+DROP TRIGGER IF EXISTS trg_auditoria_caballos              ON caballo;
+DROP TRIGGER IF EXISTS trg_auditoria_propietario           ON propietario;
+DROP TRIGGER IF EXISTS trg_auditoria_propietarios          ON propietario;
+DROP TRIGGER IF EXISTS trg_auditoria_evento                ON evento;
+DROP TRIGGER IF EXISTS trg_auditoria_eventos               ON evento;
+DROP TRIGGER IF EXISTS trg_auditoria_inscripcion           ON inscripcion;
+DROP TRIGGER IF EXISTS trg_auditoria_inscripciones         ON inscripcion;
+DROP TRIGGER IF EXISTS trg_auditoria_factura               ON factura;
+DROP TRIGGER IF EXISTS trg_auditoria_facturas              ON factura;
+DROP TRIGGER IF EXISTS trg_auditoria_historial_veterinario ON historial_veterinario;
+DROP TRIGGER IF EXISTS trg_auditoria_historial             ON historial_veterinario;
+DROP TRIGGER IF EXISTS trg_auditoria_establo               ON establo;
+DROP TRIGGER IF EXISTS trg_auditoria_establos              ON establo;
+DROP TRIGGER IF EXISTS trg_auditoria_suministro            ON suministro;
+DROP TRIGGER IF EXISTS trg_auditoria_suministros           ON suministro;
+DROP TRIGGER IF EXISTS trg_auditoria_alimentacion          ON alimentacion;
+DROP TRIGGER IF EXISTS trg_auditoria_resultado_carrera     ON resultado_carrera;
+DROP TRIGGER IF EXISTS trg_auditoria_alerta_veterinaria    ON alerta_veterinaria;
+DROP TRIGGER IF EXISTS trg_auditoria_historial_transaccion ON historial_transaccion;
 
--- Funciones de auditoría del compañero (reemplazadas por fn_registrar_auditoria)
+-- Función genérica del compañero (usaba fn_auditar_tabla para todo)
+DROP FUNCTION IF EXISTS fn_auditar_tabla() CASCADE;
+-- Funciones individuales por si usaban la variante con nombre de tabla
 DROP FUNCTION IF EXISTS fn_auditar_caballos();
 DROP FUNCTION IF EXISTS fn_auditar_propietarios();
 DROP FUNCTION IF EXISTS fn_auditar_eventos();
 DROP FUNCTION IF EXISTS fn_auditar_inscripciones();
 DROP FUNCTION IF EXISTS fn_auditar_facturas();
 DROP FUNCTION IF EXISTS fn_auditar_historial();
+DROP FUNCTION IF EXISTS fn_auditar_suministros();
+DROP FUNCTION IF EXISTS fn_auditar_alimentacion();
 
 
 -- ================================================================

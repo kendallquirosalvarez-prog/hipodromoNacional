@@ -50,7 +50,59 @@
         <div class="page-header">
             <span class="page-kicker">Gestión · Módulo 6</span>
             <h1>💰 <em>Facturas</em></h1>
-            <p>Facturación alineada a la legislación costarricense. IVA 13%.</p>
+            <p>Facturación alineada a la legislación costarricense. IVA 13% (Ley 9635).</p>
+        </div>
+
+        <div th:if="${mensaje}"
+             style="background:rgba(46,125,82,0.15);border:1px solid rgba(46,125,82,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#81c784;"
+             th:text="${mensaje}"></div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">⭐</span>
+                <h3>Automatización · Propietarios Frecuentes</h3>
+            </div>
+            <p style="margin-bottom:1rem;opacity:.8;">
+                Marque los propietarios que han facturado más de <strong>₡500 000</strong> en los últimos 6 meses
+                para que reciban un <strong>10% de descuento</strong> en su próxima factura.
+                El descuento se aplica automáticamente al registrar la factura y la bandera se reinicializa.
+            </p>
+            <form th:action="@{/facturas/marcar-frecuentes}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-primary"
+                        onclick="return confirm('¿Marcar propietarios frecuentes para descuento del 10%?')">
+                    Marcar Propietarios Frecuentes
+                </button>
+            </form>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">📄</span>
+                <h3>Facturación Automática por Propietario</h3>
+            </div>
+            <p style="margin-bottom:1rem;opacity:.8;">
+                Genera facturas para todos los eventos con inscripciones activas de un propietario
+                que aún no han sido facturados. Incluye comisión administrativa (5%) e IVA 13%.
+            </p>
+            <form th:action="@{/facturas/facturar-propietario}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Propietario</label>
+                        <select name="idPropietario" required>
+                            <option value="">Seleccione propietario</option>
+                            <option th:each="p : ${propietarios}"
+                                    th:value="${p.idPropietario}"
+                                    th:text="${p.nombre} + ' ' + ${p.apellidos}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio de Inscripción (₡)</label>
+                        <input type="number" name="precioInscripcion" value="50000" step="1000" min="0"/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Generar Facturas</button>
+            </form>
         </div>
 
         <div class="form-card">

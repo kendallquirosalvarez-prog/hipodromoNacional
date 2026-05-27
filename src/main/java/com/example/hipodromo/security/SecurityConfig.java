@@ -25,13 +25,14 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Recursos estáticos y login siempre accesibles
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                .requestMatchers("/login", "/er-diagram.html").permitAll()
+                .requestMatchers("/login", "/er-diagram.html", "/er-diagram-nuevo.html").permitAll()
                 // Control de acceso por módulo y rol
                 .requestMatchers("/historial/**", "/alertas/**").hasAnyRole("ADMIN", "VETERINARIO")
                 .requestMatchers("/establos/**", "/suministros/**", "/alimentacion/**").hasAnyRole("ADMIN", "ENCARGADO")
-                .requestMatchers("/propietarios/**", "/caballos/**").hasAnyRole("ADMIN", "PROPIETARIO")
-                .requestMatchers("/eventos/**", "/inscripciones/**", "/facturas/**",
-                                 "/transacciones/**", "/resultados/**").hasAnyRole("ADMIN", "OPERADOR")
+                // Propietarios: registran caballos, inscriben animales, consultan resultados y facturación
+                .requestMatchers("/propietarios/**", "/caballos/**",
+                                 "/eventos/**", "/inscripciones/**", "/facturas/**",
+                                 "/transacciones/**", "/resultados/**").hasAnyRole("ADMIN", "PROPIETARIO")
                 // Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
             )

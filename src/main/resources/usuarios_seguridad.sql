@@ -10,12 +10,13 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- {noop} = contraseña en texto plano, solo para desarrollo/demo
+-- Roles: ADMIN · PROPIETARIO · VETERINARIO · ENCARGADO  (según rúbrica)
 INSERT INTO usuarios (username, password, nombre, rol, activo) VALUES
     ('c19296', '{noop}C19296', 'Kendall Andrés Quirós Álvarez',  'ROLE_ADMIN',       true),
     ('c20051', '{noop}C20051', 'Kristy Daniela Acosta Mercado',  'ROLE_VETERINARIO', true),
-    ('c23112', '{noop}C23112', 'Dering Josué García Acevedo',    'ROLE_OPERADOR',    true),
+    ('c23112', '{noop}C23112', 'Dering Josué García Acevedo',    'ROLE_PROPIETARIO', true),
     ('c24510', '{noop}C24510', 'Justin Josué Marenco Herrera',   'ROLE_ADMIN',       true),
     ('c17735', '{noop}C17735', 'David Daniel Sotela Sánchez',    'ROLE_ENCARGADO',   true)
-ON CONFLICT (username) DO NOTHING;
+ON CONFLICT (username) DO UPDATE SET rol = EXCLUDED.rol;
 
 SELECT username, nombre, rol, activo FROM usuarios ORDER BY username;

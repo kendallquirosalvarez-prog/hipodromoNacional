@@ -40,4 +40,17 @@ public interface FacturaRepository extends JpaRepository<Factura, String> {
     @Transactional
     @Query(value = "CALL sp_eliminar_factura(:p_id)", nativeQuery = true)
     void eliminarFactura(@Param("p_id") String id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "CALL sp_marcar_propietarios_frecuentes()", nativeQuery = true)
+    void marcarPropietariosFrecuentes();
+
+    @Modifying
+    @Transactional
+    @Query(value = "CALL sp_facturar_propietario(:p_id_propietario, :p_precio)", nativeQuery = true)
+    void facturarPropietario(
+        @Param("p_id_propietario") String idPropietario,
+        @Param("p_precio") java.math.BigDecimal precioInscripcion
+    );
 }

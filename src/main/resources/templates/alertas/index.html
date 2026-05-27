@@ -53,6 +53,16 @@
             <p>Avisos automáticos cuando una certificación veterinaria está próxima a vencer (dentro de 30 días).</p>
         </div>
 
+        <div th:if="${mensaje}"
+             style="background:rgba(46,125,82,0.15);border:1px solid rgba(46,125,82,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#81c784;"
+             th:text="${mensaje}"></div>
+
+        <div th:if="${error}"
+             style="background:rgba(183,28,28,0.15);border:1px solid rgba(183,28,28,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#ef9a9a;"
+             th:text="${error}"></div>
+
         <div class="form-card">
             <div class="form-card-header">
                 <span class="form-card-icon">🔔</span>

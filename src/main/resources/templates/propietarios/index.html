@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 <head>
@@ -53,6 +53,98 @@
             <p>Registro, modificación y eliminación de propietarios de caballos.</p>
         </div>
 
+        <div th:if="${mensaje}"
+             style="background:rgba(46,125,82,0.15);border:1px solid rgba(46,125,82,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#81c784;"
+             th:text="${mensaje}"></div>
+
+        <div th:if="${error}"
+             style="background:rgba(183,28,28,0.15);border:1px solid rgba(183,28,28,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#ef9a9a;"
+             th:text="${error}"></div>
+
+        <!-- ── Filtros de ubicación geográfica (cascada sin AJAX) ────────── -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">📍</span>
+                <h3>Filtrar Barrio por Ubicación</h3>
+            </div>
+            <p style="margin-bottom:1rem;opacity:.8;">
+                Seleccione Provincia → Cantón → Distrito para filtrar la lista de barrios
+                disponibles en el formulario de registro.
+            </p>
+
+            <!-- Nivel 1: Provincia (envía solo fp) -->
+            <div class="form-grid" style="margin-bottom:.75rem;">
+                <div class="form-group">
+                    <label>Provincia</label>
+                    <form method="get" action="/propietarios" style="margin:0;">
+                        <select name="fp" onchange="this.form.submit()" style="width:100%;">
+                            <option value="">Todas las provincias</option>
+                            <option th:each="prov : ${provincias}"
+                                    th:value="${prov.idProvincia}"
+                                    th:text="${prov.nombreProvincia}"
+                                    th:selected="${prov.idProvincia == fp}"></option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Nivel 2: Cantón (solo visible cuando hay provincia, envía fp+fc) -->
+                <div class="form-group">
+                    <label>Cantón</label>
+                    <form method="get" action="/propietarios" style="margin:0;" th:if="${fp != null}">
+                        <input type="hidden" name="fp" th:value="${fp}"/>
+                        <select name="fc" onchange="this.form.submit()" style="width:100%;">
+                            <option value="">Todos los cantones</option>
+                            <option th:each="cant : ${cantones}"
+                                    th:value="${cant.idCanton}"
+                                    th:text="${cant.nombreCanton}"
+                                    th:selected="${cant.idCanton == fc}"></option>
+                        </select>
+                    </form>
+                    <select disabled="disabled" style="width:100%;opacity:.4;" th:unless="${fp != null}">
+                        <option>Seleccione primero una provincia</option>
+                    </select>
+                </div>
+
+                <!-- Nivel 3: Distrito (solo visible cuando hay cantón, envía fp+fc+fd) -->
+                <div class="form-group">
+                    <label>Distrito</label>
+                    <form method="get" action="/propietarios" style="margin:0;" th:if="${fc != null}">
+                        <input type="hidden" name="fp" th:value="${fp}"/>
+                        <input type="hidden" name="fc" th:value="${fc}"/>
+                        <select name="fd" onchange="this.form.submit()" style="width:100%;">
+                            <option value="">Todos los distritos</option>
+                            <option th:each="dist : ${distritos}"
+                                    th:value="${dist.idDistrito}"
+                                    th:text="${dist.nombreDistrito}"
+                                    th:selected="${dist.idDistrito == fd}"></option>
+                        </select>
+                    </form>
+                    <select disabled="disabled" style="width:100%;opacity:.4;" th:unless="${fc != null}">
+                        <option>Seleccione primero un cantón</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display:flex;align-items:flex-end;">
+                    <a href="/propietarios" class="btn btn-secondary" style="width:100%;text-align:center;">
+                        Limpiar filtros
+                    </a>
+                </div>
+            </div>
+
+            <p style="font-size:.85rem;opacity:.7;" th:if="${fd != null}">
+                ✅ Mostrando barrios del distrito seleccionado.
+            </p>
+            <p style="font-size:.85rem;opacity:.7;" th:if="${fc != null and fd == null}">
+                📋 Mostrando todos los barrios del cantón. Seleccione un distrito para filtrar más.
+            </p>
+            <p style="font-size:.85rem;opacity:.7;" th:if="${fp != null and fc == null}">
+                📋 Mostrando todos los barrios de la provincia. Seleccione un cantón para filtrar.
+            </p>
+        </div>
+
+        <!-- ── Formulario de registro / edición ──────────────────────────── -->
         <div class="form-card">
             <div class="form-card-header">
                 <span class="form-card-icon">👤</span>
@@ -60,6 +152,8 @@
             </div>
             <form th:action="${propietario.idPropietario != null and !#strings.isEmpty(propietario.idPropietario)} ? @{/propietarios/actualizar} : @{/propietarios/guardar}"
                   th:object="${propietario}" method="post">
+                <!-- Mantener los filtros activos al guardar (para que la página regrese al mismo estado) -->
+                <input type="hidden" name="fp_saved" th:value="${fp}"/>
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Cédula / ID</label>
@@ -76,7 +170,11 @@
                         <input type="text" th:field="*{apellidos}" placeholder="Apellidos" required/>
                     </div>
                     <div class="form-group">
-                        <label>Barrio</label>
+                        <label>Barrio
+                            <span style="font-size:.8rem;opacity:.7;" th:if="${fd != null}"> — filtrado por distrito</span>
+                            <span style="font-size:.8rem;opacity:.7;" th:if="${fc != null and fd == null}"> — filtrado por cantón</span>
+                            <span style="font-size:.8rem;opacity:.7;" th:if="${fp != null and fc == null}"> — filtrado por provincia</span>
+                        </label>
                         <select th:field="*{idBarrio}" required>
                             <option value="">Seleccione un barrio</option>
                             <option th:each="b : ${barrios}"
@@ -94,6 +192,7 @@
             </form>
         </div>
 
+        <!-- ── Lista de propietarios ───────────────────────────────────────── -->
         <div class="table-section">
             <div class="table-section-header">
                 <h3>Lista de <em>Propietarios</em></h3>
@@ -115,7 +214,7 @@
                             <td th:text="${p.idPropietario}"></td>
                             <td th:text="${p.nombre}"></td>
                             <td th:text="${p.apellidos}"></td>
-                            <td th:text="${p.idBarrio}"></td>
+                            <td th:text="${p.nombreBarrio != null} ? ${p.nombreBarrio} : ${p.idBarrio}"></td>
                             <td>
                                 <span th:if="${p.descuentoProximaFacturacion}" class="badge badge-green">Sí</span>
                                 <span th:unless="${p.descuentoProximaFacturacion}" class="badge badge-gray">No</span>

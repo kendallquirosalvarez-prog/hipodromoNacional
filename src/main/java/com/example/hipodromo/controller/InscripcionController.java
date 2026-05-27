@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/inscripciones")
@@ -32,14 +33,26 @@ public class InscripcionController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Inscripcion inscripcion) {
-        inscripcionRepository.insertarInscripcion(
-            inscripcion.getIdInscripcion(),
-            inscripcion.getIdEvento(),
-            inscripcion.getIdCaballo(),
-            inscripcion.getFechaInscripcion(),
-            inscripcion.getEstado()
-        );
+    public String guardar(@ModelAttribute Inscripcion inscripcion, RedirectAttributes ra) {
+        try {
+            inscripcionRepository.insertarInscripcion(
+                inscripcion.getIdInscripcion(),
+                inscripcion.getIdEvento(),
+                inscripcion.getIdCaballo(),
+                inscripcion.getFechaInscripcion(),
+                inscripcion.getEstado()
+            );
+            ra.addFlashAttribute("mensaje", "Inscripción registrada correctamente.");
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("certificación veterinaria")) {
+                ra.addFlashAttribute("error",
+                    "No se puede inscribir al caballo: no tiene certificación veterinaria vigente. " +
+                    "Registre primero un historial veterinario con fecha de vencimiento futura.");
+            } else {
+                ra.addFlashAttribute("error", "Error al registrar la inscripción: " + msg);
+            }
+        }
         return "redirect:/inscripciones";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/resultados")
@@ -32,14 +33,19 @@ public class ResultadoCarreraController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute ResultadoCarrera resultado) {
-        resultadoRepository.insertarResultado(
-            resultado.getIdEvento(),
-            resultado.getIdCaballo(),
-            resultado.getPosicion(),
-            resultado.getTiempo(),
-            resultado.getPremioGanado()
-        );
+    public String guardar(@ModelAttribute ResultadoCarrera resultado, RedirectAttributes ra) {
+        try {
+            resultadoRepository.insertarResultado(
+                resultado.getIdEvento(),
+                resultado.getIdCaballo(),
+                resultado.getPosicion(),
+                resultado.getTiempo(),
+                resultado.getPremioGanado()
+            );
+            ra.addFlashAttribute("mensaje", "Resultado registrado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al registrar: " + extraerError(e));
+        }
         return "redirect:/resultados";
     }
 
@@ -53,13 +59,18 @@ public class ResultadoCarreraController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute ResultadoCarrera resultado) {
-        resultadoRepository.actualizarResultado(
-            resultado.getIdResultado(),
-            resultado.getPosicion(),
-            resultado.getTiempo(),
-            resultado.getPremioGanado()
-        );
+    public String actualizar(@ModelAttribute ResultadoCarrera resultado, RedirectAttributes ra) {
+        try {
+            resultadoRepository.actualizarResultado(
+                resultado.getIdResultado(),
+                resultado.getPosicion(),
+                resultado.getTiempo(),
+                resultado.getPremioGanado()
+            );
+            ra.addFlashAttribute("mensaje", "Resultado actualizado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al actualizar: " + extraerError(e));
+        }
         return "redirect:/resultados";
     }
 
@@ -67,5 +78,14 @@ public class ResultadoCarreraController {
     public String eliminar(@PathVariable Long id) {
         resultadoRepository.eliminarResultado(id);
         return "redirect:/resultados";
+    }
+
+    private static String extraerError(Exception e) {
+        Throwable t = e;
+        while (t.getCause() != null) t = t.getCause();
+        String msg = t.getMessage();
+        if (msg == null) return "Error inesperado al procesar la solicitud.";
+        if (msg.startsWith("ERROR: ")) msg = msg.substring(7);
+        return msg;
     }
 }

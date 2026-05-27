@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.hipodromo.model.Establo;
 import com.example.hipodromo.repository.EstabloRepository;
@@ -32,13 +33,18 @@ public class EstabloController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Establo establo) {
-        establoRepository.insertarEstablo(
-            establo.getIdEstablo(),
-            establo.getCapacidad(),
-            establo.getEstado(),
-            establo.getIdBarrio()
-        );
+    public String guardar(@ModelAttribute Establo establo, RedirectAttributes ra) {
+        try {
+            establoRepository.insertarEstablo(
+                establo.getIdEstablo(),
+                establo.getCapacidad(),
+                establo.getEstado(),
+                establo.getIdBarrio()
+            );
+            ra.addFlashAttribute("mensaje", "Establo registrado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al registrar: " + extraerError(e));
+        }
         return "redirect:/establos";
     }
 
@@ -51,13 +57,18 @@ public class EstabloController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute Establo establo) {
-        establoRepository.actualizarEstablo(
-            establo.getIdEstablo(),
-            establo.getCapacidad(),
-            establo.getEstado(),
-            establo.getIdBarrio()
-        );
+    public String actualizar(@ModelAttribute Establo establo, RedirectAttributes ra) {
+        try {
+            establoRepository.actualizarEstablo(
+                establo.getIdEstablo(),
+                establo.getCapacidad(),
+                establo.getEstado(),
+                establo.getIdBarrio()
+            );
+            ra.addFlashAttribute("mensaje", "Establo actualizado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al actualizar: " + extraerError(e));
+        }
         return "redirect:/establos";
     }
 
@@ -65,5 +76,14 @@ public class EstabloController {
     public String eliminar(@PathVariable String id) {
         establoRepository.eliminarEstablo(id);
         return "redirect:/establos";
+    }
+
+    private static String extraerError(Exception e) {
+        Throwable t = e;
+        while (t.getCause() != null) t = t.getCause();
+        String msg = t.getMessage();
+        if (msg == null) return "Error inesperado al procesar la solicitud.";
+        if (msg.startsWith("ERROR: ")) msg = msg.substring(7);
+        return msg;
     }
 }

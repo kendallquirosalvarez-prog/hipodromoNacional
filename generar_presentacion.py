@@ -284,7 +284,7 @@ HTML = f"""<!DOCTYPE html>
     <div class="arch-row" style="border-left:3px solid var(--red);">
       <div class="arch-layer" style="color:var(--red);">🗃️ PostgreSQL (Supabase)</div>
       <div class="arch-arrow">→</div>
-      <div class="arch-detail">14 tablas · Stored procedures con lógica de negocio · Triggers de auditoría · Bitácoras particionadas por trimestre</div>
+      <div class="arch-detail">18 tablas · Stored procedures con lógica de negocio · 22 triggers de auditoría · 8 bitácoras particionadas por trimestre</div>
     </div>
   </div>
   <div class="slide-num">2 / 13</div>
@@ -518,9 +518,9 @@ git push origin main
           <div style="font-size:0.7rem;color:#adbac7;margin-top:0.3rem;">Historial vet. y alertas</div>
         </div>
         <div class="card" style="border-top:3px solid var(--orange);">
-          <div style="font-size:1.5rem;margin-bottom:0.3rem;">📋</div>
-          <div style="font-weight:700;color:var(--white);font-size:0.85rem;">OPERADOR</div>
-          <div style="font-size:0.7rem;color:#adbac7;margin-top:0.3rem;">Eventos, facturas, resultados</div>
+          <div style="font-size:1.5rem;margin-bottom:0.3rem;">🤝</div>
+          <div style="font-weight:700;color:var(--white);font-size:0.85rem;">PROPIETARIO</div>
+          <div style="font-size:0.7rem;color:#adbac7;margin-top:0.3rem;">Caballos, inscripciones, facturas</div>
         </div>
         <div class="card" style="border-top:3px solid var(--green);">
           <div style="font-size:1.5rem;margin-bottom:0.3rem;">🌾</div>
@@ -543,12 +543,12 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
   .<span class="fn">requestMatchers</span>(<span class="str">"/historial/**"</span>,
                   <span class="str">"/alertas/**"</span>)
     .<span class="fn">hasAnyRole</span>(<span class="str">"ADMIN"</span>,<span class="str">"VETERINARIO"</span>)
-  .<span class="fn">requestMatchers</span>(<span class="str">"/suministros/**"</span>,
+  .<span class="fn">requestMatchers</span>(<span class="str">"/establos/**"</span>, <span class="str">"/suministros/**"</span>,
                   <span class="str">"/alimentacion/**"</span>)
     .<span class="fn">hasAnyRole</span>(<span class="str">"ADMIN"</span>,<span class="str">"ENCARGADO"</span>)
-  .<span class="fn">requestMatchers</span>(<span class="str">"/facturas/**"</span>,
-                  <span class="str">"/resultados/**"</span>)
-    .<span class="fn">hasAnyRole</span>(<span class="str">"ADMIN"</span>,<span class="str">"OPERADOR"</span>)
+  .<span class="fn">requestMatchers</span>(<span class="str">"/caballos/**"</span>, <span class="str">"/facturas/**"</span>,
+                  <span class="str">"/inscripciones/**"</span>, <span class="str">"/resultados/**"</span>)
+    .<span class="fn">hasAnyRole</span>(<span class="str">"ADMIN"</span>,<span class="str">"PROPIETARIO"</span>)
   .<span class="fn">anyRequest</span>().<span class="fn">authenticated</span>()
 )
 .<span class="fn">formLogin</span>(form -> form
@@ -641,21 +641,22 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
 <section>
 <div class="slide-inner">
   <h2 class="slide-title">Base de Datos PostgreSQL</h2>
-  <p class="slide-sub">14 tablas normalizadas · Toda la lógica de negocio vive en stored procedures</p>
+  <p class="slide-sub">18 tablas normalizadas · Toda la lógica de negocio vive en stored procedures</p>
   <hr class="divider">
 
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; flex:1;">
     <div style="display:flex; flex-direction:column; gap:0.75rem;">
       <div class="card blue">
-        <div class="card-title">📊 14 Tablas del sistema</div>
+        <div class="card-title">📊 18 Tablas del sistema</div>
         <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0.2rem 0.6rem;font-size:0.72rem;">
           <span>• Propietarios</span><span>• Establos</span>
           <span>• Caballos</span><span>• Eventos</span>
           <span>• Inscripciones</span><span>• Resultados</span>
           <span>• Hist.Veterinario</span><span>• Alertas Vet.</span>
-          <span>• Suministros</span><span>• Alimentacion</span>
+          <span>• Suministros</span><span>• Alimentación</span>
           <span>• Facturas</span><span>• Transacciones</span>
-          <span>• Pais/Provincia</span><span>• Canton/Barrio</span>
+          <span>• Pais · Provincia</span><span>• Canton · Distrito</span>
+          <span>• Barrio</span><span>• Usuarios</span>
         </div>
       </div>
       <div class="card orange">
@@ -713,21 +714,21 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
   <div class="cards cards-4" style="flex:1;">
     <div class="card purple">
       <span class="card-icon">📋</span>
-      <div class="card-title">Bitácoras Particionadas</div>
+      <div class="card-title">8 Bitácoras Particionadas</div>
       <div class="card-body">
-        6 tablas × 4 trimestres<br>
+        8 tablas × 4 trimestres<br>
         Cada partición filtra por rango de fechas — consultar Q2 no toca registros del Q1<br><br>
         <span style="color:#bc8cff">Implementado en PostgreSQL, transparente para Spring Boot</span>
       </div>
     </div>
     <div class="card blue">
       <span class="card-icon">🔍</span>
-      <div class="card-title">18 Triggers de Auditoría</div>
+      <div class="card-title">22 Triggers en Total</div>
       <div class="card-body">
-        3 por tabla auditada:<br>
-        AFTER INSERT · UPDATE · DELETE<br><br>
-        Captura <code style="color:var(--blue)">CURRENT_USER</code>, <code style="color:var(--blue)">TG_OP</code>, <code style="color:var(--blue)">NOW()</code>
-        en cada operación
+        12 de auditoría (1 por tabla)<br>
+        8 de bitácoras particionadas<br>
+        + alerta vencimiento cert.<br>
+        + descuento cliente frecuente
       </div>
     </div>
     <div class="card green">
@@ -850,7 +851,7 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
       <div class="tl-body">
         Diagrama ER<br>
         Normalización 3FN<br>
-        DDL: 14 tablas<br>
+        DDL: 18 tablas<br>
         Constraints FK
       </div>
     </div>
@@ -860,8 +861,8 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
       <div class="tl-title">Lógica PostgreSQL</div>
       <div class="tl-body">
         Stored procedures<br>
-        Bitácoras particionadas<br>
-        18 triggers auditoría<br>
+        8 bitácoras particionadas<br>
+        22 triggers<br>
         Roles y permisos
       </div>
     </div>
@@ -918,9 +919,9 @@ http.<span class="fn">authorizeHttpRequests</span>(auth -> auth
 
   <div class="closing-grid">
     <div class="logros-list">
-      <div class="logro-item"><span class="logro-icon">🗄️</span>14 tablas normalizadas hasta 3FN con constraints, FK y CHECK en PostgreSQL</div>
+      <div class="logro-item"><span class="logro-icon">🗄️</span>18 tablas normalizadas hasta 3FN con constraints, FK y CHECK en PostgreSQL</div>
       <div class="logro-item"><span class="logro-icon">⚙️</span>Stored procedures para todo CRUD + lógica de negocio (IVA, descuentos, premios)</div>
-      <div class="logro-item"><span class="logro-icon">📋</span>6 bitácoras particionadas por trimestre · 18 triggers de auditoría automática</div>
+      <div class="logro-item"><span class="logro-icon">📋</span>8 bitácoras particionadas por trimestre · 22 triggers de auditoría automática</div>
       <div class="logro-item"><span class="logro-icon">🌱</span>Spring Boot 3.5 con 12 módulos CRUD usando Thymeleaf + Spring Data JPA</div>
       <div class="logro-item"><span class="logro-icon">🔒</span>Spring Security con 4 roles, login propio y contraseñas BCrypt en Supabase</div>
       <div class="logro-item"><span class="logro-icon">🚀</span>Despliegue continuo: git push → Railway compila y publica en producción</div>

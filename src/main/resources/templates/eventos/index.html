@@ -53,6 +53,16 @@
             <p>Programación y control de carreras, distancias y premios.</p>
         </div>
 
+        <div th:if="${mensaje}"
+             style="background:rgba(46,125,82,0.15);border:1px solid rgba(46,125,82,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#81c784;"
+             th:text="${mensaje}"></div>
+
+        <div th:if="${error}"
+             style="background:rgba(183,28,28,0.15);border:1px solid rgba(183,28,28,0.4);
+                    border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#ef9a9a;"
+             th:text="${error}"></div>
+
         <div class="form-card">
             <div class="form-card-header">
                 <span class="form-card-icon">🏆</span>
@@ -112,6 +122,41 @@
             </form>
         </div>
 
+        <!-- ── Finalizar Evento y Facturar ───────────────────────────────── -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <span class="form-card-icon">🏁</span>
+                <h3>Finalizar Evento y Generar Facturas</h3>
+            </div>
+            <p style="margin-bottom:1rem;opacity:.8;">
+                Al finalizar un evento, el sistema cambia su estado a <strong>Finalizado</strong>
+                y genera automáticamente las facturas (con IVA 13% y comisión 5%) para todos
+                los propietarios con caballos inscritos y activos en ese evento.
+            </p>
+            <form th:action="@{/eventos/finalizar}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Evento a finalizar</label>
+                        <select name="idEvento" required>
+                            <option value="">Seleccione evento</option>
+                            <option th:each="e : ${eventos}"
+                                    th:if="${e.estado != 'Finalizado' and e.estado != 'Cancelado'}"
+                                    th:value="${e.idEvento}"
+                                    th:text="${e.nombre} + ' (' + ${e.idEvento} + ') — ' + ${e.estado}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio de inscripción (₡)</label>
+                        <input type="number" name="precio" value="50000" step="1000" min="0"/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                        onclick="return confirm('¿Finalizar el evento y generar facturas para todos los inscritos?')">
+                    Finalizar y Facturar
+                </button>
+            </form>
+        </div>
+
         <div class="table-section">
             <div class="table-section-header">
                 <h3>Lista de <em>Eventos</em></h3>
@@ -149,6 +194,16 @@
                             </td>
                             <td class="td-actions">
                                 <a th:href="@{/eventos/editar/{id}(id=${e.idEvento})}" class="btn-edit">Editar</a>
+                                <form th:if="${e.estado != 'Finalizado' and e.estado != 'Cancelado'}"
+                                      th:action="@{/eventos/finalizar}" method="post" style="display:inline;">
+                                    <input type="hidden" name="idEvento" th:value="${e.idEvento}"/>
+                                    <input type="hidden" name="precio"   value="50000"/>
+                                    <button type="submit" class="btn-edit"
+                                            style="background:rgba(46,125,82,0.25);border-color:rgba(46,125,82,0.6);"
+                                            onclick="return confirm('¿Finalizar y facturar este evento?')">
+                                        Finalizar
+                                    </button>
+                                </form>
                                 <a th:href="@{/eventos/eliminar/{id}(id=${e.idEvento})}"
                                    class="btn-delete"
                                    onclick="return confirm('¿Eliminar este evento?')">Eliminar</a>

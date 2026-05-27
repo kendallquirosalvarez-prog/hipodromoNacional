@@ -40,4 +40,12 @@ public interface EventoRepository extends JpaRepository<Evento, String> {
     @Transactional
     @Query(value = "CALL sp_eliminar_evento(:p_id)", nativeQuery = true)
     void eliminarEvento(@Param("p_id") String id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "CALL sp_finalizar_evento(:p_id, :p_precio)", nativeQuery = true)
+    void finalizarEvento(
+        @Param("p_id")     String id,
+        @Param("p_precio") BigDecimal precioInscripcion
+    );
 }

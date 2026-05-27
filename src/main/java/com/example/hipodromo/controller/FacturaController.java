@@ -34,17 +34,28 @@ public class FacturaController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Factura factura) {
-        facturaRepository.insertarFactura(
-            factura.getIdFactura(),
-            factura.getIdPropietario(),
-            factura.getIdEvento(),
-            factura.getSubtotal(),
-            factura.getDescuento(),
-            factura.getImpuestos(),
-            factura.getTotal(),
-            factura.getEstadoPago()
-        );
+    public String guardar(@ModelAttribute Factura factura, RedirectAttributes ra) {
+        try {
+            facturaRepository.insertarFactura(
+                factura.getIdFactura(),
+                factura.getIdPropietario(),
+                factura.getIdEvento(),
+                factura.getSubtotal(),
+                factura.getDescuento(),
+                factura.getImpuestos(),
+                factura.getTotal(),
+                factura.getEstadoPago()
+            );
+            ra.addFlashAttribute("mensaje", "Factura registrada correctamente.");
+        } catch (Exception e) {
+            String msg = extraerError(e);
+            if (msg.contains("IVA") || msg.contains("13%")) {
+                ra.addFlashAttribute("error",
+                    "El IVA ingresado no corresponde al 13% del subtotal neto (Ley 9635). Verifique los montos.");
+            } else {
+                ra.addFlashAttribute("error", "Error al registrar: " + msg);
+            }
+        }
         return "redirect:/facturas";
     }
 
@@ -58,13 +69,18 @@ public class FacturaController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute Factura factura) {
-        facturaRepository.actualizarFactura(
-            factura.getIdFactura(),
-            factura.getDescuento(),
-            factura.getTotal(),
-            factura.getEstadoPago()
-        );
+    public String actualizar(@ModelAttribute Factura factura, RedirectAttributes ra) {
+        try {
+            facturaRepository.actualizarFactura(
+                factura.getIdFactura(),
+                factura.getDescuento(),
+                factura.getTotal(),
+                factura.getEstadoPago()
+            );
+            ra.addFlashAttribute("mensaje", "Factura actualizada correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al actualizar: " + extraerError(e));
+        }
         return "redirect:/facturas";
     }
 
@@ -79,6 +95,15 @@ public class FacturaController {
         facturaRepository.marcarPropietariosFrecuentes();
         ra.addFlashAttribute("mensaje", "Propietarios frecuentes marcados para descuento del 10%.");
         return "redirect:/facturas";
+    }
+
+    private static String extraerError(Exception e) {
+        Throwable t = e;
+        while (t.getCause() != null) t = t.getCause();
+        String msg = t.getMessage();
+        if (msg == null) return "Error inesperado al procesar la solicitud.";
+        if (msg.startsWith("ERROR: ")) msg = msg.substring(7);
+        return msg;
     }
 
     @PostMapping("/facturar-propietario")

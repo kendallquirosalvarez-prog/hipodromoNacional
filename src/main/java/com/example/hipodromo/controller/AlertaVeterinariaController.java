@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/alertas")
@@ -32,12 +33,17 @@ public class AlertaVeterinariaController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute AlertaVeterinaria alerta) {
-        alertaRepository.insertarAlerta(
-            alerta.getIdCaballo(),
-            alerta.getIdPropietario(),
-            alerta.getMensaje()
-        );
+    public String guardar(@ModelAttribute AlertaVeterinaria alerta, RedirectAttributes ra) {
+        try {
+            alertaRepository.insertarAlerta(
+                alerta.getIdCaballo(),
+                alerta.getIdPropietario(),
+                alerta.getMensaje()
+            );
+            ra.addFlashAttribute("mensaje", "Alerta registrada correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al registrar: " + extraerError(e));
+        }
         return "redirect:/alertas";
     }
 
@@ -51,5 +57,14 @@ public class AlertaVeterinariaController {
     public String eliminar(@PathVariable Long id) {
         alertaRepository.eliminarAlerta(id);
         return "redirect:/alertas";
+    }
+
+    private static String extraerError(Exception e) {
+        Throwable t = e;
+        while (t.getCause() != null) t = t.getCause();
+        String msg = t.getMessage();
+        if (msg == null) return "Error inesperado al procesar la solicitud.";
+        if (msg.startsWith("ERROR: ")) msg = msg.substring(7);
+        return msg;
     }
 }

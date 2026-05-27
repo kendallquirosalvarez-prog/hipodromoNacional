@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 @Entity
 @Table(name = "propietario")
@@ -25,6 +26,9 @@ public class Propietario {
     @Column(name = "propietario_con_descuento_proxima_facturacion")
     private Boolean descuentoProximaFacturacion;
 
+    @Formula("(SELECT b.nombre_barrio FROM barrio b WHERE b.id_barrio = id_barrio)")
+    private String nombreBarrio;
+
     public String getIdPropietario() { return idPropietario; }
     public void setIdPropietario(String idPropietario) { this.idPropietario = idPropietario; }
     public String getNombre() { return nombre; }
@@ -35,4 +39,5 @@ public class Propietario {
     public void setIdBarrio(Integer idBarrio) { this.idBarrio = idBarrio; }
     public Boolean getDescuentoProximaFacturacion() { return descuentoProximaFacturacion; }
     public void setDescuentoProximaFacturacion(Boolean d) { this.descuentoProximaFacturacion = d; }
+    public String getNombreBarrio() { return nombreBarrio; }
 }

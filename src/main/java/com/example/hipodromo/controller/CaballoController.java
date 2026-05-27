@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -34,18 +35,23 @@ public class CaballoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Caballo caballo) {
-        caballoRepository.insertarCaballo(
-            caballo.getIdCaballo(),
-            caballo.getNombre(),
-            caballo.getFechaNacimiento(),
-            caballo.getSexo(),
-            caballo.getRaza(),
-            caballo.getPeso(),
-            caballo.getEstadoSalud(),
-            caballo.getIdPropietario(),
-            caballo.getIdEstablo()
-        );
+    public String guardar(@ModelAttribute Caballo caballo, RedirectAttributes ra) {
+        try {
+            caballoRepository.insertarCaballo(
+                caballo.getIdCaballo(),
+                caballo.getNombre(),
+                caballo.getFechaNacimiento(),
+                caballo.getSexo(),
+                caballo.getRaza(),
+                caballo.getPeso(),
+                caballo.getEstadoSalud(),
+                caballo.getIdPropietario(),
+                caballo.getIdEstablo()
+            );
+            ra.addFlashAttribute("mensaje", "Caballo registrado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al registrar: " + extraerError(e));
+        }
         return "redirect:/caballos";
     }
 
@@ -58,14 +64,18 @@ public class CaballoController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute Caballo caballo) {
-        // Usa el stored procedure en lugar de save() para respetar las reglas de negocio de la BD
-        caballoRepository.actualizarCaballo(
-            caballo.getIdCaballo(),
-            caballo.getPeso(),
-            caballo.getEstadoSalud(),
-            caballo.getIdEstablo()
-        );
+    public String actualizar(@ModelAttribute Caballo caballo, RedirectAttributes ra) {
+        try {
+            caballoRepository.actualizarCaballo(
+                caballo.getIdCaballo(),
+                caballo.getPeso(),
+                caballo.getEstadoSalud(),
+                caballo.getIdEstablo()
+            );
+            ra.addFlashAttribute("mensaje", "Caballo actualizado correctamente.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al actualizar: " + extraerError(e));
+        }
         return "redirect:/caballos";
     }
 
@@ -75,4 +85,12 @@ public class CaballoController {
         return "redirect:/caballos";
     }
 
+    private static String extraerError(Exception e) {
+        Throwable t = e;
+        while (t.getCause() != null) t = t.getCause();
+        String msg = t.getMessage();
+        if (msg == null) return "Error inesperado al procesar la solicitud.";
+        if (msg.startsWith("ERROR: ")) msg = msg.substring(7);
+        return msg;
+    }
 }

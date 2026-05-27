@@ -1,0 +1,443 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1545 1115"
+     width="1545" height="1115">
+
+<defs>
+  <style>
+    svg { background: #0d1117; }
+    text { font-family: "JetBrains Mono", "Courier New", monospace; }
+  </style>
+  <marker id="arr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+    <polygon points="0 0, 8 3.5, 0 7" fill="#2d4a6b"/>
+  </marker>
+</defs>
+
+<!-- Background -->
+<rect width="1545" height="1115" fill="#0d1117"/>
+
+<!-- Zone: Geografía -->
+<rect x="8" y="12" width="1207" height="138" rx="6"
+      fill="none" stroke="#1e3248" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="15" y="163" font-size="10" fill="#3a5a78">GEOGRAFÍA</text>
+
+<!-- Zone: Seguridad -->
+<rect x="1250" y="118" width="244" height="175" rx="6"
+      fill="none" stroke="#1e3248" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="1257" y="307" font-size="10" fill="#3a5a78">SEGURIDAD</text>
+
+<!-- Relation lines -->
+<path d="M 240 78 C 225.0 78, 225.0 67, 210 67" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 495 78 C 480.0 78, 480.0 78, 465 78" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 735 78 C 720.0 78, 720.0 78, 705 78" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 980 78 C 965.0 78, 965.0 78, 950 78" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 270 280 C 625.0 280, 625.0 78, 980 78" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 255 534 C 617.5 534, 617.5 78, 980 78" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 325 319 C 297.5 319, 297.5 280, 270 280" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 325 319 C 325 426.5, 255 426.5, 255 534" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 645 246 C 645 282.5, 590 282.5, 590 319" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 890 246 C 915.0 246, 915.0 227, 940 227" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 640 537 C 640 428.0, 590 428.0, 590 319" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 960 536 C 775.0 536, 775.0 319, 590 319" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 1087 450 C 1087 387.0, 1067 387.0, 1067 324" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 452 570 C 452 504.0, 457 504.0, 457 438" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 325 656 C 325 468.0, 270 468.0, 270 280" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 325 959 C 325 619.5, 270 619.5, 270 280" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 580 959 C 580 593.0, 940 593.0, 940 227" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 1260 641 C 925.0 641, 925.0 319, 590 319" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 1382 555 C 1382 510.0, 1385 510.0, 1385 465" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<path d="M 645 935 C 612.5 935, 612.5 959, 580 959" fill="none" stroke="#2d4a6b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+
+<!-- Tables -->
+<rect x="18" y="28" width="195" height="84" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="15" y="25" width="195" height="84" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="15" y="25" width="195" height="34" rx="7" fill="#1c2d42"/>
+<rect x="15" y="51" width="195" height="9" fill="#1c2d42"/>
+<text x="112" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">pais</text>
+<line x1="16" y1="59" x2="209" y2="59" stroke="#30363d" stroke-width="1"/>
+<rect x="16" y="59" width="193" height="22" fill="#191e2d"/>
+<text x="20" y="74" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="41" y="74" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_pais</text>
+<text x="206" y="74" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">SERIAL</text>
+<text x="41" y="96" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre_pais</text>
+<text x="206" y="96" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="243" y="28" width="225" height="106" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="240" y="25" width="225" height="106" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="240" y="25" width="225" height="34" rx="7" fill="#1c2d42"/>
+<rect x="240" y="51" width="225" height="9" fill="#1c2d42"/>
+<text x="352" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">provincia</text>
+<line x1="241" y1="59" x2="464" y2="59" stroke="#30363d" stroke-width="1"/>
+<rect x="241" y="59" width="223" height="22" fill="#191e2d"/>
+<text x="245" y="74" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="266" y="74" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_provincia</text>
+<text x="461" y="74" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">SERIAL</text>
+<text x="266" y="96" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre_provincia</text>
+<text x="461" y="96" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="241" y="103" width="223" height="22" fill="#191e2d"/>
+<text x="245" y="118" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="266" y="118" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_pais</text>
+<text x="461" y="118" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="498" y="28" width="210" height="106" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="495" y="25" width="210" height="106" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="495" y="25" width="210" height="34" rx="7" fill="#1c2d42"/>
+<rect x="495" y="51" width="210" height="9" fill="#1c2d42"/>
+<text x="600" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">canton</text>
+<line x1="496" y1="59" x2="704" y2="59" stroke="#30363d" stroke-width="1"/>
+<rect x="496" y="59" width="208" height="22" fill="#191e2d"/>
+<text x="500" y="74" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="521" y="74" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_canton</text>
+<text x="701" y="74" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">SERIAL</text>
+<text x="521" y="96" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre_canton</text>
+<text x="701" y="96" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="496" y="103" width="208" height="22" fill="#191e2d"/>
+<text x="500" y="118" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="521" y="118" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_provincia</text>
+<text x="701" y="118" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="738" y="28" width="215" height="106" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="735" y="25" width="215" height="106" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="735" y="25" width="215" height="34" rx="7" fill="#1c2d42"/>
+<rect x="735" y="51" width="215" height="9" fill="#1c2d42"/>
+<text x="842" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">distrito</text>
+<line x1="736" y1="59" x2="949" y2="59" stroke="#30363d" stroke-width="1"/>
+<rect x="736" y="59" width="213" height="22" fill="#191e2d"/>
+<text x="740" y="74" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="761" y="74" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_distrito</text>
+<text x="946" y="74" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">SERIAL</text>
+<text x="761" y="96" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre_distrito</text>
+<text x="946" y="96" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="736" y="103" width="213" height="22" fill="#191e2d"/>
+<text x="740" y="118" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="761" y="118" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_canton</text>
+<text x="946" y="118" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="983" y="28" width="210" height="106" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="980" y="25" width="210" height="106" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="980" y="25" width="210" height="34" rx="7" fill="#1c2d42"/>
+<rect x="980" y="51" width="210" height="9" fill="#1c2d42"/>
+<text x="1085" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">barrio</text>
+<line x1="981" y1="59" x2="1189" y2="59" stroke="#30363d" stroke-width="1"/>
+<rect x="981" y="59" width="208" height="22" fill="#191e2d"/>
+<text x="985" y="74" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="1006" y="74" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_barrio</text>
+<text x="1186" y="74" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">SERIAL</text>
+<text x="1006" y="96" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre_barrio</text>
+<text x="1186" y="96" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="981" y="103" width="208" height="22" fill="#191e2d"/>
+<text x="985" y="118" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="1006" y="118" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_distrito</text>
+<text x="1186" y="118" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="18" y="208" width="255" height="150" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="15" y="205" width="255" height="150" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="15" y="205" width="255" height="34" rx="7" fill="#1c2d42"/>
+<rect x="15" y="231" width="255" height="9" fill="#1c2d42"/>
+<text x="142" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">propietario</text>
+<line x1="16" y1="239" x2="269" y2="239" stroke="#30363d" stroke-width="1"/>
+<rect x="16" y="239" width="253" height="22" fill="#191e2d"/>
+<text x="20" y="254" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="41" y="254" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_propietario</text>
+<text x="266" y="254" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="41" y="276" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre</text>
+<text x="266" y="276" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="16" y="283" width="253" height="22" fill="#191e2d"/>
+<text x="41" y="298" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">apellidos</text>
+<text x="266" y="298" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<text x="20" y="320" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="41" y="320" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_barrio</text>
+<text x="266" y="320" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="16" y="327" width="253" height="22" fill="#191e2d"/>
+<text x="41" y="342" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">desc_prox_factura</text>
+<text x="266" y="342" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BOOLEAN</text>
+<rect x="18" y="473" width="240" height="128" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="15" y="470" width="240" height="128" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="15" y="470" width="240" height="34" rx="7" fill="#1c2d42"/>
+<rect x="15" y="496" width="240" height="9" fill="#1c2d42"/>
+<text x="135" y="492" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">establo</text>
+<line x1="16" y1="504" x2="254" y2="504" stroke="#30363d" stroke-width="1"/>
+<rect x="16" y="504" width="238" height="22" fill="#191e2d"/>
+<text x="20" y="519" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="41" y="519" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_establo</text>
+<text x="251" y="519" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="41" y="541" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">capacidad</text>
+<text x="251" y="541" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="16" y="548" width="238" height="22" fill="#191e2d"/>
+<text x="41" y="563" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">estado</text>
+<text x="251" y="563" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="20" y="585" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="41" y="585" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_barrio</text>
+<text x="251" y="585" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="328" y="203" width="265" height="238" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="325" y="200" width="265" height="238" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="325" y="200" width="265" height="34" rx="7" fill="#1c2d42"/>
+<rect x="325" y="226" width="265" height="9" fill="#1c2d42"/>
+<text x="457" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">caballo</text>
+<line x1="326" y1="234" x2="589" y2="234" stroke="#30363d" stroke-width="1"/>
+<rect x="326" y="234" width="263" height="22" fill="#191e2d"/>
+<text x="330" y="249" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="351" y="249" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_caballo</text>
+<text x="586" y="249" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="351" y="271" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre</text>
+<text x="586" y="271" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="326" y="278" width="263" height="22" fill="#191e2d"/>
+<text x="351" y="293" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_nacimiento</text>
+<text x="586" y="293" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<text x="351" y="315" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">sexo</text>
+<text x="586" y="315" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(10)</text>
+<rect x="326" y="322" width="263" height="22" fill="#191e2d"/>
+<text x="351" y="337" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">raza</text>
+<text x="586" y="337" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(50)</text>
+<text x="351" y="359" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">peso</text>
+<text x="586" y="359" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="326" y="366" width="263" height="22" fill="#191e2d"/>
+<text x="351" y="381" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">estado_salud</text>
+<text x="586" y="381" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="330" y="403" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="403" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_propietario</text>
+<text x="586" y="403" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="326" y="410" width="263" height="22" fill="#191e2d"/>
+<text x="330" y="425" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="425" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_establo</text>
+<text x="586" y="425" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="943" y="133" width="255" height="194" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="940" y="130" width="255" height="194" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="940" y="130" width="255" height="34" rx="7" fill="#1c2d42"/>
+<rect x="940" y="156" width="255" height="9" fill="#1c2d42"/>
+<text x="1067" y="152" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">evento</text>
+<line x1="941" y1="164" x2="1194" y2="164" stroke="#30363d" stroke-width="1"/>
+<rect x="941" y="164" width="253" height="22" fill="#191e2d"/>
+<text x="945" y="179" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="966" y="179" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_evento</text>
+<text x="1191" y="179" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="966" y="201" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre</text>
+<text x="1191" y="201" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(200)</text>
+<rect x="941" y="208" width="253" height="22" fill="#191e2d"/>
+<text x="966" y="223" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha</text>
+<text x="1191" y="223" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">TIMESTAMP</text>
+<text x="966" y="245" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">tipo_carrera</text>
+<text x="1191" y="245" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(50)</text>
+<rect x="941" y="252" width="253" height="22" fill="#191e2d"/>
+<text x="966" y="267" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">distancia</text>
+<text x="1191" y="267" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<text x="966" y="289" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">premio_total</text>
+<text x="1191" y="289" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="941" y="296" width="253" height="22" fill="#191e2d"/>
+<text x="966" y="311" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">estado</text>
+<text x="1191" y="311" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="648" y="163" width="245" height="172" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="645" y="160" width="245" height="172" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="645" y="160" width="245" height="34" rx="7" fill="#1c2d42"/>
+<rect x="645" y="186" width="245" height="9" fill="#1c2d42"/>
+<text x="767" y="182" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">inscripcion</text>
+<line x1="646" y1="194" x2="889" y2="194" stroke="#30363d" stroke-width="1"/>
+<rect x="646" y="194" width="243" height="22" fill="#191e2d"/>
+<text x="650" y="209" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="671" y="209" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_inscripcion</text>
+<text x="886" y="209" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="650" y="231" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="671" y="231" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_evento</text>
+<text x="886" y="231" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="646" y="238" width="243" height="22" fill="#191e2d"/>
+<text x="650" y="253" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="671" y="253" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_caballo</text>
+<text x="886" y="253" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="671" y="275" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_inscripcion</text>
+<text x="886" y="275" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<rect x="646" y="282" width="243" height="22" fill="#191e2d"/>
+<text x="671" y="297" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">estado</text>
+<text x="886" y="297" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="671" y="319" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">posicion_final</text>
+<text x="886" y="319" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="963" y="453" width="255" height="172" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="960" y="450" width="255" height="172" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="960" y="450" width="255" height="34" rx="7" fill="#1c2d42"/>
+<rect x="960" y="476" width="255" height="9" fill="#1c2d42"/>
+<text x="1087" y="472" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">resultado_carrera</text>
+<line x1="961" y1="484" x2="1214" y2="484" stroke="#30363d" stroke-width="1"/>
+<rect x="961" y="484" width="253" height="22" fill="#191e2d"/>
+<text x="965" y="499" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="986" y="499" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_resultado</text>
+<text x="1211" y="499" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BIGSERIAL</text>
+<text x="965" y="521" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="986" y="521" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_evento</text>
+<text x="1211" y="521" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="961" y="528" width="253" height="22" fill="#191e2d"/>
+<text x="965" y="543" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="986" y="543" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_caballo</text>
+<text x="1211" y="543" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="986" y="565" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">posicion</text>
+<text x="1211" y="565" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">INT</text>
+<rect x="961" y="572" width="253" height="22" fill="#191e2d"/>
+<text x="986" y="587" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">tiempo</text>
+<text x="1211" y="587" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="986" y="609" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">premio_ganado</text>
+<text x="1211" y="609" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="643" y="443" width="278" height="194" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="640" y="440" width="278" height="194" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="640" y="440" width="278" height="34" rx="7" fill="#1c2d42"/>
+<rect x="640" y="466" width="278" height="9" fill="#1c2d42"/>
+<text x="779" y="462" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">historial_veterinario</text>
+<line x1="641" y1="474" x2="917" y2="474" stroke="#30363d" stroke-width="1"/>
+<rect x="641" y="474" width="276" height="22" fill="#191e2d"/>
+<text x="645" y="489" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="666" y="489" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_registro</text>
+<text x="914" y="489" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="645" y="511" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="666" y="511" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_caballo</text>
+<text x="914" y="511" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="641" y="518" width="276" height="22" fill="#191e2d"/>
+<text x="666" y="533" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">diagnostico</text>
+<text x="914" y="533" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">TEXT</text>
+<text x="666" y="555" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">tratamiento</text>
+<text x="914" y="555" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">TEXT</text>
+<rect x="641" y="562" width="276" height="22" fill="#191e2d"/>
+<text x="666" y="577" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_revision</text>
+<text x="914" y="577" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<text x="666" y="599" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_venc_cert</text>
+<text x="914" y="599" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<rect x="641" y="606" width="276" height="22" fill="#191e2d"/>
+<text x="666" y="621" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">veterinario</text>
+<text x="914" y="621" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<rect x="328" y="573" width="255" height="172" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="325" y="570" width="255" height="172" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="325" y="570" width="255" height="34" rx="7" fill="#1c2d42"/>
+<rect x="325" y="596" width="255" height="9" fill="#1c2d42"/>
+<text x="452" y="592" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">alerta_veterinaria</text>
+<line x1="326" y1="604" x2="579" y2="604" stroke="#30363d" stroke-width="1"/>
+<rect x="326" y="604" width="253" height="22" fill="#191e2d"/>
+<text x="330" y="619" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="351" y="619" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_alerta</text>
+<text x="576" y="619" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BIGSERIAL</text>
+<text x="330" y="641" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="641" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_caballo</text>
+<text x="576" y="641" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="326" y="648" width="253" height="22" fill="#191e2d"/>
+<text x="330" y="663" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="663" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_propietario</text>
+<text x="576" y="663" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="351" y="685" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">mensaje</text>
+<text x="576" y="685" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">TEXT</text>
+<rect x="326" y="692" width="253" height="22" fill="#191e2d"/>
+<text x="351" y="707" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">leida</text>
+<text x="576" y="707" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BOOLEAN</text>
+<text x="351" y="729" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_alerta</text>
+<text x="576" y="729" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<rect x="1263" y="318" width="250" height="150" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="1260" y="315" width="250" height="150" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="1260" y="315" width="250" height="34" rx="7" fill="#1c2d42"/>
+<rect x="1260" y="341" width="250" height="9" fill="#1c2d42"/>
+<text x="1385" y="337" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">suministro</text>
+<line x1="1261" y1="349" x2="1509" y2="349" stroke="#30363d" stroke-width="1"/>
+<rect x="1261" y="349" width="248" height="22" fill="#191e2d"/>
+<text x="1265" y="364" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="1286" y="364" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_suministro</text>
+<text x="1506" y="364" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="1286" y="386" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">tipo</text>
+<text x="1506" y="386" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(50)</text>
+<rect x="1261" y="393" width="248" height="22" fill="#191e2d"/>
+<text x="1286" y="408" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">proveedor</text>
+<text x="1506" y="408" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(200)</text>
+<text x="1286" y="430" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">cantidad_disponible</text>
+<text x="1506" y="430" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="1261" y="437" width="248" height="22" fill="#191e2d"/>
+<text x="1286" y="452" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">precio_unitario</text>
+<text x="1506" y="452" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="1263" y="558" width="245" height="172" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="1260" y="555" width="245" height="172" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="1260" y="555" width="245" height="34" rx="7" fill="#1c2d42"/>
+<rect x="1260" y="581" width="245" height="9" fill="#1c2d42"/>
+<text x="1382" y="577" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">alimentacion</text>
+<line x1="1261" y1="589" x2="1504" y2="589" stroke="#30363d" stroke-width="1"/>
+<rect x="1261" y="589" width="243" height="22" fill="#191e2d"/>
+<text x="1265" y="604" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="1286" y="604" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_alimentacion</text>
+<text x="1501" y="604" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BIGSERIAL</text>
+<text x="1265" y="626" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="1286" y="626" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_caballo</text>
+<text x="1501" y="626" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="1261" y="633" width="243" height="22" fill="#191e2d"/>
+<text x="1265" y="648" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="1286" y="648" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_suministro</text>
+<text x="1501" y="648" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="1286" y="670" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">tipo_alimento</text>
+<text x="1501" y="670" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(50)</text>
+<rect x="1261" y="677" width="243" height="22" fill="#191e2d"/>
+<text x="1286" y="692" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">cantidad</text>
+<text x="1501" y="692" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<text x="1286" y="714" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha</text>
+<text x="1501" y="714" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<rect x="328" y="843" width="255" height="238" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="325" y="840" width="255" height="238" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="325" y="840" width="255" height="34" rx="7" fill="#1c2d42"/>
+<rect x="325" y="866" width="255" height="9" fill="#1c2d42"/>
+<text x="452" y="862" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">factura</text>
+<line x1="326" y1="874" x2="579" y2="874" stroke="#30363d" stroke-width="1"/>
+<rect x="326" y="874" width="253" height="22" fill="#191e2d"/>
+<text x="330" y="889" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="351" y="889" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_factura</text>
+<text x="576" y="889" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="330" y="911" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="911" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_propietario</text>
+<text x="576" y="911" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="326" y="918" width="253" height="22" fill="#191e2d"/>
+<text x="330" y="933" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="351" y="933" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_evento</text>
+<text x="576" y="933" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<text x="351" y="955" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">subtotal</text>
+<text x="576" y="955" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="326" y="962" width="253" height="22" fill="#191e2d"/>
+<text x="351" y="977" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">descuento</text>
+<text x="576" y="977" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<text x="351" y="999" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">impuestos</text>
+<text x="576" y="999" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<rect x="326" y="1006" width="253" height="22" fill="#191e2d"/>
+<text x="351" y="1021" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">total</text>
+<text x="576" y="1021" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<text x="351" y="1043" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">estado_pago</text>
+<text x="576" y="1043" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="326" y="1050" width="253" height="22" fill="#191e2d"/>
+<text x="351" y="1065" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_emision</text>
+<text x="576" y="1065" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">TIMESTAMP</text>
+<rect x="648" y="863" width="250" height="150" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="645" y="860" width="250" height="150" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="645" y="860" width="250" height="34" rx="7" fill="#1c2d42"/>
+<rect x="645" y="886" width="250" height="9" fill="#1c2d42"/>
+<text x="770" y="882" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">historial_transaccion</text>
+<line x1="646" y1="894" x2="894" y2="894" stroke="#30363d" stroke-width="1"/>
+<rect x="646" y="894" width="248" height="22" fill="#191e2d"/>
+<text x="650" y="909" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="671" y="909" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">id_transaccion</text>
+<text x="891" y="909" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BIGSERIAL</text>
+<text x="650" y="931" font-family="monospace" font-size="9" font-weight="700" fill="#79c0ff">FK</text>
+<text x="671" y="931" font-family="JetBrains Mono,monospace" font-size="11" fill="#79c0ff">id_factura</text>
+<text x="891" y="931" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="646" y="938" width="248" height="22" fill="#191e2d"/>
+<text x="671" y="953" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">monto</text>
+<text x="891" y="953" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DECIMAL</text>
+<text x="671" y="975" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">metodo_pago</text>
+<text x="891" y="975" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(30)</text>
+<rect x="646" y="982" width="248" height="22" fill="#191e2d"/>
+<text x="671" y="997" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">fecha_pago</text>
+<text x="891" y="997" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">DATE</text>
+<rect x="1263" y="133" width="225" height="150" rx="7" fill="rgba(0,0,0,0.55)"/>
+<rect x="1260" y="130" width="225" height="150" rx="7" fill="#161b27" stroke="#30363d" stroke-width="1.5"/>
+<rect x="1260" y="130" width="225" height="34" rx="7" fill="#1c2d42"/>
+<rect x="1260" y="156" width="225" height="9" fill="#1c2d42"/>
+<text x="1372" y="152" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#ffd700">usuarios</text>
+<line x1="1261" y1="164" x2="1484" y2="164" stroke="#30363d" stroke-width="1"/>
+<rect x="1261" y="164" width="223" height="22" fill="#191e2d"/>
+<text x="1265" y="179" font-family="monospace" font-size="9" font-weight="700" fill="#ffd700">PK</text>
+<text x="1286" y="179" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffd700">username</text>
+<text x="1481" y="179" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(50)</text>
+<text x="1286" y="201" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">password</text>
+<text x="1481" y="201" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(255)</text>
+<rect x="1261" y="208" width="223" height="22" fill="#191e2d"/>
+<text x="1286" y="223" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">nombre</text>
+<text x="1481" y="223" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(100)</text>
+<text x="1286" y="245" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">rol</text>
+<text x="1481" y="245" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">VARCHAR(20)</text>
+<rect x="1261" y="252" width="223" height="22" fill="#191e2d"/>
+<text x="1286" y="267" font-family="JetBrains Mono,monospace" font-size="11" fill="#e6edf3">activo</text>
+<text x="1481" y="267" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="#8b949e">BOOLEAN</text>
+
+<!-- Title -->
+<text x="772" y="1102" text-anchor="middle" font-size="12" fill="#4a6070">
+  Diagrama ER · Hipódromo Nacional · IF-5100 UCR Liberia · 18 tablas · 22 triggers · 8 bitácoras particionadas
+</text>
+</svg>
